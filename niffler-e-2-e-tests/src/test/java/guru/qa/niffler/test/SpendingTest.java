@@ -26,12 +26,12 @@ public class SpendingTest {
     void doLogin() {
         Selenide.open("http://127.0.0.1:3000/");
         $("a[href*='redirect']").click();
-        $("input[name='username']").setValue("dima");
+        $("input[name='username']").setValue("gish");
         $("input[name='password']").setValue("12345");
         $("button[type='submit']").click();
     }
 
-    @Spend(username = "dima",
+    @Spend(username = "gish",
             description = "QA.GURU Advanced 5",
             amount = 65000.00,
             currency = CurrencyValues.RUB,
