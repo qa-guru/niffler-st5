@@ -1,7 +1,6 @@
 package guru.qa.niffler.pages.authentication;
 
 import com.codeborne.selenide.SelenideElement;
-import guru.qa.niffler.pages.main.MainPage;
 import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -33,8 +32,7 @@ public class AuthorizationPage {
     }
 
     @Step("Click SignIn")
-    public MainPage clickSignInButton() {
+    public void clickSignInButton() {
         sigInButton.click();
-        return new MainPage();
     }
 }

@@ -7,7 +7,6 @@ import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
 import guru.qa.niffler.jupiter.extension.GenerateCategoryExtension;
 import guru.qa.niffler.jupiter.extension.GenerateSpendExtension;
-import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.pages.authentication.AuthorizationPage;
@@ -15,8 +14,6 @@ import guru.qa.niffler.pages.main.MainPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import static com.codeborne.selenide.Selenide.$;
 
 @ExtendWith({GenerateCategoryExtension.class,
         GenerateSpendExtension.class})
@@ -54,7 +51,7 @@ public class SpendingTest {
             category = "Обучение"
     )
     @Test
-    void spendingShouldBeDeletedAfterTableAction(CategoryJson categoryJson, SpendJson spendJson) {
+    void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
         SelenideElement rowWithSpending = mainPage
                 .findSpendingByDescription(spendJson.description());
 

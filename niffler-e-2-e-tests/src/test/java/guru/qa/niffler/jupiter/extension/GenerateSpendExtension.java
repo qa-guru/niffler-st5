@@ -4,11 +4,7 @@ import guru.qa.niffler.api.SpendApi;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
 import guru.qa.niffler.model.SpendJson;
 import okhttp3.OkHttpClient;
-import org.junit.jupiter.api.extension.BeforeEachCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.api.extension.ParameterContext;
-import org.junit.jupiter.api.extension.ParameterResolutionException;
-import org.junit.jupiter.api.extension.ParameterResolver;
+import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
@@ -31,7 +27,7 @@ public class GenerateSpendExtension implements BeforeEachCallback, ParameterReso
             .build();
 
     @Override
-    public void beforeEach(ExtensionContext extensionContext) throws Exception {
+    public void beforeEach(ExtensionContext extensionContext) {
         SpendApi spendApi = retrofit.create(SpendApi.class);
 
         AnnotationSupport.findAnnotation(

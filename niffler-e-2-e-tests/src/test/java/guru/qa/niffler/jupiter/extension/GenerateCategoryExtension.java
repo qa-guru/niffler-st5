@@ -3,7 +3,6 @@ package guru.qa.niffler.jupiter.extension;
 import guru.qa.niffler.api.CategoryApi;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.model.CategoryJson;
-import guru.qa.niffler.model.SpendJson;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
@@ -27,7 +26,7 @@ public class GenerateCategoryExtension implements BeforeEachCallback, ParameterR
             .build();
 
     @Override
-    public void beforeEach(ExtensionContext extensionContext) throws Exception {
+    public void beforeEach(ExtensionContext extensionContext) {
         CategoryApi categoryApi = retrofit.create(CategoryApi.class);
 
         AnnotationSupport.findAnnotation(
