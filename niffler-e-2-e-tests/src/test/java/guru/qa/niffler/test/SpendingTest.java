@@ -16,11 +16,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.codeborne.selenide.Selenide.open;
 
-@ExtendWith(CategoryExtension.class)
-@ExtendWith(SpendExtension.class)
+@ExtendWith({CategoryExtension.class, SpendExtension.class})
 public class SpendingTest {
 
     private MainPage mainPage;
+    private final String username = "dotsarev";
+    private final String password = "dotsarev";
 
     static {
         Configuration.browserSize = "1920x1080";
@@ -30,15 +31,15 @@ public class SpendingTest {
     void doLogin() {
         mainPage = open("http://127.0.0.1:3000/main", WelcomePage.class)
                 .openLoginPage()
-                .doLogin();
+                .doLogin(username, password);
     }
 
     @GenerateCategory(
             category = "Обучение",
-            username = "dotsarev"
+            username = username
     )
 
-    @GenerateSpend(username = "dotsarev",
+    @GenerateSpend(username = username,
             description = "QA.GURU Advanced 5",
             amount = 65000.00,
             currency = CurrencyValues.RUB,

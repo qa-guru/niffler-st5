@@ -22,6 +22,7 @@ public class CategoryExtension implements BeforeEachCallback {
             .baseUrl("http://127.0.0.1:8093/")
             .addConverterFactory(JacksonConverterFactory.create())
             .build();
+
     @Override
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
         CategoriesApi categoriesApi = retrofit.create(CategoriesApi.class);
@@ -37,7 +38,7 @@ public class CategoryExtension implements BeforeEachCallback {
                             category.username()
                     );
                     try {
-                        CategoryJson result = categoriesApi.addCategory(categoryJson).execute().body();
+                        categoriesApi.addCategory(categoryJson).execute().body();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

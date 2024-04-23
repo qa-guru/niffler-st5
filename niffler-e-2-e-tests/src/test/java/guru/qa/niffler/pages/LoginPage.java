@@ -11,13 +11,13 @@ import static com.codeborne.selenide.WebDriverConditions.url;
 public class LoginPage extends BasePage<LoginPage>{
 
     public final String url = "http://127.0.0.1:9000/login";
-    private final SelenideElement username = $("input[name='username']").as("Логин");
-    private final SelenideElement password = $("input[name='password']").as("Пароль");
+    private final SelenideElement userNameField = $("input[name='username']").as("Логин");
+    private final SelenideElement passwordField = $("input[name='password']").as("Пароль");
     private final SelenideElement submitBtn = $("button[type='submit']").as("Кнопка 'Войти'");
 
     @Override
     public LoginPage waitForPageLoaded() {
-        username.shouldBe(visible);
+        userNameField.shouldBe(visible);
         return null;
     }
 
@@ -27,9 +27,9 @@ public class LoginPage extends BasePage<LoginPage>{
                 .shouldHave(url(url));
         return this;
     }
-    public MainPage doLogin() {
-        username.setValue("dotsarev");
-        password.setValue("dotsarev");
+    public MainPage doLogin(String username, String password) {
+        userNameField.setValue("dotsarev");
+        passwordField.setValue("dotsarev");
         submitBtn.click();
         return page(MainPage.class);
     }
