@@ -11,10 +11,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import java.io.IOException;
 
-public class CategoryExtension implements BeforeEachCallback, ParameterResolver {
-
-    public static final ExtensionContext.Namespace NAMESPACE
-            = ExtensionContext.Namespace.create(CategoryExtension.class);
+public class CategoryExtension implements BeforeEachCallback {
 
     private static final OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .build();
@@ -40,25 +37,11 @@ public class CategoryExtension implements BeforeEachCallback, ParameterResolver 
                             category.username()
                     );
                     try {
-                        CategoryJson result = categoryApi.createCategory(categoryJson).execute().body();
-                        extensionContext.getStore(NAMESPACE).put("category", result);
+                        categoryApi.createCategory(categoryJson).execute();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                 }
         );
-    }
-
-    @Override
-    public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return parameterContext
-                .getParameter()
-                .getType()
-                .isAssignableFrom(CategoryJson.class);
-    }
-
-    @Override
-    public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return extensionContext.getStore(NAMESPACE).get("category");
     }
 }

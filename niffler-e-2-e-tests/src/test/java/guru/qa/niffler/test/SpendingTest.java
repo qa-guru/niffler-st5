@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-@ExtendWith({SpendExtension.class, CategoryExtension.class})
+@ExtendWith({CategoryExtension.class, SpendExtension.class})
 public class SpendingTest {
 
     private final AuthPage authPage = new AuthPage();
