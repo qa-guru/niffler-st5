@@ -6,6 +6,7 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 public interface CategoriesApi {
+
     @POST("internal/categories/add")
     Call<CategoryJson> addCategory(@Body CategoryJson spendJson);
 }

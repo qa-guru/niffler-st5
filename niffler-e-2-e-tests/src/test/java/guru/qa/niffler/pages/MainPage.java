@@ -14,7 +14,7 @@ public class MainPage extends BasePage<MainPage>{
 
     public final String url = "http://127.0.0.1:3000/main";
     private final SelenideElement spendingForm = $(".add-spending__form")
-            .as("Форма создания расходов");
+            .as("Форма создания трат");
     private final SelenideElement deleteSpendingBtn = $(".spendings__bulk-actions button")
             .as("Кнопка 'Удалить'");
     private final ElementsCollection rowsTable = $(".spendings-table tbody").$$("tr")
