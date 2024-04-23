@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 @ExtendWith(SpendExtension.class)
@@ -24,6 +25,7 @@ public class SpendingTest {
 
     @BeforeEach
     void doLogin() {
+        // createSpend
         Selenide.open("http://127.0.0.1:3000/");
         $("a[href*='redirect']").click();
         $("input[name='username']").setValue("dima");
@@ -31,11 +33,19 @@ public class SpendingTest {
         $("button[type='submit']").click();
     }
 
-    @Spend(username = "dima",
+    @Test
+    void anotherTest() {
+        Selenide.open("http://127.0.0.1:3000/");
+        $("a[href*='redirect']").should(visible);
+    }
+
+    @Spend(
+            username = "dima",
             description = "QA.GURU Advanced 5",
             amount = 65000.00,
             currency = CurrencyValues.RUB,
-            category = "Обучение")
+            category = "Обучение"
+    )
     @Test
     void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
         SelenideElement rowWithSpending = $(".spendings-table tbody")
