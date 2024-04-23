@@ -1,7 +1,7 @@
 package guru.qa.niffler.jupiter.extension;
 
 import guru.qa.niffler.api.SpendApi;
-import guru.qa.niffler.jupiter.annotation.Spend;
+import guru.qa.niffler.jupiter.annotation.GenerateSpend;
 import guru.qa.niffler.model.SpendJson;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
@@ -18,8 +18,7 @@ import java.util.Date;
 
 public class SpendExtension implements BeforeEachCallback, ParameterResolver {
 
-    public static final ExtensionContext.Namespace NAMESPACE
-            = ExtensionContext.Namespace.create(SpendExtension.class);
+    public static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(SpendExtension.class);
 
     private static final OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .build();
@@ -36,7 +35,7 @@ public class SpendExtension implements BeforeEachCallback, ParameterResolver {
 
         AnnotationSupport.findAnnotation(
                 extensionContext.getRequiredTestMethod(),
-                Spend.class
+                GenerateSpend.class
         ).ifPresent(
                 spend -> {
                     SpendJson spendJson = new SpendJson(
