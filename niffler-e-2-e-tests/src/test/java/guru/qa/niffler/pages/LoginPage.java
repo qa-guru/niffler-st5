@@ -28,8 +28,8 @@ public class LoginPage extends BasePage<LoginPage>{
         return this;
     }
     public MainPage doLogin(String username, String password) {
-        userNameField.setValue("dotsarev");
-        passwordField.setValue("dotsarev");
+        userNameField.setValue(username);
+        passwordField.setValue(password);
         submitBtn.click();
         return page(MainPage.class);
     }
