@@ -3,6 +3,7 @@ package guru.qa.niffler.test;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.Spend;
 import guru.qa.niffler.jupiter.extension.SpendExtension;
 import guru.qa.niffler.model.CurrencyValues;
@@ -31,7 +32,11 @@ public class SpendingTest {
         $("button[type='submit']").click();
     }
 
-    @Spend(username = "dima",
+    @GenerateCategory(
+            username = "Aleksei",
+            category = "Обучение"
+    )
+    @Spend(username = "Aleksei",
             description = "QA.GURU Advanced 5",
             amount = 65000.00,
             currency = CurrencyValues.RUB,
