@@ -28,8 +28,6 @@ public class SpendingTest {
 
     static {
         Configuration.browserSize = "2560x1080";
-
-
     }
 
     @BeforeEach
@@ -47,16 +45,9 @@ public class SpendingTest {
             category = "Обучение")
     @Test
     void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
-        SelenideElement rowWithSpending =
-
-                $(".spendings-table tbody")
-                        .$$("tr")
-                        .find(text(spendJson.description()));
-
-        rowWithSpending.$$("td").first().scrollIntoView("{behavior: \"instant\", block: \"center\", inline: \"center\"}").click();
-        $(".spendings__bulk-actions button").click();
-
-        $(".spendings-table tbody").$$("tr")
-                .shouldHave(size(0));
+        SelenideElement rowWithSpending = mainPage.findSpendingRowByDescription(spendJson.description());
+        mainPage.chooseSpending(rowWithSpending)
+                .deleteSpending()
+                .checkSpendingShouldBeDeletedAfterTableAction(0);
     }
 }

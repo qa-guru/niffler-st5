@@ -19,7 +19,7 @@ public class MainPage {
             descriptionInput = addSpendingSection.$("input[name='description']"),
             calendarInput = addSpendingSection.$(".react-datepicker__input-container"),
             submitSpendingButton = addSpendingSection.$("button[type='submit']"),
-            submitDeleteSelected = addSpendingSection.$(".spendings__bulk-actions button");
+            submitDeleteSelected = $(".spendings__bulk-actions button");
 
     //Actions
     public SelenideElement findSpendingRowByDescription(String description) {
@@ -39,34 +39,34 @@ public class MainPage {
         sectionHistory.shouldHave(size(expectedSize));
     }
 
-    public MainPage setNewSpendingCategory(String category) {
-        categoryInput.setValue(category);
-        return this;
-    }
-
-    public MainPage setAmount(Double amount) {
-        amountInput.scrollIntoView(true);
-        return this;
-    }
-
-    public MainPage setDescription(String description) {
-        descriptionInput.scrollIntoView(true);
-        return this;
-    }
-
-    public MainPage setDate(String date) {
-        calendarInput.setValue(date);
-        return this;
-    }
-
-    public MainPage submitSpending() {
-        submitSpendingButton.click();
-        return this;
-    }
-
-    public MainPage submitDeleteSelected() {
-        submitDeleteSelected.scrollIntoView(true).click();
-        return this;
-    }
+//    public MainPage setNewSpendingCategory(String category) {
+//        categoryInput.setValue(category);
+//        return this;
+//    }
+//
+//    public MainPage setAmount(Double amount) {
+//        amountInput.scrollIntoView(true);
+//        return this;
+//    }
+//
+//    public MainPage setDescription(String description) {
+//        descriptionInput.scrollIntoView(true);
+//        return this;
+//    }
+//
+//    public MainPage setDate(String date) {
+//        calendarInput.setValue(date);
+//        return this;
+//    }
+//
+//    public MainPage submitSpending() {
+//        submitSpendingButton.click();
+//        return this;
+//    }
+//
+//    public MainPage submitDeleteSelected() {
+//        submitDeleteSelected.scrollIntoView(true).click();
+//        return this;
+//    }
 
 }
