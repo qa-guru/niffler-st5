@@ -5,6 +5,7 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
+import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
@@ -17,7 +18,7 @@ public class MainPage extends BasePage<MainPage>{
             .as("Форма создания трат");
     private final SelenideElement deleteSpendingBtn = $(".spendings__bulk-actions button")
             .as("Кнопка 'Удалить'");
-    private final ElementsCollection rowsTable = $(".spendings-table tbody").$$("tr")
+    private final ElementsCollection rowsSpendingTable = $(".spendings-table tbody").$$("tr")
             .as("Строки таблицы");
 
     @Override
@@ -32,22 +33,26 @@ public class MainPage extends BasePage<MainPage>{
                 .shouldHave(url(url));
         return this;
     }
-    @Step("Удалить трату с текстом {0} в поле 'Description'")
-    public MainPage deleteRowWithSpending(String description) {
-        findRowWithSpending(description).$$("td").first()
+
+    @Step("Выбрать трату с текстом {0} в поле 'Description'")
+    public MainPage chooseSpending(SelenideElement rowWithSpending) {
+        rowWithSpending.$$("td").first()
                 .scrollIntoView(true)
                 .click();
+        return this;
+    }
+    @Step("Удалить трату")
+    public MainPage deleteSpending() {
         deleteSpendingBtn.click();
         return this;
     }
-    @Step("Проверить, что трата с текстом {0} в поле 'Description' удалена")
-    public MainPage checkRowWithSpendingIsExist(String description) {
-        findRowWithSpending(description).shouldNot(visible);
-        return this;
+    @Step("Проверить, что в таблице {0} записей  с тратами")
+    public void checkCountOfSpendings(int expectedSize) {
+        rowsSpendingTable.shouldHave(size(expectedSize));
     }
 
     @Step("Найти трату с текстом {0} в поле 'Description'")
-    private SelenideElement findRowWithSpending(String description) {
-        return rowsTable.find(text(description));
+    public SelenideElement findRowWithSpendingByDescription(String description) {
+        return rowsSpendingTable.find(text(description));
     }
 }

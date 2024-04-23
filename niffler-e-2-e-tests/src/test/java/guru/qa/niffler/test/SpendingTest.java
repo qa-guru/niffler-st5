@@ -1,6 +1,7 @@
 package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.SelenideElement;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
 import guru.qa.niffler.jupiter.extension.CategoryExtension;
@@ -45,7 +46,13 @@ public class SpendingTest {
 
     @Test
     void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
-        mainPage.deleteRowWithSpending(spendJson.description())
-                .checkRowWithSpendingIsExist(spendJson.description());
+        final int expectedSize = 0;
+
+        SelenideElement rowWithSpending = mainPage
+                .findRowWithSpendingByDescription(spendJson.description());
+
+                mainPage.chooseSpending(rowWithSpending)
+                        .deleteSpending()
+                        .checkCountOfSpendings(expectedSize);
     }
 }
