@@ -39,34 +39,4 @@ public class MainPage {
         sectionHistory.shouldHave(size(expectedSize));
     }
 
-//    public MainPage setNewSpendingCategory(String category) {
-//        categoryInput.setValue(category);
-//        return this;
-//    }
-//
-//    public MainPage setAmount(Double amount) {
-//        amountInput.scrollIntoView(true);
-//        return this;
-//    }
-//
-//    public MainPage setDescription(String description) {
-//        descriptionInput.scrollIntoView(true);
-//        return this;
-//    }
-//
-//    public MainPage setDate(String date) {
-//        calendarInput.setValue(date);
-//        return this;
-//    }
-//
-//    public MainPage submitSpending() {
-//        submitSpendingButton.click();
-//        return this;
-//    }
-//
-//    public MainPage submitDeleteSelected() {
-//        submitDeleteSelected.scrollIntoView(true).click();
-//        return this;
-//    }
-
 }

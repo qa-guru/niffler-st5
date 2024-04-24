@@ -3,7 +3,8 @@ package guru.qa.niffler.test;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
-import guru.qa.niffler.jupiter.annotation.Spend;
+import guru.qa.niffler.jupiter.annotation.GenerateCategory;
+import guru.qa.niffler.jupiter.annotation.GenerateSpend;
 import guru.qa.niffler.jupiter.extension.SpendExtension;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
@@ -13,12 +14,6 @@ import guru.qa.niffler.page.WelcomePage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import static com.codeborne.selenide.CollectionCondition.size;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.getFocusedElement;
 
 @ExtendWith(SpendExtension.class)
 public class SpendingTest {
@@ -38,7 +33,11 @@ public class SpendingTest {
                 .clickSubmit();
     }
 
-    @Spend(username = "ibutov",
+    @GenerateCategory(
+            username = "ibutov",
+            category = "Обучение"
+    )
+    @GenerateSpend(username = "ibutov",
             description = "QA.GURU Advanced 5",
             amount = 65000.00,
             currency = CurrencyValues.RUB,

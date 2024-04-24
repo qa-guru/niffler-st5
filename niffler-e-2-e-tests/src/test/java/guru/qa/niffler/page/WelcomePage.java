@@ -17,7 +17,6 @@ public class WelcomePage {
 //        registrationRedirect.click();
 //        return new RegistrationPage();
 //    }
-
     public WelcomePage waitPageLoaded(){
         loginRedirect.should(visible);
         registrationRedirect.should(visible);
