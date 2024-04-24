@@ -17,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 @ExtendWith({SpendExtension.class, CategoryExtension.class})
@@ -28,13 +29,15 @@ public class SpendingTest {
 
     @BeforeEach
     void doLogin() {
+
         WelcomePage welcomePage = new WelcomePage();
         LoginPage loginPage = new LoginPage();
-
+			
         Selenide.open("http://127.0.0.1:3000/");
         welcomePage.clickLoginBtn();
         loginPage.doLogin("Aleksei", "Pass123");
     }
+
 
     @GenerateCategory(
             username = "Aleksei",
@@ -45,6 +48,7 @@ public class SpendingTest {
             amount = 65000.00,
             currency = CurrencyValues.RUB,
             category = "Досуг")
+
     @Test
     void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
        Selenide.open("http://127.0.0.1:3000/main");

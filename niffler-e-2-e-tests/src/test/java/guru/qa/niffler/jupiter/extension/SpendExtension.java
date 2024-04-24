@@ -16,7 +16,8 @@ import java.util.Date;
 
 public class SpendExtension implements BeforeEachCallback, ParameterResolver {
 
-    public static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(SpendExtension.class);
+    public static final ExtensionContext.Namespace NAMESPACE
+            = ExtensionContext.Namespace.create(SpendExtension.class);
 
     private static final OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .build();
@@ -56,7 +57,10 @@ public class SpendExtension implements BeforeEachCallback, ParameterResolver {
 
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return parameterContext.getParameter().getType().isAssignableFrom(SpendJson.class);
+        return parameterContext
+                .getParameter()
+                .getType()
+                .isAssignableFrom(SpendJson.class);
     }
 
     @Override
