@@ -18,9 +18,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @ExtendWith({GenerateCategoryExtension.class,
         GenerateSpendExtension.class})
 public class SpendingTest {
-    AuthorizationPage authorizationPage = new AuthorizationPage();
+    private static final AuthorizationPage authorizationPage = new AuthorizationPage();
 
-    MainPage mainPage = new MainPage();
+    private static final MainPage mainPage = new MainPage();
 
     static {
         Configuration.browserSize = "1920x1080";
