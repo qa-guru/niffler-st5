@@ -21,4 +21,5 @@ public record SpendJson(
         @JsonProperty("username")
         String username) {
 
-}
+    }
+
