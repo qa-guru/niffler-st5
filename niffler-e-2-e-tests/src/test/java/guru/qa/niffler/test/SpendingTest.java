@@ -2,7 +2,6 @@ package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
 import guru.qa.niffler.jupiter.extension.GenerateCategoryExtension;
@@ -18,9 +17,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @ExtendWith({GenerateCategoryExtension.class,
         GenerateSpendExtension.class})
 public class SpendingTest {
-    private static final AuthorizationPage authorizationPage = new AuthorizationPage();
+    private final AuthorizationPage authorizationPage = new AuthorizationPage();
 
-    private static final MainPage mainPage = new MainPage();
+    private final MainPage mainPage = new MainPage();
 
     static {
         Configuration.browserSize = "1920x1080";
@@ -33,8 +32,8 @@ public class SpendingTest {
         Selenide.open("http://127.0.0.1:3000/");
 
         authorizationPage.clickLogInButton()
-                .fillInUsernameField("testuser")
-                .fillInPasswordField("Voisjf%05842")
+                .setUsername("testuser")
+                .setPassword("Voisjf%05842")
                 .clickSignInButton();
 
     }
@@ -52,11 +51,9 @@ public class SpendingTest {
     )
     @Test
     void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
-        SelenideElement rowWithSpending = mainPage
-                .findSpendingByDescription(spendJson.description());
-
-        mainPage.choosingFirstSpending(rowWithSpending)
+        mainPage.choosingFirstSpending(mainPage
+                        .findSpendingByDescription(spendJson.description()))
                 .clickDeleteSelected()
-                .checkingSpendingTableSize(0);
+                .expectedTableSize(0);
     }
 }

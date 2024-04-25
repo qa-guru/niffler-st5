@@ -19,8 +19,8 @@ public class MainPage {
     }
 
     @Step("Find spending by description in table")
-    public MainPage choosingFirstSpending(SelenideElement firstRowWithSpending) {
-        firstRowWithSpending.$$("td").first().scrollIntoView(true).click();
+    public MainPage choosingFirstSpending(SelenideElement rowWithSpending) {
+        rowWithSpending.$$("td").first().scrollIntoView(true).click();
         return this;
     }
 
@@ -30,8 +30,8 @@ public class MainPage {
         return this;
     }
 
-    @Step("Checking spending table size")
-    public void checkingSpendingTableSize(int sizeShouldBe) {
+    @Step("Verify expected table size")
+    public void expectedTableSize(int sizeShouldBe) {
         table.shouldHave(size(sizeShouldBe));
     }
 }
