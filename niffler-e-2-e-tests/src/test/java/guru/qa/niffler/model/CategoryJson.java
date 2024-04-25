@@ -10,6 +10,6 @@ public record CategoryJson(
         @JsonProperty("category")
         String category,
         @JsonProperty("username")
-        String username){
+        String username) {
 
 }
