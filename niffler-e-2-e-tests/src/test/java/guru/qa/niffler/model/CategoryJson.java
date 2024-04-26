@@ -11,5 +11,4 @@ public record CategoryJson(
         String category,
         @JsonProperty("username")
         String username) {
-
 }

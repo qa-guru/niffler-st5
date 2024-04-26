@@ -146,7 +146,7 @@ https://github.com/confluentinc/cp-docker-images/issues/801#issuecomment-6920851
 create
     database "niffler-userdata" with owner postgres;
 create
-    database "niffler-spend" with owner postgres;
+    database "niffler-generateSpend" with owner postgres;
 create
     database "niffler-currency" with owner postgres;
 create
@@ -221,7 +221,7 @@ User-MacBook-Pro niffler-auth % gradle bootRun --args='--spring.profiles.active=
 Или просто перейдя к main-классу приложения NifflerAuthApplication выбрать run в IDEA (предварительно удостовериться что
 выполнен предыдущий пункт)
 
-#### 5  Запустить в любой последовательности другие сервисы: niffler-currency, niffler-spend, niffler-gateway, niffler-userdata
+#### 5  Запустить в любой последовательности другие сервисы: niffler-currency, niffler-generateSpend, niffler-gateway, niffler-userdata
 
 # Запуск Niffler в докере:
 
@@ -313,7 +313,7 @@ Build to Docker daemon failed, perhaps you should make sure your credentials for
 - niffler-frontend
 - niffler-frontend-gql
 - niffler-userdata
-- niffler-spend
+- niffler-generateSpend
 - niffler-gateway
 - niffler-currency
 - niffler-auth
