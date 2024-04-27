@@ -14,7 +14,7 @@ public class LoginPage {
     private final SelenideElement passwordField = $("input[name='password']");
     private final SelenideElement submitButton = $("button[type='submit']");
     private final SelenideElement signUp = $(byText("Sign up!"));
-    private final SelenideElement loader = $("div[role='progressbar']");
+    private final SelenideElement loader = $(".loader");
 
     /**
      * Войти в систему
