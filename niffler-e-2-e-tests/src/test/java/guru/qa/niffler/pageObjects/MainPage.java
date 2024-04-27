@@ -13,10 +13,10 @@ import static guru.qa.niffler.test.SpendingTest.CENTER;
 
 public class MainPage extends BasePage<MainPage> {
 
-    public MainPage selectCategory(SpendJson spendJson) {
+    public MainPage selectCategory(String description) {
         SelenideElement rowWithSpending = $(".spendings-table tbody")
                 .$$("tr")
-                .find(text(spendJson.description()));
+                .find(text(description));
         rowWithSpending.$$("td")
                 .first()
                 .scrollIntoView(CENTER)

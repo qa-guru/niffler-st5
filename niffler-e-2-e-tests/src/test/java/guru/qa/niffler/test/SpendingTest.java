@@ -5,6 +5,7 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import guru.qa.niffler.extensions.DesktopCapabilities;
 import guru.qa.niffler.jupiter.annotation.Category;
+import guru.qa.niffler.jupiter.annotation.PrepareTestData;
 import guru.qa.niffler.jupiter.annotation.Spend;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.jupiter.extension.SpendExtension;
@@ -12,6 +13,8 @@ import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.pageObjects.LoginPage;
 import guru.qa.niffler.pageObjects.MainPage;
+import guru.qa.niffler.retrofit.categoriesEndpoint.CategoriesClient;
+import guru.qa.niffler.retrofit.spendsEndpoint.SpendsClient;
 import io.qameta.allure.Allure;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,29 +33,25 @@ import static com.codeborne.selenide.Selenide.open;
 
 
 @ExtendWith(DesktopCapabilities.class)
-@WebTest
+@ExtendWith(PrepareTestData.class)
 public class SpendingTest {
 
     public static final String CENTER = "{block: \"center\"}";
 
 
-    @Category(
-            category = "Обучение3",
-            username = "dima"
-    )
-    @Spend(
-            //username = "dima",
-            description = "QA.GURU Advanced 5",
-            amount = 65000.00,
-            currency = CurrencyValues.RUB
-           // category = "Обучение"
-    )
+//    @BeforeEach
+//    void setData () {
+//        new CategoriesClient().addNewCategory();
+//        new SpendsClient().createSpend();
+//    }
+
+
     @Test
-    void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
+    void spendingShouldBeDeletedAfterTableAction() {
         open("http://127.0.0.1:3000/", LoginPage.class)
                 .doLogin()
                 .at(MainPage.class)
-                .selectCategory(spendJson)
+                .selectCategory("Тачка")
                 .deleteCategory();
     }
 }

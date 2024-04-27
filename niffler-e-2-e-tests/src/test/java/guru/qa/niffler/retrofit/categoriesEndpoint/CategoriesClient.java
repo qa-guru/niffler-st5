@@ -13,18 +13,18 @@ public class CategoriesClient {
         retrofitInitializer = new RetrofitInitializer("http://127.0.0.1:8093/internal/");
     }
 
-    private CategoryBody createCategoryBody() {
-        return new CategoryBody(null, "Аквадискотека", "dima");
+    private CategoryBody createCategoryBody(String category, String username) {
+        return new CategoryBody(null, category, username);
     }
 
-    public CategoryResponse addNewCategory () {
+    public CategoryResponse addNewCategory (String category, String username) {
         CategoriesService categoriesService = retrofitInitializer.createService(CategoriesService.class);
-        return retrofitInitializer.executeRequest(categoriesService.addCategory(createCategoryBody()), CategoryResponse.class);
+        return retrofitInitializer.executeRequest(categoriesService.addCategory(createCategoryBody(category, username)), CategoryResponse.class);
     }
 
-    @Test
-    void test() {
-        addNewCategory();
-    }
+//    @Test
+//    void test() {
+//        addNewCategory();
+//    }
 
 }
