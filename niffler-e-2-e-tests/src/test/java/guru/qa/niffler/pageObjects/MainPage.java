@@ -1,23 +1,25 @@
 package guru.qa.niffler.pageObjects;
 
 import com.codeborne.selenide.SelenideElement;
-import com.mifmif.common.regex.Main;
-import guru.qa.niffler.model.SpendJson;
-import io.qameta.allure.Step;
-import lombok.SneakyThrows;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
-import static guru.qa.niffler.test.SpendingTest.CENTER;
 
 public class MainPage extends BasePage<MainPage> {
 
+    public static final String CENTER = "{block: \"center\"}";
+    private final String trSet = "tr";
+    private final String tdSet = "td";
+    private final String deleteBtn = ".spendings__bulk-actions button";
+    private final String tableBody = ".spendings-table tbody";
+
+
     public MainPage selectCategory(String description) {
-        SelenideElement rowWithSpending = $(".spendings-table tbody")
-                .$$("tr")
+        SelenideElement rowWithSpending = $(tableBody)
+                .$$(trSet)
                 .find(text(description));
-        rowWithSpending.$$("td")
+        rowWithSpending.$$(tdSet)
                 .first()
                 .scrollIntoView(CENTER)
                 .click();
@@ -25,8 +27,8 @@ public class MainPage extends BasePage<MainPage> {
     }
 
     public MainPage deleteCategory() {
-        $(".spendings__bulk-actions button").click();
-        $(".spendings-table tbody").$$("tr")
+        $(deleteBtn).click();
+        $(tableBody).$$(trSet)
                 .shouldHave(size(0));
         return this;
     }
