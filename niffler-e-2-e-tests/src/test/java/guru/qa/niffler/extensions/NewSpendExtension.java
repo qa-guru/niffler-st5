@@ -31,7 +31,6 @@ public class NewSpendExtension implements BeforeEachCallback, ParameterResolver 
         );
     }
 
-
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
         return parameterContext
