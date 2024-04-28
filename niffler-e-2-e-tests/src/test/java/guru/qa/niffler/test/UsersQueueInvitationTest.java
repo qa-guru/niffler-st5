@@ -14,8 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.codeborne.selenide.Condition.*;
-import static guru.qa.niffler.jupiter.annotation.User.Selector.FRIEND;
-import static guru.qa.niffler.jupiter.annotation.User.Selector.INVITE_SENT;
+import static guru.qa.niffler.jupiter.annotation.User.Selector.*;
 
 
 @ExtendWith(UsersQueueExtension.class)

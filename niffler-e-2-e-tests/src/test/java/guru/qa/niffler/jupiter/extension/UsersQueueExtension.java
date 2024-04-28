@@ -15,7 +15,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static guru.qa.niffler.model.UserJson.userWithUsername;
 
-// Любой тест проходит через него
 public class UsersQueueExtension implements
         BeforeEachCallback,
         AfterEachCallback,
@@ -52,7 +51,7 @@ public class UsersQueueExtension implements
 
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
-        UserJson user = null;
+        UserJson userForTest = null;
         List<User> userAnnotations = Arrays.stream(context.getRequiredTestMethod().getParameters())
                 .filter(p -> AnnotationSupport.isAnnotated(p, User.class))
                 .map(p -> p.getAnnotation(User.class))
@@ -60,14 +59,14 @@ public class UsersQueueExtension implements
 
         for (User userAnnotation : userAnnotations) {
                 switch (userAnnotation.selector()) {
-                case FRIEND -> FRIEND.poll();
-                case INVITE_SENT -> INVITE_SENT.poll();
-                case INVITE_RECEIVED -> INVITE_RECEIVED.poll();
+                case FRIEND -> userForTest = FRIEND.poll();
+                case INVITE_SENT -> userForTest = INVITE_SENT.poll();
+                case INVITE_RECEIVED -> userForTest = INVITE_RECEIVED.poll();
             };
             Allure.getLifecycle().updateTestCase(testCase -> {
                 testCase.setStart(new Date().getTime());
             });
-            context.getStore(NAMESPACE).put(userAnnotation.selector().name(), user);
+            context.getStore(NAMESPACE).put(userAnnotation.selector().name(), userForTest);
         }
     }
 
