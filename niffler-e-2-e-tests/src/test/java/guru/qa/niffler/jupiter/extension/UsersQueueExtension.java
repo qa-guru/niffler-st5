@@ -42,7 +42,7 @@ public class UsersQueueExtension implements
         FRIEND.add(userWithUsername("Alex"));
         FRIEND.add(userWithUsername("Shmel"));
 
-        INVITE_SENT.add(userWithUsername("Anna"));
+        INVITE_SENT.add(userWithUsername("Shmel"));
         INVITE_SENT.add(userWithUsername("Emilia"));
 
         INVITE_RECEIVED.add(userWithUsername("Ivan"));
@@ -59,28 +59,47 @@ public class UsersQueueExtension implements
 
         for (User userAnnotation : userAnnotations) {
                 switch (userAnnotation.selector()) {
-                case FRIEND -> userForTest = FRIEND.poll();
-                case INVITE_SENT -> userForTest = INVITE_SENT.poll();
-                case INVITE_RECEIVED -> userForTest = INVITE_RECEIVED.poll();
+                    case FRIEND:
+                        userForTest = FRIEND.poll();
+                        if (userForTest != null) {
+                            context.getStore(NAMESPACE).put(context.getUniqueId() + "_userFriend", userForTest);
+                        }
+                        break;
+                    case INVITE_SENT: userForTest = INVITE_SENT.poll();
+                        if (userForTest != null) {
+                            context.getStore(NAMESPACE).put(context.getUniqueId() + "_userInviteSent", userForTest);
+                        }
+                        break;
+                    case INVITE_RECEIVED: userForTest = INVITE_RECEIVED.poll();
+                        if (userForTest != null) {
+                            context.getStore(NAMESPACE).put(context.getUniqueId() + "_userInviteReceived", userForTest);
+                        }
+                        break;
             };
             Allure.getLifecycle().updateTestCase(testCase -> {
                 testCase.setStart(new Date().getTime());
             });
-            context.getStore(NAMESPACE).put(userAnnotation.selector().name(), userForTest);
         }
     }
 
     @Override
     public void afterEach(ExtensionContext context) throws Exception {
-        UserJson userFromTest = context.getStore(NAMESPACE).get("userFriend", UserJson.class);
-        FRIEND.add(userFromTest);
+        UserJson userFriend = context.getStore(NAMESPACE).remove(context.getUniqueId() + "_userFriend", UserJson.class);
+        if (userFriend != null) {
+            FRIEND.add(userFriend);
+        }
 
-        userFromTest = context.getStore(NAMESPACE).get("userInviteSent", UserJson.class);
-        INVITE_SENT.add(userFromTest);
+        UserJson userInviteSent = context.getStore(NAMESPACE).remove(context.getUniqueId() + "_userInviteSent", UserJson.class);
+        if (userInviteSent != null) {
+            INVITE_SENT.add(userInviteSent);
+        }
 
-        userFromTest = context.getStore(NAMESPACE).get("userInviteReceived", UserJson.class);
-        INVITE_RECEIVED.add(userFromTest);
+        UserJson userInviteReceived = context.getStore(NAMESPACE).remove(context.getUniqueId() + "_userInviteReceived", UserJson.class);
+        if (userInviteReceived != null) {
+            INVITE_RECEIVED.add(userInviteReceived);
+        }
     }
+
 
 
     @Override
@@ -105,10 +124,9 @@ public class UsersQueueExtension implements
         ExtensionContext.Store store = extensionContext.getStore(NAMESPACE);
 
         return switch (annotation.selector()) {
-            case FRIEND -> store.get("userFriend", UserJson.class);
-            case INVITE_SENT -> store.get("userInviteSent", UserJson.class);
-            case INVITE_RECEIVED ->
-                    store.get("userInviteReceived", UserJson.class);
+            case FRIEND -> store.get(extensionContext.getUniqueId() + "_userFriend", UserJson.class);
+            case INVITE_SENT -> store.get(extensionContext.getUniqueId() + "_userInviteSent", UserJson.class);
+            case INVITE_RECEIVED -> store.get(extensionContext.getUniqueId() + "_userInviteReceived", UserJson.class);
         };
     }
 }
