@@ -23,17 +23,6 @@ public class UsersQueueExtension implements
     public static final ExtensionContext.Namespace NAMESPACE
             = ExtensionContext.Namespace.create(UsersQueueExtension.class);
 
-//    // todo Add new the functionality to send and accept invitations with API
-//    private static final OkHttpClient okHttpClient = new OkHttpClient.Builder()
-//            .addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(BODY))
-//            .build();
-//
-//    private final Retrofit retrofit = new Retrofit.Builder()
-//            .client(okHttpClient)
-//            .baseUrl("http://127.0.0.1:8089/")
-//            .addConverterFactory(JacksonConverterFactory.create())
-//            .build();
-
     private static final Queue<UserJson> FRIEND = new ConcurrentLinkedQueue<>();
     private static final Queue<UserJson> INVITE_SENT = new ConcurrentLinkedQueue<>();
     private static final Queue<UserJson> INVITE_RECEIVED = new ConcurrentLinkedQueue<>();
@@ -42,7 +31,7 @@ public class UsersQueueExtension implements
         FRIEND.add(userWithUsername("Alex"));
         FRIEND.add(userWithUsername("Shmel"));
 
-        INVITE_SENT.add(userWithUsername("Shmel"));
+        INVITE_SENT.add(userWithUsername("Anna"));
         INVITE_SENT.add(userWithUsername("Emilia"));
 
         INVITE_RECEIVED.add(userWithUsername("Ivan"));
