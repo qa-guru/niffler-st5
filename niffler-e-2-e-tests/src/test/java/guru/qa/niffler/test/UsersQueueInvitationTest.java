@@ -2,12 +2,9 @@ package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebElementCondition;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
-import guru.qa.niffler.jupiter.extension.UserQueueExtension;
 import guru.qa.niffler.jupiter.extension.UsersQueueExtension;
-import guru.qa.niffler.model.FriendState;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.PeoplePage;
@@ -17,12 +14,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
 import static guru.qa.niffler.jupiter.annotation.User.Selector.FRIEND;
 import static guru.qa.niffler.jupiter.annotation.User.Selector.INVITE_SENT;
 
-@WebTest
+
 @ExtendWith(UsersQueueExtension.class)
 public class UsersQueueInvitationTest {
 
@@ -50,9 +45,7 @@ public class UsersQueueInvitationTest {
                 $("div").
                 shouldHave(text("You are friends"));
 
-        SelenideElement userForAnotherTestRow = $(".abstract-table tbody").
-                $$("tr").
-                find(text(userForAnotherTest.username()));
+        SelenideElement userForAnotherTestRow = peoplePage.userNameRow(userForAnotherTest.username());
         userForAnotherTestRow.
                 lastChild().
                 $(".abstract-table__buttons div").

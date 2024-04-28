@@ -39,9 +39,7 @@ public class UserQueueExtension implements
         while (userForTest == null) {
             userForTest = USERS.poll();
         }
-        Allure.getLifecycle().updateTestCase(testCase -> {
-            testCase.setStart(new Date().getTime());
-        });
+        Allure.getLifecycle().updateTestCase(testCase -> testCase.setStart(new Date().getTime()));
         context.getStore(NAMESPACE).put(context.getUniqueId(), userForTest);
     }
 

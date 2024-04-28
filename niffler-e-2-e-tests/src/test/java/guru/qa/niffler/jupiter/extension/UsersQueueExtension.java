@@ -43,11 +43,11 @@ public class UsersQueueExtension implements
         FRIEND.add(userWithUsername("Alex"));
         FRIEND.add(userWithUsername("Shmel"));
 
-        INVITE_SENT.add(userWithUsername("Shmel"));
-        INVITE_SENT.add(userWithUsername("Alex"));
+        INVITE_SENT.add(userWithUsername("Anna"));
+        INVITE_SENT.add(userWithUsername("Emilia"));
 
-        INVITE_RECEIVED.add(userWithUsername("Alex"));
-        INVITE_RECEIVED.add(userWithUsername("Aleksei"));
+        INVITE_RECEIVED.add(userWithUsername("Ivan"));
+        INVITE_RECEIVED.add(userWithUsername("Petr"));
     }
 
     @Override
