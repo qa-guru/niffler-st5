@@ -42,7 +42,7 @@ public record UserJson(
                 )
         );
     }
-    public static UserJson userForTest(String username, String password) {
+    public static UserJson userWithUsername(String username) {
         return new UserJson(
                 null,
                 username,
