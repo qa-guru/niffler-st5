@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.codeborne.selenide.Condition.*;
 import static guru.qa.niffler.jupiter.annotation.User.Selector.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @ExtendWith(UsersQueueExtension.class)
@@ -35,22 +36,32 @@ public class UsersQueueInvitationTest {
     }
 
     @Test
-    void invitationReceivedTest(@User(selector = FRIEND) UserJson userForTest,
+    void friendsTestWithFriendAndInviteSent(@User(selector = FRIEND) UserJson userForTest,
                                 @User(selector = INVITE_SENT) UserJson userForAnotherTest) {
         Selenide.open("http://127.0.0.1:3000/people");
-        SelenideElement userForTestRow = peoplePage.userNameRow(userForTest.username());
-        userForTestRow.
-                lastChild().
-                $("div").
-                shouldHave(text("You are friends"));
+        assertTrue(peoplePage.isFriend(userForTest.username()));
 
-        SelenideElement userForAnotherTestRow = peoplePage.userNameRow(userForAnotherTest.username());
-        userForAnotherTestRow.
-                lastChild().
-                $(".abstract-table__buttons div").
-                shouldHave(attribute(
-                        "data-tooltip-id",
-                        "submit-invitation"));
+        assertTrue(peoplePage.isInviteSent(userForAnotherTest.username()));
+
+    }
+
+    @Test
+    void friendsTestWithFriendAndInviteReceived(@User(selector = FRIEND) UserJson userForTest,
+                                            @User(selector = INVITE_RECEIVED) UserJson userForAnotherTest) {
+        Selenide.open("http://127.0.0.1:3000/people");
+        assertTrue(peoplePage.isFriend(userForTest.username()));
+
+        assertTrue(peoplePage.isInvitationReceived(userForAnotherTest.username()));
+
+    }
+
+    @Test
+    void friendsTestWithInviteSentAndInviteReceived(@User(selector = INVITE_SENT) UserJson userForTest,
+                                                @User(selector = INVITE_RECEIVED) UserJson userForAnotherTest) {
+        Selenide.open("http://127.0.0.1:3000/people");
+        assertTrue(peoplePage.isInviteSent(userForTest.username()));
+
+        assertTrue(peoplePage.isInvitationReceived(userForAnotherTest.username()));
 
     }
 }
