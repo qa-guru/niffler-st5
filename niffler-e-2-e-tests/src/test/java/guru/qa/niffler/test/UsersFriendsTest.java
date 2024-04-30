@@ -17,6 +17,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static guru.qa.niffler.jupiter.annotation.User.UserType.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @WebTest
@@ -187,6 +188,7 @@ public class UsersFriendsTest {
             @User(INVITATION_SEND) UserJson user2) {
         assertTrue(user1.username().contains("_send"));
         assertTrue(user2.username().contains("_send"));
+        assertNotEquals(user1.username(), user2.username());
     }
 
     @Disabled
