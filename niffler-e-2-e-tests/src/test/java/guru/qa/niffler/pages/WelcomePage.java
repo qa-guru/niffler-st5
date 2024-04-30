@@ -19,7 +19,7 @@ public class WelcomePage {
      */
     public void goToLogin() {
         welcomeHeader.should(text(welcomeMassage));
-        loginBtn.should(visible).click();
+        loginBtn.click();
         welcomeHeader.should(not(visible));
     }
 
@@ -28,7 +28,7 @@ public class WelcomePage {
      */
     public void goToRegister() {
         welcomeHeader.should(text(welcomeMassage));
-        registerBtn.should(visible).click();
+        registerBtn.click();
         welcomeHeader.should(not(visible));
     }
 

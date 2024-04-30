@@ -32,7 +32,7 @@ public class CategoryExtension implements BeforeEachCallback {
             .build();
 
     @Override
-    public void beforeEach(ExtensionContext extensionContext) throws Exception {
+    public void beforeEach(ExtensionContext extensionContext) {
         SpendApi spendApi = retrofit.create(SpendApi.class);
 
         AnnotationSupport.findAnnotation(

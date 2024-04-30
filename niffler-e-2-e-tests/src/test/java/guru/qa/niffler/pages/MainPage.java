@@ -5,7 +5,6 @@ import com.codeborne.selenide.SelenideElement;
 
 import java.time.Duration;
 
-import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 
@@ -21,7 +20,7 @@ public class MainPage {
      */
     public MainPage selectSpendingByDescription(String description) {
         SelenideElement rowWithSpending = spendings.find(text(description));
-        rowWithSpending.$$("td").first().scrollIntoView(true).click();
+        rowWithSpending.$("td").scrollIntoView(true).click();
         return this;
     }
 
@@ -29,11 +28,14 @@ public class MainPage {
      * Удалить выбранные расходы
      */
     public void deleteSpending() {
-        int sizeBefore = spendings.size();
-
         deleteAllSelectedBtn.click();
         progressBar.should(not(visible), Duration.ofSeconds(10));
-        spendings.shouldHave(size(sizeBefore - 1));
     }
 
+    /**
+     * Проверка видимости строки в таблице расходов по description расхода
+     */
+    public boolean checkRow(String description) {
+        return spendings.find(text(description)).exists();
+    }
 }

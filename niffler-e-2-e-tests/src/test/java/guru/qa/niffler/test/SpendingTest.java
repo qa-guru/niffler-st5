@@ -1,6 +1,5 @@
 package guru.qa.niffler.test;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.jupiter.annotation.Spend;
@@ -19,18 +18,17 @@ import org.openqa.selenium.OutputType;
 import java.io.ByteArrayInputStream;
 import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 @WebTest
 public class SpendingTest {
 
-    static {
-        Configuration.browserSize = "1920x1080";
-    }
+    private MainPage mainPage = new MainPage();
+    private WelcomePage welcomePage = new WelcomePage();
+    private LoginPage loginPage = new LoginPage();
 
     @BeforeEach
     void doLogin() {
-        WelcomePage welcomePage = new WelcomePage();
-        LoginPage loginPage = new LoginPage();
-
         Selenide.open("http://127.0.0.1:3000");
         welcomePage.goToLogin();
         loginPage.login("den", "123");
@@ -61,10 +59,11 @@ public class SpendingTest {
     )
     @Test
     void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
-        MainPage mainPage = new MainPage();
-
         mainPage
                 .selectSpendingByDescription(spendJson.description())
                 .deleteSpending();
+
+        assertFalse(mainPage.checkRow(spendJson.description()),
+                "В таблице найдена строка: " + spendJson.description());
     }
 }
