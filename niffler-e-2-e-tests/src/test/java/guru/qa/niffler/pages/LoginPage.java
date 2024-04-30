@@ -1,6 +1,7 @@
 package guru.qa.niffler.pages;
 
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 
 import java.time.Duration;
 
@@ -19,6 +20,7 @@ public class LoginPage {
     /**
      * Войти в систему
      */
+    @Step
     public void login(String login, String password) {
         loginInput.setValue(login);
         passwordInput.setValue(password);
