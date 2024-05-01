@@ -2,82 +2,87 @@ package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
-import guru.qa.niffler.jupiter.annotation.Category;
-import guru.qa.niffler.jupiter.annotation.Spend;
-import guru.qa.niffler.jupiter.annotation.meta.WebTest;
+import guru.qa.niffler.jupiter.annotation.GenerateCategory;
+import guru.qa.niffler.jupiter.annotation.GenerateSpend;
+import guru.qa.niffler.jupiter.extension.CategoryExtension;
+import guru.qa.niffler.jupiter.extension.SpendExtension;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
+import guru.qa.niffler.page.AuthorizationPage;
+import guru.qa.niffler.page.LoginPage;
+import guru.qa.niffler.page.MainPage;
 import io.qameta.allure.Allure;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.OutputType;
 
 import java.io.ByteArrayInputStream;
 import java.util.Objects;
 
-import static com.codeborne.selenide.CollectionCondition.size;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
 
-
-@WebTest
+@ExtendWith({CategoryExtension.class, SpendExtension.class})
 public class SpendingTest {
 
-    static {
-        Configuration.browserSize = "1920x1080";
-    }
+	AuthorizationPage authorizationPage = new AuthorizationPage();
 
-    @BeforeEach
-    void doLogin() {
-        // createSpend
-        Selenide.open("http://127.0.0.1:3000/");
-        $("a[href*='redirect']").click();
-        $("input[name='username']").setValue("dima");
-        $("input[name='password']").setValue("12345");
-        $("button[type='submit']").click();
-    }
+	MainPage mainPage = new MainPage();
 
-    @Test
-    void anotherTest() {
-        Selenide.open("http://127.0.0.1:3000/");
-        $("a[href*='redirect']").should(visible);
-    }
+	LoginPage loginPage = new LoginPage();
 
-    @AfterEach
-    void doScreenshot() {
-        Allure.addAttachment(
-                "Screen on test end",
-                new ByteArrayInputStream(
-                        Objects.requireNonNull(
-                                Selenide.screenshot(OutputType.BYTES)
-                        )
-                )
-        );
-    }
+	private static final String category = "Обучение";
+	private static final String userName = "dima";
+	private static final String userPassword = "12345";
 
-    @Category(
-            category = "Обучение3",
-            username = "dima"
-    )
-    @Spend(
-            description = "QA.GURU Advanced 5",
-            amount = 65000.00,
-            currency = CurrencyValues.RUB
-    )
-    @Test
-    void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
-        SelenideElement rowWithSpending = $(".spendings-table tbody")
-                .$$("tr")
-                .find(text(spendJson.description()))
-                .scrollIntoView(false);
 
-        rowWithSpending.$$("td").first().click();
-        $(".spendings__bulk-actions button").click();
+	static {
+		Configuration.browserSize = "1920x1080";
+	}
 
-        $(".spendings-table tbody").$$("tr")
-                .shouldHave(size(0));
-    }
+	@BeforeEach
+	void doLogin() {
+		Selenide.open("http://127.0.0.1:3000/");
+		authorizationPage.loginButtonClick();
+		loginPage.userNameFieldSetValue(userName);
+		loginPage.passwordFieldSetValue(userPassword);
+		loginPage.signUpClick();
+
+	}
+
+	@Test
+	void anotherTest() {
+		Selenide.open("http://127.0.0.1:3000/");
+		authorizationPage.loginButtonIsVisible();
+	}
+
+	@AfterEach
+	void doScreenshot() {
+		Allure.addAttachment(
+				"Screen on test end",
+				new ByteArrayInputStream(
+						Objects.requireNonNull(
+								Selenide.screenshot(OutputType.BYTES)
+						)
+				)
+		);
+	}
+
+	@GenerateCategory(
+			category = category,
+			username = userName
+	)
+	@GenerateSpend(
+			username = userName,
+			category = category,
+			description = "QA.GURU Advanced 5",
+			amount = 65000.00,
+			currency = CurrencyValues.RUB
+	)
+	@Test
+	void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
+		mainPage.selectSpending(spendJson.description());
+		mainPage.clickDeleteSelectButton();
+		mainPage.checkListSpendingIsEmpty();
+	}
 }

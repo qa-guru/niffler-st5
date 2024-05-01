@@ -1,8 +1,7 @@
 package guru.qa.niffler.jupiter.extension;
 
 import guru.qa.niffler.api.SpendApi;
-import guru.qa.niffler.jupiter.annotation.Spend;
-import guru.qa.niffler.model.CategoryJson;
+import guru.qa.niffler.jupiter.annotation.GenerateSpend;
 import guru.qa.niffler.model.SpendJson;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -40,29 +39,22 @@ public class SpendExtension implements BeforeEachCallback, ParameterResolver {
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
         SpendApi spendApi = retrofit.create(SpendApi.class);
 
-        CategoryJson category = extensionContext.getStore(CategoryExtension.NAMESPACE).get(
-                extensionContext.getUniqueId(),
-                CategoryJson.class
-        );
-
         AnnotationSupport.findAnnotation(
                 extensionContext.getRequiredTestMethod(),
-                Spend.class
+                GenerateSpend.class
         ).ifPresent(
-                spend -> {
+                generateSpend -> {
                     SpendJson spendJson = new SpendJson(
                             null,
                             new Date(),
-                            category.category(),
-                            spend.currency(),
-                            spend.amount(),
-                            spend.description(),
-                            category.username()
+                            generateSpend.category(),
+                            generateSpend.currency(),
+                            generateSpend.amount(),
+                            generateSpend.description(),
+                            generateSpend.username()
                     );
                     try {
-                        SpendJson result = Objects.requireNonNull(
-                                spendApi.createSpend(spendJson).execute().body()
-                        );
+                        SpendJson result =spendApi.createSpend(spendJson).execute().body();
                         extensionContext.getStore(NAMESPACE).put(
                                 extensionContext.getUniqueId(),
                                 result

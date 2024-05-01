@@ -9,12 +9,16 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
-public @interface Spend {
+public @interface GenerateSpend {
 
     CurrencyValues currency();
 
     double amount();
 
     String description();
+
+    String username();
+
+    String category();
 
 }
