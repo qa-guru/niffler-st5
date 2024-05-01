@@ -108,16 +108,47 @@ public class UserQueueExtension implements
                 parameterContext.getParameter().isAnnotationPresent(User.class);
     }
 
+    /**
+     * It's used to resolve a parameter in a test method, which is annotated with the @User annotation. The @User annotation specifies the type of user to be used in the test.
+     * The purpose of the resolveParameter method in the context of JUnit testing frameworks is to dynamically resolve a value for a parameter in a test method by retrieving the corresponding dependency from the test's ApplicationContext. This method is part of the ParameterResolver interface, which defines the API for test extensions that wish to dynamically resolve parameters at runtime.
+     * When a test class constructor, a test method, or a lifecycle method accepts a parameter, the parameter must be resolved at runtime by a registered ParameterResolver.
+     * @param parameterContext the context for the parameter for which an argument should
+     *                         be resolved; never {@code null}
+     * @param extensionContext the extension context for the {@code Executable}
+     *                         about to be invoked; never {@code null}
+     * @return
+     * @throws ParameterResolutionException
+     */
     @Override
     public UserJson resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
+        /*
+        * Finding the Annotation:
+        * The AnnotationSupport.findAnnotation() method is used to find the @User annotation on the parameter being resolved.
+        * This annotation specifies the type of user to be used in the test.
+        */
         Optional<User> annotation = AnnotationSupport.findAnnotation(parameterContext.getParameter(), User.class);
+
+        /*
+        * Getting the User Type:
+        * The User.UserType enum value is retrieved from the annotation.
+        * This enum value represents the type of user to be used in the test.
+        */
         User.UserType userType = annotation.get().value();
 
+        /*
+        * Getting the Users from the Store:
+        * The extensionContext.getStore() method is used to get a store that is specific to the current test extension context.
+        * The store is used to cache the users of different types.
+        * The get() method is used to retrieve the list of users of the specified type from the store.
+        */
         Map<User.UserType, List<UserJson>> usersFromTest =
                 extensionContext.getStore(NAMESPACE).get(extensionContext.getUniqueId(), Map.class);
 
         List<UserJson> usersOfType = usersFromTest.get(userType);
 
+        /* This user is then used in the test */
+        //todo - как написать код так, чтобы разрешать каждого из списка, если их несколько с одним типом,
+        // например, в тесте withSameUserTypesTest()
         return usersOfType.getFirst();
     }
 }
