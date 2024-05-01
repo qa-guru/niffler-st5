@@ -182,6 +182,7 @@ public class UsersFriendsTest {
     }
 
     @DisplayName("Каждой твари в контексте по паре")
+    @Description("Тест упадёт. Необходимо доработать резолвер. Пока не понял как.")
     @Test
     void withSameUserTypesTest(
             @User(INVITATION_SEND) UserJson user1,
