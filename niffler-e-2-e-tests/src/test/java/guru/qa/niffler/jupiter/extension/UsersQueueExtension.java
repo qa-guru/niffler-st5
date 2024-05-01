@@ -45,7 +45,16 @@ public class UsersQueueExtension implements
         USERS.put(WITH_FRIENDS, new ConcurrentLinkedQueue<>(
                 List.of(
                         simpleUser("testuser3", "Voisjf%05842"),
-                        simpleUser("testuser4", "Voisjf%05842")
+                        simpleUser("testuser31", "Voisjf%05842"),
+                        simpleUser("testuser32", "Voisjf%05842")
+                ))
+        );
+
+        USERS.put(ACCEPTED_FRIENDS, new ConcurrentLinkedQueue<>(
+                List.of(
+                        simpleUser("testuser4", "Voisjf%05842"),
+                        simpleUser("testuser41", "Voisjf%05842"),
+                        simpleUser("testuser42", "Voisjf%05842")
                 ))
         );
     }
@@ -87,11 +96,9 @@ public class UsersQueueExtension implements
 
     @Override
     public void afterEach(ExtensionContext context) {
-        Map<User.Selector, UserJson> users = context.getStore(NAMESPACE).get(context.getUniqueId(), Map.class);
-        for (Map.Entry<User.Selector, UserJson> user : users.entrySet()) {
-            if (user != null) {
-                USERS.get(user.getKey()).add(user.getValue());
-            }
+        Map<User.Selector, UserJson> usersFromTest = (Map<User.Selector, UserJson>) context.getStore(NAMESPACE).get(context.getUniqueId(), Map.class);
+        for (User.Selector selector : usersFromTest.keySet()) {
+            USERS.get(selector).add(usersFromTest.get(selector));
         }
     }
 
@@ -99,8 +106,11 @@ public class UsersQueueExtension implements
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
         return parameterContext.getParameter()
                 .getType()
-                .isAssignableFrom(UserJson.class) &&
-                parameterContext.getParameter().isAnnotationPresent(User.class);
+                .isAssignableFrom(UserJson.class)
+                &&
+                parameterContext
+                        .getParameter()
+                        .isAnnotationPresent(User.class);
     }
 
     @Override

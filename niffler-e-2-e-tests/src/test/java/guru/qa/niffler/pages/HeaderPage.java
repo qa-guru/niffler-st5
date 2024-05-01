@@ -8,7 +8,6 @@ import static com.codeborne.selenide.Selenide.$;
 public class HeaderPage {
     private final SelenideElement friendsNavigationButton = $("li[data-tooltip-content='Friends']");
     private final SelenideElement allPeopleNavigationButton = $("li[data-tooltip-content='All people']");
-    private final SelenideElement logoutButton = $(".header__logout button");
 
     @Step("Open friends page")
     public FriendsPage openFriendsPage() {
@@ -20,11 +19,5 @@ public class HeaderPage {
     public AllPeoplePage openAllPeoplePage() {
         allPeopleNavigationButton.click();
         return new AllPeoplePage();
-    }
-
-    @Step("Click Logout button")
-    public AuthorizationPage clickLogout() {
-        logoutButton.click();
-        return new AuthorizationPage();
     }
 }

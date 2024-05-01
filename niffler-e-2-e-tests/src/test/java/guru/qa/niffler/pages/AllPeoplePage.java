@@ -29,8 +29,9 @@ public class AllPeoplePage {
     }
 
     @Step("Checking whether the status is You are friends")
-    public void isStatusYAFriends(SelenideElement foundFriend) {
+    public AllPeoplePage isStatusYAFriends(SelenideElement foundFriend) {
         foundFriend.$(".abstract-table__buttons div").getText().equals("You are friends");
+        return this;
     }
 
     @Step("Checking if there is a Submit button")

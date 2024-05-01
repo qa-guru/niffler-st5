@@ -12,11 +12,10 @@ import guru.qa.niffler.pages.HeaderPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static guru.qa.niffler.jupiter.annotation.User.Selector.INVITATION_RECEIVED;
-import static guru.qa.niffler.jupiter.annotation.User.Selector.INVITATION_SENT;
+import static guru.qa.niffler.jupiter.annotation.User.Selector.*;
 
 @WebTest
-public class ReceivedFriendInvitationTest {
+public class FriendsWithTest {
     private final AuthorizationPage authorizationPage = new AuthorizationPage();
     private final HeaderPage headerPage = new HeaderPage();
     private final FriendsPage friendsPage = new FriendsPage();
@@ -27,7 +26,7 @@ public class ReceivedFriendInvitationTest {
     }
 
     @BeforeEach
-    void doLogin(@User(selector = INVITATION_RECEIVED) UserJson userForTest) {
+    void doLogin(@User(selector = WITH_FRIENDS) UserJson userForTest) {
         Selenide.open("http://127.0.0.1:3000/");
 
         authorizationPage.clickLogInButton()
@@ -37,58 +36,40 @@ public class ReceivedFriendInvitationTest {
     }
 
     @Test
-    void checkingFriendInvitationReceiveTest(@User(selector = INVITATION_SENT) UserJson anotherUserForTest) {
+    void checkingYAFriendsStatusTest(@User(selector = ACCEPTED_FRIENDS) UserJson anotherUserForTest) {
         headerPage.openAllPeoplePage()
-                .ifThereIsASubmitButton(
-                        allPeoplePage
-                                .findFriendByUsername(anotherUserForTest.username()))
-                .ifThereIsADeclineButton(
+                .isStatusYAFriends(
                         allPeoplePage
                                 .findFriendByUsername(anotherUserForTest.username()));
 
         headerPage.openFriendsPage()
-                .ifThereIsASubmitButton(
-                        friendsPage
-                                .findFriendByUsername(anotherUserForTest.username()))
-                .ifThereIsADeclineButton(
+                .isStatusYAFriends(
                         friendsPage
                                 .findFriendByUsername(anotherUserForTest.username()));
     }
 
     @Test
-    void checkingFriendInvitationReceiveTest1(@User(selector = INVITATION_SENT) UserJson anotherUserForTest) {
+    void checkingYAFriendsStatusTest1(@User(selector = ACCEPTED_FRIENDS) UserJson anotherUserForTest) {
         headerPage.openAllPeoplePage()
-                .ifThereIsASubmitButton(
-                        allPeoplePage
-                                .findFriendByUsername(anotherUserForTest.username()))
-                .ifThereIsADeclineButton(
+                .isStatusYAFriends(
                         allPeoplePage
                                 .findFriendByUsername(anotherUserForTest.username()));
 
         headerPage.openFriendsPage()
-                .ifThereIsASubmitButton(
-                        friendsPage
-                                .findFriendByUsername(anotherUserForTest.username()))
-                .ifThereIsADeclineButton(
+                .isStatusYAFriends(
                         friendsPage
                                 .findFriendByUsername(anotherUserForTest.username()));
     }
 
     @Test
-    void checkingFriendInvitationReceiveTest2(@User(selector = INVITATION_SENT) UserJson anotherUserForTest) {
+    void checkingYAFriendsStatusTest2(@User(selector = ACCEPTED_FRIENDS) UserJson anotherUserForTest) {
         headerPage.openAllPeoplePage()
-                .ifThereIsASubmitButton(
-                        allPeoplePage
-                                .findFriendByUsername(anotherUserForTest.username()))
-                .ifThereIsADeclineButton(
+                .isStatusYAFriends(
                         allPeoplePage
                                 .findFriendByUsername(anotherUserForTest.username()));
 
         headerPage.openFriendsPage()
-                .ifThereIsASubmitButton(
-                        friendsPage
-                                .findFriendByUsername(anotherUserForTest.username()))
-                .ifThereIsADeclineButton(
+                .isStatusYAFriends(
                         friendsPage
                                 .findFriendByUsername(anotherUserForTest.username()));
     }

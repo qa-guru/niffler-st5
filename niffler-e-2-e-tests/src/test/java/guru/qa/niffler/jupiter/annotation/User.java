@@ -13,6 +13,6 @@ public @interface User {
     Selector selector();
 
     enum Selector {
-        INVITATION_SENT, INVITATION_RECEIVED, WITH_FRIENDS
+        INVITATION_SENT, INVITATION_RECEIVED, WITH_FRIENDS, ACCEPTED_FRIENDS
     }
 }

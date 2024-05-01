@@ -16,6 +16,12 @@ public class FriendsPage {
         return friendsTable.find(text(username));
     }
 
+    @Step("Checking whether the status is You are friends")
+    public FriendsPage isStatusYAFriends(SelenideElement foundFriend) {
+        foundFriend.$(".abstract-table__buttons div").getText().equals("You are friends");
+        return this;
+    }
+
     @Step("Checking if there is a Submit button")
     public FriendsPage ifThereIsASubmitButton(SelenideElement foundFriend) {
         foundFriend.$$(".abstract-table__buttons div").first().should(Condition.attribute("data-tooltip-content", "Submit invitation"));
@@ -26,5 +32,4 @@ public class FriendsPage {
     public void ifThereIsADeclineButton(SelenideElement foundFriend) {
         foundFriend.$$(".abstract-table__buttons div").last().should(Condition.attribute("data-tooltip-content", "Decline invitation"));
     }
-
 }
