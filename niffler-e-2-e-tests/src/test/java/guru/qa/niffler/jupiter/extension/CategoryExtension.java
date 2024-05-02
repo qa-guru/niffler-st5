@@ -1,6 +1,6 @@
 package guru.qa.niffler.jupiter.extension;
 
-import guru.qa.niffler.api.CategoriesApi;
+import guru.qa.niffler.api.SpendApi;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.model.CategoryJson;
 import okhttp3.OkHttpClient;
@@ -12,7 +12,9 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import java.io.IOException;
 
-public class CategoryExtension implements BeforeEachCallback {
+public class CategoryExtension implements  BeforeEachCallback {
+    public static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(CategoryExtension.class);
+
 
     private static final OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .build();
@@ -25,7 +27,7 @@ public class CategoryExtension implements BeforeEachCallback {
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
-        CategoriesApi categoriesApi = retrofit.create(CategoriesApi.class);
+        SpendApi spendApi = retrofit.create(SpendApi.class);
 
         AnnotationSupport.findAnnotation(
                 extensionContext.getRequiredTestMethod(),
@@ -38,7 +40,8 @@ public class CategoryExtension implements BeforeEachCallback {
                             category.username()
                     );
                     try {
-                        categoriesApi.addCategory(categoryJson).execute().body();
+                        CategoryJson result = spendApi.addCategory(categoryJson).execute().body();
+                        extensionContext.getStore(NAMESPACE).put(extensionContext.getUniqueId(), result);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

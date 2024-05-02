@@ -2,6 +2,7 @@ package guru.qa.niffler.pages;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
@@ -26,7 +27,7 @@ public class WelcomePage extends BasePage<WelcomePage>{
                 .shouldHave(url(url));
         return this;
     }
-
+    @Step("Перейти на страницу авторизации")
     public LoginPage openLoginPage() {
         loginBtn.click();
         return page(LoginPage.class);

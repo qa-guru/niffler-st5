@@ -2,6 +2,7 @@ package guru.qa.niffler.pages;
 
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
@@ -27,6 +28,8 @@ public class LoginPage extends BasePage<LoginPage>{
                 .shouldHave(url(url));
         return this;
     }
+
+    @Step("Авторизоваться пользователем с именем {0}")
     public MainPage doLogin(String username, String password) {
         userNameField.setValue(username);
         passwordField.setValue(password);
