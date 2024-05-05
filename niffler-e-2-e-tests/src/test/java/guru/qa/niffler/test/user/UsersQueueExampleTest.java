@@ -1,4 +1,4 @@
-package guru.qa.niffler.test;
+package guru.qa.niffler.test.user;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;

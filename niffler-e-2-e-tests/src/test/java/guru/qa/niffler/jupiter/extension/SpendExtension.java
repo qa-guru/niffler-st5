@@ -17,6 +17,7 @@ import java.util.Objects;
 
 import static okhttp3.logging.HttpLoggingInterceptor.Level.BODY;
 
+@Deprecated
 public class SpendExtension implements BeforeEachCallback, ParameterResolver {
 
     public static final ExtensionContext.Namespace NAMESPACE
@@ -36,7 +37,7 @@ public class SpendExtension implements BeforeEachCallback, ParameterResolver {
     public void beforeEach(ExtensionContext extensionContext) {
         SpendApi spendApi = retrofit.create(SpendApi.class);
 
-        CategoryJson category = extensionContext.getStore(CategoryExtension.NAMESPACE).get(
+        CategoryJson category = extensionContext.getStore(CategoryHttpExtension.NAMESPACE).get(
                 extensionContext.getUniqueId(),
                 CategoryJson.class
         );
