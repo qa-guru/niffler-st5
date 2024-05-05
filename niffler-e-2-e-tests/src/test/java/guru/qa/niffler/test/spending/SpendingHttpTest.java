@@ -31,7 +31,7 @@ public class SpendingHttpTest {
     }
 
     @Category(
-            category = "Обучение-asd6",
+            category = "Обучение",
             username = "dima")
     @Spend(
             spendDate = "2024-04-18",
