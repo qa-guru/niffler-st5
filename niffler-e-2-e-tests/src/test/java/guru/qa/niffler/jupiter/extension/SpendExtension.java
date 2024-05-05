@@ -67,7 +67,7 @@ public class SpendExtension implements BeforeEachCallback, ParameterResolver {
     }
 
     @Override
-    public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return extensionContext.getStore(NAMESPACE).get("spend");
+    public SpendJson resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
+        return extensionContext.getStore(NAMESPACE).get("spend", SpendJson.class);
     }
 }

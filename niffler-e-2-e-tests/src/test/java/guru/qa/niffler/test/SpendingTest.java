@@ -1,7 +1,6 @@
 package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
@@ -34,8 +33,8 @@ public class SpendingTest {
 
     @BeforeEach
     void doLogin() {
-        Selenide.open("http://127.0.0.1:3000/main");
-        authPage.loginBtnClick();
+        authPage.openAuthPage()
+                .loginBtnClick();
         loginPage.setUsername("dima")
                 .setPassword("12345")
                 .clickSubmitBtn();
