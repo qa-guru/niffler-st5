@@ -11,7 +11,7 @@ public class AuthPage {
     private final SelenideElement usernameInput = $("input[name='username']");
     private final SelenideElement passwordInput = $("input[name='password']");
     private final SelenideElement signInButton = $(".form__submit");
-    private final  SelenideElement viewPasswordButton = $(".form__password-button");
+    private final SelenideElement viewPasswordButton = $(".form__password-button");
 
     public AuthPage setUsername(String username) {
 
@@ -30,10 +30,8 @@ public class AuthPage {
         signInButton.click();
     }
 
-    public AuthPage login(String username, String password) {
+    public void login(String username, String password) {
 
         setUsername(username).setPassword(password).clickSignIn();
-
-        return this;
     }
 }

@@ -36,7 +36,6 @@ public class SpendingTest {
         Selenide.open("http://127.0.0.1:3000/");
         startPage.clickLoginButton();
         authPage.login("dima", "12345");
-
     }
 
     @Test
@@ -51,7 +50,7 @@ public class SpendingTest {
             currency = CurrencyValues.RUB
     )
     @GenerateCategory(
-            category = "Обучение045",
+            category = "Обучение",
             username = "dima"
     )
     @Test
@@ -59,11 +58,9 @@ public class SpendingTest {
 
         MainPage mainPage = new MainPage();
 
-        mainPage.clickCheckbox(mainPage.findSpendingByDescription(spendJson.description()))
+        mainPage.clickCheckbox(spendJson.description())
                 .deleteSpending()
                 .checkSpendingsDeletedText()
                 .checkSpendingsCount(0);
-
-
     }
 }
