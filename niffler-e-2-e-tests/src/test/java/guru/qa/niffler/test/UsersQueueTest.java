@@ -1,66 +1,97 @@
 package guru.qa.niffler.test;
 
-import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.*;
+import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.jupiter.extension.UserQueueExtension;
 import guru.qa.niffler.model.UserJson;
+import guru.qa.niffler.model.UserType;
+import guru.qa.niffler.pages.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.WindowType;
 
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
 
 @WebTest
 @ExtendWith(UserQueueExtension.class)
 public class UsersQueueTest {
 
+    static {
+        Configuration.browserSize = "1920x1080";
+    }
+
+    StartPage startPage = new StartPage();
+    AuthPage authPage = new AuthPage();
+    MainPage mainPage = new MainPage();
+    FriendsPage friendsPage = new FriendsPage();
+    PeoplePage peoplePage = new PeoplePage();
+
+
     @Test
-    void loginTest0(UserJson testUser) {
+    void noFriendsInTable(@User(UserType.COMMON) UserJson testUser) {
+
         Selenide.open("http://127.0.0.1:3000/");
-        $("a[href*='redirect']").click();
-        $("input[name='username']").setValue(testUser.username());
-        $("input[name='password']").setValue(testUser.testData().password());
-        $("button[type='submit']").click();
-        $(".header__avatar").should(visible);
+        startPage.clickLoginButton();
+        authPage.login(testUser.username(), testUser.testData().password());
+        mainPage.clickFriendsButton();
+        friendsPage.checkNoFriendsMessage();
     }
 
     @Test
-    void loginTest1(UserJson testUser) {
+    void friendsSeeEachOtherInFiendsTable(@User(UserType.WITH_FRIEND) UserJson testUser,
+                                          @User(UserType.WITH_FRIEND_2) UserJson testUserAnother) {
+
         Selenide.open("http://127.0.0.1:3000/");
-        $("a[href*='redirect']").click();
-        $("input[name='username']").setValue(testUser.username());
-        $("input[name='password']").setValue(testUser.testData().password());
-        $("button[type='submit']").click();
-        $(".header__avatar").should(visible);
+        startPage.clickLoginButton();
+        authPage.login(testUser.username(), testUser.testData().password());
+        mainPage.clickFriendsButton();
+        friendsPage.checkFriendsName(testUser.testData().friend().getFirst());
+        mainPage.logOut();
+
+        Selenide.switchTo().newWindow(WindowType.WINDOW);
+        Selenide.open("http://127.0.0.1:3000/");
+        startPage.clickLoginButton();
+        authPage.login(testUserAnother.username(), testUserAnother.testData().password());
+        mainPage.clickFriendsButton();
+        friendsPage.checkFriendsName(testUserAnother.testData().friend().getFirst());
     }
 
     @Test
-    void loginTest2(UserJson testUser) {
+    void userSendInviteAndUserInvitedSeeEachOtherInFriendsTable(@User(UserType.WITH_FRIEND) UserJson userSendInvite,
+                                                                @User(UserType.WITH_INVITE) UserJson userWithInvite) {
+
         Selenide.open("http://127.0.0.1:3000/");
-        $("a[href*='redirect']").click();
-        $("input[name='username']").setValue(testUser.username());
-        $("input[name='password']").setValue(testUser.testData().password());
-        $("button[type='submit']").click();
-        $(".header__avatar").should(visible);
+        startPage.clickLoginButton();
+        authPage.login(userSendInvite.username(), userSendInvite.testData().password());
+        mainPage.clickPeopleButton();
+        peoplePage.checkStatus("Nastiletko", "Pending invitation");
+        mainPage.logOut();
+
+        Selenide.switchTo().newWindow(WindowType.WINDOW);
+        Selenide.open("http://127.0.0.1:3000/");
+        startPage.clickLoginButton();
+        authPage.login(userWithInvite.username(), userWithInvite.testData().password());
+        mainPage.clickFriendsButton();
+        friendsPage.checkFriendsName(userSendInvite.username());
     }
 
     @Test
-    void loginTest3(UserJson testUser) {
+    void userWithInviteCanDeclineAndSubmit(@User(UserType.WITH_INVITE) UserJson testUser) {
+
         Selenide.open("http://127.0.0.1:3000/");
-        $("a[href*='redirect']").click();
-        $("input[name='username']").setValue(testUser.username());
-        $("input[name='password']").setValue(testUser.testData().password());
-        $("button[type='submit']").click();
-        $(".header__avatar").should(visible);
+        startPage.clickLoginButton();
+        authPage.login(testUser.username(), testUser.testData().password());
+        mainPage.clickFriendsButton();
+        friendsPage.checkOptionInvite("decline").checkOptionInvite("submit");
     }
 
     @Test
-    void loginTest4(UserJson testUser) {
+    void friendTaggedInPeopleTable(@User(UserType.WITH_FRIEND) UserJson testUser) {
+
         Selenide.open("http://127.0.0.1:3000/");
-        $("a[href*='redirect']").click();
-        $("input[name='username']").setValue(testUser.username());
-        $("input[name='password']").setValue(testUser.testData().password());
-        $("button[type='submit']").click();
-        $(".header__avatar").should(visible);
+        startPage.clickLoginButton();
+        authPage.login(testUser.username(), testUser.testData().password());
+        mainPage.clickPeopleButton();
+        peoplePage.checkStatus("Nastiletko2", "You are friends");
     }
 }

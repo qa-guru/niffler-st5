@@ -1,4 +1,7 @@
 package guru.qa.niffler.model;
 
-public record TestData(String password) {
+import java.util.List;
+
+public record TestData(String password, List<String> friend) {
+
 }

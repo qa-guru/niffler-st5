@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
 import java.util.UUID;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -25,9 +26,10 @@ import java.util.UUID;
             @JsonProperty("friendState")
             FriendState friendState,
             @JsonIgnore
-            TestData testData) {
+            TestData testData)
+    {
 
-        public static UserJson simpleUser(String username, String password) {
+        public static UserJson simpleUser(String username, String password, List<String> friend) {
             return new UserJson(
                     null,
                     username,
@@ -38,8 +40,9 @@ import java.util.UUID;
                     null,
                     null,
                     new TestData(
-                            password
+                            password, friend
                     )
+
             );
         }
     }
