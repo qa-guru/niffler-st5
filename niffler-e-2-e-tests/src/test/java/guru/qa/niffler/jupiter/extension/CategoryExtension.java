@@ -38,14 +38,15 @@ public class CategoryExtension implements BeforeEachCallback {
                 extensionContext.getRequiredTestMethod(),
                 GenerateCategory.class
         ).ifPresent(
-                cat -> {
+                category -> {
                     CategoryJson categoryJson = new CategoryJson(
                             null,
-                            cat.category(),
-                            cat.username()
+                            category.category(),
+                            category.username()
                     );
                     try {
-                        categoryApi.createCategory(categoryJson).execute();
+                        CategoryJson result = categoryApi.createCategory(categoryJson).execute().body();
+                        extensionContext.getStore(NAMESPACE).put("category",result);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
