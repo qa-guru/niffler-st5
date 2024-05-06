@@ -11,7 +11,7 @@ public class AuthorizationPage {
 			loginButton = $x("//a[contains(text(),'Login')]"),
 			registerButton = $x("//a[contains(text(),'Register')]");
 
-	public void loginButtonClick() {
+	public void ClickLoginButton() {
 		loginButton.click();
 	}
 
@@ -19,7 +19,7 @@ public class AuthorizationPage {
 		loginButton.should(visible);
 	}
 
-	public void registerButtonClick() {
+	public void ClickRegisterButton() {
 		registerButton.click();
 	}
 

@@ -12,12 +12,14 @@ public class MainPage {
 	private final ElementsCollection listSpending = $$x("//tbody/tr");
 	private final SelenideElement deleteSelectButton = $x("//button[contains(text(),'Delete selected')]");
 
-	public void selectSpending(String spending) {
+	public MainPage selectSpending(String spending) {
 		listSpending.find(text(spending)).$$("td").first().scrollTo().click();
+		return this;
 	}
 
-	public void clickDeleteSelectButton() {
+	public MainPage clickDeleteSelectButton() {
 		deleteSelectButton.click();
+		return this;
 	}
 
 	public void checkListSpendingIsEmpty() {

@@ -4,8 +4,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
-import guru.qa.niffler.jupiter.extension.CategoryExtension;
-import guru.qa.niffler.jupiter.extension.SpendExtension;
+import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.page.AuthorizationPage;
@@ -15,14 +14,13 @@ import io.qameta.allure.Allure;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.OutputType;
 
 import java.io.ByteArrayInputStream;
 import java.util.Objects;
 
 
-@ExtendWith({CategoryExtension.class, SpendExtension.class})
+@WebTest
 public class SpendingTest {
 
 	AuthorizationPage authorizationPage = new AuthorizationPage();
@@ -31,9 +29,9 @@ public class SpendingTest {
 
 	LoginPage loginPage = new LoginPage();
 
-	private static final String category = "Обучение";
-	private static final String userName = "dima";
-	private static final String userPassword = "12345";
+	private static final String CATEGORY = "Обучение";
+	private static final String USER_NAME = "dima";
+	private static final String USER_PASSWORD = "12345";
 
 
 	static {
@@ -43,9 +41,9 @@ public class SpendingTest {
 	@BeforeEach
 	void doLogin() {
 		Selenide.open("http://127.0.0.1:3000/");
-		authorizationPage.loginButtonClick();
-		loginPage.userNameFieldSetValue(userName);
-		loginPage.passwordFieldSetValue(userPassword);
+		authorizationPage.ClickLoginButton();
+		loginPage.userNameFieldSetValue(USER_NAME);
+		loginPage.passwordFieldSetValue(USER_PASSWORD);
 		loginPage.signUpClick();
 
 	}
@@ -69,8 +67,8 @@ public class SpendingTest {
 	}
 
 	@GenerateCategory(
-			category = category,
-			username = userName
+			category = CATEGORY,
+			username = USER_NAME
 	)
 	@GenerateSpend(
 			description = "QA.GURU Advanced 5",
@@ -79,8 +77,10 @@ public class SpendingTest {
 	)
 	@Test
 	void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
-		mainPage.selectSpending(spendJson.description());
-		mainPage.clickDeleteSelectButton();
-		mainPage.checkListSpendingIsEmpty();
+		mainPage
+				.selectSpending(spendJson.description())
+				.clickDeleteSelectButton()
+				.checkListSpendingIsEmpty();
+
 	}
 }
