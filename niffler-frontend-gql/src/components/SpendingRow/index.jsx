@@ -26,7 +26,7 @@ export const SpendingRow = ({
         evt.preventDefault();
         updateSpending({
             variables: {
-                spend: {
+                generateSpend: {
                     ...data,
                     amount: parseFloat(data.amount),
                 }
