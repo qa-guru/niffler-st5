@@ -75,10 +75,10 @@ public class UserQueueExtension implements
 
             while (userForTest == null) {
                 userForTest = switch (userType) {
-                    case UserType.COMMON -> USERS.poll();
+                    case UserType.INVITATION_SEND -> USERS.poll();
                     case UserType.WITH_FRIEND -> USERS_WITH_FRIEND.poll();
                     case UserType.WITH_FRIEND_2 -> USERS_WITH_FRIEND_2.poll();
-                    case UserType.WITH_INVITE -> USERS_WITH_INVITE.poll();
+                    case UserType.INVITATION_RECIEVED -> USERS_WITH_INVITE.poll();
                 };
             }
             users.put(userType, userForTest);
@@ -98,10 +98,10 @@ public class UserQueueExtension implements
 
         for (Map.Entry<UserType, UserJson> user : usersFromTest.entrySet()) {
             switch (user.getKey()) {
-                case UserType.COMMON -> USERS.add(user.getValue());
+                case UserType.INVITATION_SEND -> USERS.add(user.getValue());
                 case UserType.WITH_FRIEND -> USERS_WITH_FRIEND.add(user.getValue());
                 case UserType.WITH_FRIEND_2 -> USERS_WITH_FRIEND_2.add(user.getValue());
-                case UserType.WITH_INVITE -> USERS_WITH_INVITE.add(user.getValue());
+                case UserType.INVITATION_RECIEVED -> USERS_WITH_INVITE.add(user.getValue());
             }
         }
 

@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.PARAMETER)
 public @interface User {
 
-    UserType value() default UserType.COMMON;
+    UserType value() default UserType.INVITATION_SEND;
 
 
 }

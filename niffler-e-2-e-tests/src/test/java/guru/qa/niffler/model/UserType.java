@@ -1,6 +1,6 @@
 package guru.qa.niffler.model;
 
 public enum UserType {
-    COMMON, WITH_FRIEND, WITH_INVITE, WITH_FRIEND_2
+    INVITATION_SEND, WITH_FRIEND, INVITATION_RECIEVED, WITH_FRIEND_2
 }
 
