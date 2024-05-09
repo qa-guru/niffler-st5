@@ -3,15 +3,17 @@ package guru.qa.niffler.jupiter.extension;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.model.UserJson;
 import io.qameta.allure.Allure;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
 
+import java.lang.reflect.Parameter;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static guru.qa.niffler.model.UserJson.simpleUser;
 
-// Любой тест проходит через него
 public class UserQueueExtension implements
         BeforeEachCallback,
         AfterEachCallback,
@@ -19,6 +21,8 @@ public class UserQueueExtension implements
 
     public static final ExtensionContext.Namespace NAMESPACE
             = ExtensionContext.Namespace.create(UserQueueExtension.class);
+
+    private static final Map<User.UserType, Queue<UserJson>> usersQueue = new ConcurrentHashMap<>();
 
     private static final Queue<UserJson> INVITATION_SEND = new ConcurrentLinkedQueue<>();
     private static final Queue<UserJson> INVITATION_RECEIVED = new ConcurrentLinkedQueue<>();
@@ -38,68 +42,64 @@ public class UserQueueExtension implements
         // Пользователи с FriendState.FRIEND приняли запрос от пользователей с FriendState.INVITE_SENT
         WITH_FRIENDS.add(simpleUser("duck_friend", "12345"));
         WITH_FRIENDS.add(simpleUser("barsik_friend", "12345"));
+
+        usersQueue.put(User.UserType.INVITATION_SEND, INVITATION_SEND);
+        usersQueue.put(User.UserType.INVITATION_RECEIVED, INVITATION_RECEIVED);
+        usersQueue.put(User.UserType.WITH_FRIENDS, WITH_FRIENDS);
     }
 
     @Override
     public void beforeEach(ExtensionContext context) {
+        List<Parameter> parametersList = new ArrayList<>();
+        Map<Parameter, UserJson> parameterUserJsonMap = new HashMap<>();
 
-        // список типов юзера для теста
-        List<User> usersTypeList = Arrays.stream(context.getRequiredTestMethod().getParameters())
+        // забрал параметры с beforeEach()
+        Arrays.stream(context.getRequiredTestClass().getDeclaredMethods())
+                .filter(m -> AnnotationSupport.isAnnotated(m, BeforeEach.class))
+                .flatMap(m -> Arrays.stream(m.getParameters()))
                 .filter(p -> AnnotationSupport.isAnnotated(p, User.class))
-                .map(p -> p.getAnnotation(User.class))
-                .toList();
+                .filter(p -> p.getType().isAssignableFrom(UserJson.class))
+                .forEach(parametersList::add);
 
-        // создаем списки для каждого типа пользователя
-        Map<User.UserType, List<UserJson>> usersByType = new HashMap<>();
-        usersTypeList.forEach(userType -> usersByType.computeIfAbsent(userType.value(), k -> new ArrayList<>()));
-
+        // забрал параметры с тестового метода
+        Arrays.stream(context.getRequiredTestMethod().getParameters())
+                .filter(p -> AnnotationSupport.isAnnotated(p, User.class))
+                .filter(p -> p.getType().isAssignableFrom(UserJson.class))
+                .forEach(parametersList::add);
         // для каждого конкретного типа дожидаемся в очереди пользователя
-        for (User userType : usersTypeList) {
-            User.UserType selector = userType.value();
+        for (Parameter param : parametersList) {
+            User.UserType selector = param.getAnnotation(User.class).value();
+            Queue<UserJson> typedQueue = usersQueue.get(selector);
 
             // отрубит цикл через 30 секунд
-            long fifteenSecondsLater = new Date().getTime() + 30000;
+            long endTime = new Date().getTime() + 30000;
 
             UserJson userForTest = null;
             while (userForTest == null) {
-                userForTest = switch (selector) {
-                    case INVITATION_RECEIVED -> INVITATION_RECEIVED.poll();
-                    case INVITATION_SEND -> INVITATION_SEND.poll();
-                    case WITH_FRIENDS -> WITH_FRIENDS.poll();
-                };
-                // прерыватель по таймауту
-                if (new Date().getTime() > fifteenSecondsLater)
-                    throw new RuntimeException("Превышено время ожидания тестовых данных. Добавьте ресурсов!");
+                userForTest = typedQueue.poll();
             }
-            // дождавшись пользователя, добавляем его в типовой список
-            usersByType.get(selector).add(userForTest);
+
+            // наполняю мапу для контекста
+            parameterUserJsonMap.put(param, userForTest);
+
+            // прерыватель по таймауту
+            if (new Date().getTime() > endTime)
+                throw new RuntimeException("Превышено время ожидания тестовых данных. Добавьте ресурсов!");
         }
 
-        // передаём Map с сортированными пользователями в контекст
-        context.getStore(NAMESPACE).put(context.getUniqueId(), usersByType);
-
+        // передаём мапу в контекст
+        context.getStore(NAMESPACE).put(context.getUniqueId(), parameterUserJsonMap);
         Allure.getLifecycle().updateTestCase(testCase -> testCase.setStart(new Date().getTime()));
     }
 
     @Override
     public void afterEach(ExtensionContext extensionContext) {
-        // забираем после теста Map с пользователями из контекста
-        Map<User.UserType, List<UserJson>> usersFromTest =
+        // забираем после теста мапу с пользователями из контекста
+        Map<Parameter, UserJson> params =
                 extensionContext.getStore(NAMESPACE).get(extensionContext.getUniqueId(), Map.class);
 
-        if (usersFromTest != null) {
-            // для каждого типа пользователя берём список пользователей
-            usersFromTest.forEach((userType, userList) -> {
-                // и возвращаем каждого типового пользователя в свою очередь
-                userList.forEach(user -> {
-                    switch (userType) {
-                        case INVITATION_RECEIVED -> INVITATION_RECEIVED.add(user);
-                        case INVITATION_SEND -> INVITATION_SEND.add(user);
-                        case WITH_FRIENDS -> WITH_FRIENDS.add(user);
-                    }
-                });
-            });
-        }
+        // и возвращаем каждого пользователя в свою очередь
+        params.forEach((param, userJson) -> usersQueue.get(param.getAnnotation(User.class).value()).add(userJson));
     }
 
     @Override
@@ -120,50 +120,9 @@ public class UserQueueExtension implements
      */
     @Override
     public UserJson resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        /*
-         * Finding the Annotation:
-         * The AnnotationSupport.findAnnotation() method is used to find the @User annotation on the parameter being resolved.
-         * This annotation specifies the type of user to be used in the test.
-         */
-        Optional<User> annotation = AnnotationSupport.findAnnotation(parameterContext.getParameter(), User.class);
-
-        /*
-         * Getting the User Type:
-         * The User.UserType enum value is retrieved from the annotation.
-         * This enum value represents the type of user to be used in the test.
-         */
-        User.UserType userType = annotation.get().value();
-
-        /*
-         * Getting the Users from the Store:
-         * The extensionContext.getStore() method is used to get a store that is specific to the current test extension context.
-         * The store is used to cache the users of different types.
-         * The get() method is used to retrieve the list of users of the specified type from the store.
-         */
-        Map<User.UserType, List<UserJson>> usersFromTest =
-                extensionContext.getStore(NAMESPACE)
-                        .get(extensionContext.getUniqueId(), Map.class);
-
-        List<UserJson> usersOfType = usersFromTest.get(userType);
-
-        // Retrieve the list of already resolved users for the current test from the context
-        List<UserJson> resolvedUsers =
-                extensionContext.getStore(NAMESPACE)
-                        .getOrComputeIfAbsent("resolvedUsers", key -> new ArrayList<>(), List.class);
-
-        /* This user is then used in the test.
-         * Iterate through the list of users and return the next one if it has not been resolved yet.
-         */
-        for (UserJson userJson : usersOfType) {
-            UserJson userToResolve;
-            synchronized (resolvedUsers) {
-                if (!resolvedUsers.contains(userToResolve = userJson)) {
-                    resolvedUsers.add(userToResolve);
-                    return userToResolve;
-                }
-            }
-        }
-
-        throw new ParameterResolutionException("No more users of type " + userType + " available");
+        Map<Parameter, UserJson> params =
+                extensionContext.getStore(NAMESPACE).get(extensionContext.getUniqueId(), Map.class);
+        // резолвим пользователей по содержимому параметра
+        return params.get(parameterContext.getParameter());
     }
 }
