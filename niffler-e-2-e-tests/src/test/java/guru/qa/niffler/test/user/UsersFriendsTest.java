@@ -9,13 +9,13 @@ import guru.qa.niffler.pages.LoginPage;
 import guru.qa.niffler.pages.PeopleBrowsePage;
 import guru.qa.niffler.pages.WelcomePage;
 import guru.qa.niffler.pages.common.HeaderMenu;
-import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.codeborne.selenide.Condition.*;
 import static guru.qa.niffler.jupiter.annotation.User.UserType.*;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -26,8 +26,8 @@ public class UsersFriendsTest {
     private final WelcomePage welcomePage = new WelcomePage();
     private final LoginPage loginPage = new LoginPage();
     private final HeaderMenu menu = new HeaderMenu();
-    private final FriendsBrowsePage friends = new FriendsBrowsePage();
-    private final PeopleBrowsePage people = new PeopleBrowsePage();
+    private final FriendsBrowsePage friendsPage = new FriendsBrowsePage();
+    private final PeopleBrowsePage peoplePage = new PeopleBrowsePage();
 
     @BeforeEach
     void doLogin() {
@@ -40,15 +40,11 @@ public class UsersFriendsTest {
     @Test
     void invitationSendTest0(@User(INVITATION_SEND) UserJson invitationSendTestUser) {
         loginPage.login(invitationSendTestUser.username(), invitationSendTestUser.testData().password());
+        menu.getAvatar().should(exist);
 
-        assertTrue(menu.isPageLoaded(), "Бро, я не вижу аватар");
-
-        menu.openPeopleList();
-
-        Allure.step("Проверка: Pending invitation", () -> {
-            assertTrue(people.checkRowWithStatus("Pending invitation"),
-                    "Бро, пора бы пригласить кого-нибудь");
-        });
+        menu.getPeople().click();
+        peoplePage.getPeopleContentTableWrapper().should(visible);
+        peoplePage.getFriends().find(text("Pending invitation")).should(exist);
     }
 
     // для каждого типа по 3 теста для создания очереди, можно скролить до 172 строки
@@ -56,24 +52,21 @@ public class UsersFriendsTest {
     void invitationSendTest1(@User(INVITATION_SEND) UserJson invitationSendTestUser) {
         loginPage.login(invitationSendTestUser.username(), invitationSendTestUser.testData().password());
 
-        assertTrue(menu.isPageLoaded(), "Бро, я не вижу аватар");
+        menu.getAvatar().should(exist);
 
-        menu.openPeopleList();
-
-        assertTrue(people.checkRowWithStatus("Pending invitation"),
-                "Бро, пора бы пригласить кого-нибудь");
+        menu.getPeople().click();
+        peoplePage.getPeopleContentTableWrapper().should(visible);
+        peoplePage.getFriends().find(text("Pending invitation")).should(exist);
     }
 
     @Test
     void invitationSendTest2(@User(INVITATION_SEND) UserJson invitationSendTestUser) {
         loginPage.login(invitationSendTestUser.username(), invitationSendTestUser.testData().password());
+        menu.getAvatar().should(exist);
 
-        assertTrue(menu.isPageLoaded(), "Бро, я не вижу аватар");
-
-        menu.openPeopleList();
-
-        assertTrue(people.checkRowWithStatus("Pending invitation"),
-                "Бро, пора бы пригласить кого-нибудь");
+        menu.getPeople().click();
+        peoplePage.getPeopleContentTableWrapper().should(visible);
+        peoplePage.getFriends().find(text("Pending invitation")).should(exist);
     }
 
     //**************** INVITATION RECIEVED ****************//
@@ -81,37 +74,36 @@ public class UsersFriendsTest {
     @Test
     void invitationRecievedTest0(@User(INVITATION_RECEIVED) UserJson
                                          invitationRecievedTestUser) {
+
         loginPage.login(invitationRecievedTestUser.username(), invitationRecievedTestUser.testData().password());
+        menu.getAvatar().should(exist);
 
-        assertTrue(menu.isPageLoaded(), "Бро, я не вижу аватар");
+        menu.getFriends().click();
+        friendsPage.getPeopleContentTableWrapper().should(exist);
+        friendsPage.getSubmitInvitationBtn().should(exist);
+        friendsPage.getDeclineInvitationBtn().should(exist);
 
-        menu.openFriendsList();
-
-        assertTrue(friends.checkInvitations(),
-                "Бро, сорян, сегодня новых друзей не будет :(");
-
-        menu.openPeopleList();
-
-        assertTrue(people.checkInvitations(),
-                "Тут тоже без новых друзей, прости :(");
+        menu.getPeople().click();
+        peoplePage.getPeopleContentTableWrapper().should(visible);
+        peoplePage.getSubmitInvitationBtn().should(exist);
+        peoplePage.getDeclineInvitationBtn().should(exist);
     }
 
     @Test
     void invitationRecievedTest1(@User(INVITATION_RECEIVED) UserJson
                                          invitationRecievedTestUser) {
         loginPage.login(invitationRecievedTestUser.username(), invitationRecievedTestUser.testData().password());
+        menu.getAvatar().should(exist);
 
-        assertTrue(menu.isPageLoaded(), "Бро, я не вижу аватар");
+        menu.getFriends().click();
+        friendsPage.getPeopleContentTableWrapper().should(exist);
+        friendsPage.getSubmitInvitationBtn().should(exist);
+        friendsPage.getDeclineInvitationBtn().should(exist);
 
-        menu.openFriendsList();
-
-        assertTrue(friends.checkInvitations(),
-                "Бро, сорян, сегодня новых друзей не будет :(");
-
-        menu.openPeopleList();
-
-        assertTrue(people.checkInvitations(),
-                "Тут тоже без новых друзей, прости :(");
+        menu.getPeople().click();
+        peoplePage.getPeopleContentTableWrapper().should(visible);
+        peoplePage.getSubmitInvitationBtn().should(exist);
+        peoplePage.getDeclineInvitationBtn().should(exist);
     }
 
     @Test
@@ -119,17 +111,18 @@ public class UsersFriendsTest {
                                          invitationRecievedTestUser) {
         loginPage.login(invitationRecievedTestUser.username(), invitationRecievedTestUser.testData().password());
 
-        assertTrue(menu.isPageLoaded(), "Бро, я не вижу аватар");
+        menu.getAvatar().should(exist);
 
-        menu.openFriendsList();
+        menu.getFriends().click();
+        friendsPage.getPeopleContentTableWrapper().should(exist);
 
-        assertTrue(friends.checkInvitations(),
-                "Бро, сорян, сегодня новых друзей не будет :(");
+        friendsPage.getSubmitInvitationBtn().should(exist);
+        friendsPage.getDeclineInvitationBtn().should(exist);
 
-        menu.openPeopleList();
-
-        assertTrue(people.checkInvitations(),
-                "Тут тоже без новых друзей, прости :(");
+        menu.getPeople().click();
+        peoplePage.getPeopleContentTableWrapper().should(visible);
+        peoplePage.getDeclineInvitationBtn().should(exist);
+        peoplePage.getSubmitInvitationBtn().should(exist);
     }
 
     //******************** WITH FRIENDS *********************//
@@ -137,37 +130,31 @@ public class UsersFriendsTest {
     @Test
     void withFiendsTest0(@User(WITH_FRIENDS) UserJson withFriendsTestUser) {
         loginPage.login(withFriendsTestUser.username(), withFriendsTestUser.testData().password());
+        menu.getAvatar().should(exist);
 
-        assertTrue(menu.isPageLoaded(), "Бро, я не вижу аватар");
-
-        menu.openFriendsList();
-
-        assertTrue(friends.checkRowWithStatus("You are friends"),
-                "Бро, ты, походу, лузер. У тебя совсем нет друзей!");
+        menu.getPeople().click();
+        friendsPage.getPeopleContentTableWrapper().should(exist);
+        friendsPage.getFriends().find(text("You are friends")).should(exist);
     }
 
     @Test
     void withFiendsTest1(@User(WITH_FRIENDS) UserJson withFriendsTestUser) {
         loginPage.login(withFriendsTestUser.username(), withFriendsTestUser.testData().password());
+        menu.getAvatar().should(exist);
 
-        assertTrue(menu.isPageLoaded(), "Бро, я не вижу аватар");
-
-        menu.openFriendsList();
-
-        assertTrue(friends.checkRowWithStatus("You are friends"),
-                "Бро, ты, походу, лузер. У тебя совсем нет друзей!");
+        menu.getFriends().click();
+        friendsPage.getPeopleContentTableWrapper().should(exist);
+        friendsPage.getFriends().find(text("You are friends")).should(exist);
     }
 
     @Test
     void withFiendsTest2(@User(WITH_FRIENDS) UserJson withFriendsTestUser) {
         loginPage.login(withFriendsTestUser.username(), withFriendsTestUser.testData().password());
+        menu.getAvatar().should(exist);
 
-        assertTrue(menu.isPageLoaded(), "Бро, я не вижу аватар");
-
-        menu.openFriendsList();
-
-        assertTrue(friends.checkRowWithStatus("You are friends"),
-                "Бро, ты, походу, лузер. У тебя совсем нет друзей!");
+        menu.getFriends().click();
+        friendsPage.getPeopleContentTableWrapper().should(exist);
+        friendsPage.getFriends().find(text("You are friends")).should(exist);
     }
 
     //**************** Multiple users ********************//
@@ -182,7 +169,7 @@ public class UsersFriendsTest {
     }
 
     @DisplayName("Каждой твари в контексте по паре")
-    @Description("Тест проходит. Резолвер использует контекст для получения уже добавленных пользователей.")
+    @Description("Два пользователя одного типа. Параметры в тестовом методе")
     @Test
     void withSameUserTypesTest(
             @User(INVITATION_SEND) UserJson user1,
