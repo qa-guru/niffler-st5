@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 @WebTest
-@ExtendWith(UserQueueExtension.class)
+//@ExtendWith(UserQueueExtension.class)
 public class UsersQueueExampleTest {
 
     @Test
