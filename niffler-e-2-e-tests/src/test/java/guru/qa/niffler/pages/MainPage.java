@@ -12,11 +12,8 @@ public class MainPage {
     private final ElementsCollection spendingRows = $(".spendings-table tbody").$$("tr");
     private final SelenideElement deleteSpendingBtn = $(".spendings__bulk-actions button");
 
-    public SelenideElement findSpendingRowByDescription(String description) {
-        return spendingRows.find(text(description));
-    }
-
-    public MainPage chooseSpending(SelenideElement spendingRow) {
+    public MainPage chooseSpendingByDescription(String description) {
+        SelenideElement spendingRow = spendingRows.find(text(description));
         spendingRow.$$("td").first().scrollTo().click();
         return this;
     }

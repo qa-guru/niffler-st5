@@ -11,8 +11,8 @@ public class LoginPage {
     private final SelenideElement passwordInput = $("input[name='password']");
     private final SelenideElement signInButton = $(".form__submit");
 
-    public boolean isErrorVisible() {
-        return $(".form__error").shouldBe(Condition.visible).exists();
+    public void checkIsError() {
+        $(".form__error").shouldBe(Condition.visible);
     }
 
     // Open the login page

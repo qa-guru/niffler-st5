@@ -2,7 +2,6 @@ package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
 import guru.qa.niffler.jupiter.extension.CategoryExtension;
@@ -43,8 +42,8 @@ public class SpendingTest {
             .setPassword("12345")
             .signIn();
 
-        SelenideElement rowWithSpending = mainPage.findSpendingRowByDescription(spendJson.description());
-        mainPage.chooseSpending(rowWithSpending)
+//        SelenideElement rowWithSpending = mainPage.findSpendingRowByDescription(spendJson.description());
+        mainPage.chooseSpendingByDescription(spendJson.description())
                 .deleteSpending()
                 .checkCountOfSpendings(0);
     }

@@ -21,8 +21,8 @@ public class LandingPage {
     }
 
     // Method to ensure the page is loaded
-    public boolean isLoaded() {
-        return header.shouldBe(visible).exists();
+    public void checkIsLoaded() {
+        header.shouldBe(visible);
     }
 
     // Method to navigate to the login page
