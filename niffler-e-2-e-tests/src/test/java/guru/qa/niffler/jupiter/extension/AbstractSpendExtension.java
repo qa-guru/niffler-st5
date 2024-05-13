@@ -44,7 +44,7 @@ public abstract class AbstractSpendExtension implements BeforeEachCallback, Para
                 .getParameter()
                 .getType()
                 .isAssignableFrom(CategoryJson.class)) {
-            return CategoryJson.fromEntity(((SpendJson) extensionContext.getStore(NAMESPACE).get(extensionContext.getUniqueId())).category());
+            return CategoryJson.fromEntity(((SpendJson) extensionContext.getStore(NAMESPACE).get(extensionContext.getUniqueId())).categoryEntity());
         } else {
             return extensionContext.getStore(NAMESPACE).get(extensionContext.getUniqueId());
         }

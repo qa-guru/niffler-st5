@@ -2,16 +2,8 @@ package guru.qa.niffler.data.entity;
 
 import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.model.CategoryJson;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.UUID;
 
 public class CategoryEntity implements Serializable {
@@ -58,5 +50,10 @@ public class CategoryEntity implements Serializable {
         entity.setCategory(category.category());
         entity.setUsername(category.username());
         return entity;
+    }
+
+    @Override
+    public String toString() {
+        return category;
     }
 }

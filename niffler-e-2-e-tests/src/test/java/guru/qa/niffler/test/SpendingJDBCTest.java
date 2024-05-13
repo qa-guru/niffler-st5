@@ -9,7 +9,7 @@ import guru.qa.niffler.data.repository.Repository;
 import guru.qa.niffler.data.repository.RepositoryJdbc;
 import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.jupiter.annotation.Spend;
-import guru.qa.niffler.jupiter.annotation.meta.WebTest;
+import guru.qa.niffler.jupiter.annotation.meta.WebTestJDBC;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
@@ -24,12 +24,11 @@ import java.util.Objects;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 
-@WebTest
-public class SpendingTest {
+@WebTestJDBC
+public class SpendingJDBCTest {
     public final Repository repository = new RepositoryJdbc();
 
     static {
@@ -46,12 +45,6 @@ public class SpendingTest {
         $("button[type='submit']").click();
     }
 
-    @Test
-    void anotherTest() {
-        Selenide.open("http://127.0.0.1:3000/");
-        $("a[href*='redirect']").should(visible);
-    }
-
     @AfterEach
     void doScreenshot() {
         Allure.addAttachment(
@@ -65,7 +58,7 @@ public class SpendingTest {
     }
 
     @Category(
-            category = "Обучение351",
+            category = "Обучение3599",
             username = "dima1"
     )
     @Spend(
@@ -73,7 +66,7 @@ public class SpendingTest {
             amount = 65000.00,
             currency = CurrencyValues.RUB,
             category = @Category(
-                    category = "Обучение351",
+                    category = "Обучение3599",
                     username = "dima1"
             ),
             username = "dima1")

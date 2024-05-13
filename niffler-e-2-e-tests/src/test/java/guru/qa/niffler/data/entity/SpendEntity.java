@@ -14,7 +14,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.UUID;
 
 @Setter
@@ -98,7 +97,7 @@ public class SpendEntity implements Serializable {
         tempEntity.setSpendDate(spendJson.spendDate());
         tempEntity.setAmount(spendJson.amount());
         tempEntity.setDescription(spendJson.description());
-        tempEntity.setCategory(spendJson.category());
+        tempEntity.setCategory(spendJson.categoryEntity());
         return tempEntity;
     }
 
