@@ -41,7 +41,7 @@ public class SpendingTest {
 	@BeforeEach
 	void doLogin() {
 		Selenide.open("http://127.0.0.1:3000/");
-		authorizationPage.ClickLoginButton();
+		authorizationPage.clickLoginButton();
 		loginPage.userNameFieldSetValue(USER_NAME);
 		loginPage.passwordFieldSetValue(USER_PASSWORD);
 		loginPage.signUpClick();
