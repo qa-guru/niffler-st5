@@ -15,7 +15,8 @@ public class MainPage {
 	private final SelenideElement
 			deleteSelectButton = $x("//button[contains(text(),'Delete selected')]"),
 			allPeopleButton = $x("//*[@href='/people']"),
-			friendsButton = $x("//*[@href='/friends']");
+			friendsButton = $x("//*[@href='/friends']"),
+			profileButton = $x("//*[@href='/profile']");
 
 	@Step("Проставить чек-бокс напротив трат ")
 	public MainPage selectSpending(String spending) {
@@ -43,5 +44,10 @@ public class MainPage {
 	public FriendsPage clickFriendsButton() {
 		friendsButton.should(visible).click();
 		return new FriendsPage();
+	}
+	@Step("Перейти на страницу 'Профиль'")
+	public ProfilePage clickProfileButton() {
+		profileButton.should(visible).click();
+		return new ProfilePage();
 	}
 }
