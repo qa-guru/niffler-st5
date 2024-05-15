@@ -5,11 +5,9 @@ import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.jupiter.extension.UserQueueExtension;
 import guru.qa.niffler.model.UserJson;
-import guru.qa.niffler.model.UserType;
 import guru.qa.niffler.pages.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.openqa.selenium.WindowType;
 
 
 @WebTest
@@ -38,36 +36,31 @@ public class UsersQueueTest {
     }
 
     @Test
-    void friendsSeeEachOtherInFiendsTable(@User(UserType.WITH_FRIEND) UserJson testUser,
-                                          @User(UserType.WITH_FRIEND_2) UserJson testUserAnother) {
+    void friendsSeeEachOtherInFiendsTable(@User(User.UserType.WITH_FRIEND) UserJson testUser,
+                                          @User(User.UserType.WITH_FRIEND) UserJson testUserAnother) {
 
         Selenide.open("http://127.0.0.1:3000/");
         startPage.clickLoginButton();
         authPage.login(testUser.username(), testUser.testData().password());
         mainPage.clickFriendsButton();
-        friendsPage.checkFriendsName(testUser.testData().friend().getFirst());
-        mainPage.logOut();
-
-        Selenide.switchTo().newWindow(WindowType.WINDOW);
-        Selenide.open("http://127.0.0.1:3000/");
-        startPage.clickLoginButton();
-        authPage.login(testUserAnother.username(), testUserAnother.testData().password());
-        mainPage.clickFriendsButton();
-        friendsPage.checkFriendsName(testUserAnother.testData().friend().getFirst());
+        friendsPage.checkFriendsName(testUserAnother.username());
     }
 
     @Test
-    void userSendInviteAndUserInvitedSeeEachOtherInFriendsTable(@User(UserType.INVITATION_SEND) UserJson userSendInvite,
-                                                                @User(UserType.INVITATION_RECIEVED) UserJson userWithInvite) {
+    void userSendInviteSeeInvitedInFriendsTable(@User(User.UserType.INVITATION_SEND) UserJson userSendInvite,
+                                                @User(User.UserType.INVITATION_RECIEVED) UserJson userWithInvite) {
 
         Selenide.open("http://127.0.0.1:3000/");
         startPage.clickLoginButton();
         authPage.login(userSendInvite.username(), userSendInvite.testData().password());
         mainPage.clickPeopleButton();
-        peoplePage.checkStatus("Nastiletko", "Pending invitation");
-        mainPage.logOut();
+        peoplePage.checkStatus(userWithInvite.username(), "Pending invitation");
+    }
 
-        Selenide.switchTo().newWindow(WindowType.WINDOW);
+    @Test
+    void userWithInviteSeeInvitedInFriendsTable(@User(User.UserType.INVITATION_SEND) UserJson userSendInvite,
+                                                @User(User.UserType.INVITATION_RECIEVED) UserJson userWithInvite) {
+
         Selenide.open("http://127.0.0.1:3000/");
         startPage.clickLoginButton();
         authPage.login(userWithInvite.username(), userWithInvite.testData().password());
@@ -76,7 +69,7 @@ public class UsersQueueTest {
     }
 
     @Test
-    void userWithInviteCanDeclineAndSubmit(@User(UserType.INVITATION_RECIEVED) UserJson testUser) {
+    void userWithInviteCanDeclineAndSubmit(@User(User.UserType.INVITATION_RECIEVED) UserJson testUser) {
 
         Selenide.open("http://127.0.0.1:3000/");
         startPage.clickLoginButton();
@@ -86,12 +79,13 @@ public class UsersQueueTest {
     }
 
     @Test
-    void friendTaggedInPeopleTable(@User(UserType.WITH_FRIEND) UserJson testUser) {
+    void friendTaggedInPeopleTable(@User(User.UserType.WITH_FRIEND) UserJson testUser,
+                                   @User(User.UserType.WITH_FRIEND) UserJson testUserAnother) {
 
         Selenide.open("http://127.0.0.1:3000/");
         startPage.clickLoginButton();
         authPage.login(testUser.username(), testUser.testData().password());
         mainPage.clickPeopleButton();
-        peoplePage.checkStatus("Nastiletko2", "You are friends");
+        peoplePage.checkStatus(testUserAnother.username(), "You are friends");
     }
 }

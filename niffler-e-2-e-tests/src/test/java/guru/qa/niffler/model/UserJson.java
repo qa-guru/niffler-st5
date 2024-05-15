@@ -29,7 +29,7 @@ import java.util.UUID;
             TestData testData)
     {
 
-        public static UserJson simpleUser(String username, String password, List<String> friend) {
+        public static UserJson simpleUser(String username, String password) {
             return new UserJson(
                     null,
                     username,
@@ -40,7 +40,7 @@ import java.util.UUID;
                     null,
                     null,
                     new TestData(
-                            password, friend
+                            password
                     )
 
             );
