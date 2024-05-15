@@ -16,6 +16,10 @@ public class MainPage {
 
     private final SelenideElement deleteButton = $(".spendings__bulk-actions button");
 
+    private final SelenideElement friendsButton = $("a[href*='friends']");
+    private final SelenideElement peopleButton = $("a[href*='people']");
+    private final SelenideElement logOutButton = $(".header__logout");
+
     public MainPage openPage() {
 
         Selenide.open("http://127.0.0.1:3000/main");
@@ -28,6 +32,16 @@ public class MainPage {
                 .$$("td").first().scrollIntoView(true)
                 .$("input[type='checkbox']").click();
         return this;
+    }
+
+    public void clickFriendsButton() {
+
+        friendsButton.click();
+    }
+
+    public void clickPeopleButton() {
+
+        peopleButton.click();
     }
 
     public MainPage deleteSpending() {
@@ -48,6 +62,9 @@ public class MainPage {
         return this;
     }
 
+    public void logOut() {
+        logOutButton.click();
+    }
 
 }
 
