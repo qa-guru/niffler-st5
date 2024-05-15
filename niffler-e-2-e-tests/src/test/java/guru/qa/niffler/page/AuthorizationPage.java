@@ -11,8 +11,9 @@ public class AuthorizationPage {
 			loginButton = $x("//a[contains(text(),'Login')]"),
 			registerButton = $x("//a[contains(text(),'Register')]");
 
-	public void ClickLoginButton() {
+	public LoginPage clickLoginButton() {
 		loginButton.click();
+		return new LoginPage();
 	}
 
 	public void loginButtonIsVisible() {
