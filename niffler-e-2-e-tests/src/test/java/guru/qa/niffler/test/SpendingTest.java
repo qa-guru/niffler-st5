@@ -2,29 +2,25 @@ package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
-import guru.qa.niffler.jupiter.annotation.Category;
-import guru.qa.niffler.jupiter.annotation.Spend;
-import guru.qa.niffler.jupiter.annotation.meta.WebTest;
-import guru.qa.niffler.model.CurrencyValues;
+import guru.qa.niffler.jupiter.annotation.GenerateCategory;
+import guru.qa.niffler.jupiter.annotation.GenerateSpend;
+import guru.qa.niffler.jupiter.extension.CategoryExtension;
+import guru.qa.niffler.jupiter.extension.SpendExtension;
 import guru.qa.niffler.model.SpendJson;
-import io.qameta.allure.Allure;
-import org.junit.jupiter.api.AfterEach;
+import guru.qa.niffler.page.UiBot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.OutputType;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.io.ByteArrayInputStream;
-import java.util.Objects;
-
-import static com.codeborne.selenide.CollectionCondition.size;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
+import static guru.qa.niffler.model.CurrencyValues.RUB;
 
 
-@WebTest
+@ExtendWith({CategoryExtension.class, SpendExtension.class})
 public class SpendingTest {
+
+    private final UiBot ui = new UiBot();
+
+    private final static String USERNAME = "zhanna1";
 
     static {
         Configuration.browserSize = "1920x1080";
@@ -32,52 +28,30 @@ public class SpendingTest {
 
     @BeforeEach
     void doLogin() {
-        // createSpend
-        Selenide.open("http://127.0.0.1:3000/");
-        $("a[href*='redirect']").click();
-        $("input[name='username']").setValue("dima");
-        $("input[name='password']").setValue("12345");
-        $("button[type='submit']").click();
+        Selenide.open("http://127.0.0.1:3000/main");
+        ui.startPage()
+                .clickLogin()
+                .setUsername(USERNAME)
+                .setPassword("test")
+                .clickSignIn();
     }
 
-    @Test
-    void anotherTest() {
-        Selenide.open("http://127.0.0.1:3000/");
-        $("a[href*='redirect']").should(visible);
-    }
-
-    @AfterEach
-    void doScreenshot() {
-        Allure.addAttachment(
-                "Screen on test end",
-                new ByteArrayInputStream(
-                        Objects.requireNonNull(
-                                Selenide.screenshot(OutputType.BYTES)
-                        )
-                )
-        );
-    }
-
-    @Category(
-            category = "Обучение3",
-            username = "dima"
+    @GenerateCategory(
+            category = "Обучение",
+            username = USERNAME
     )
-    @Spend(
+    @GenerateSpend(
             description = "QA.GURU Advanced 5",
             amount = 65000.00,
-            currency = CurrencyValues.RUB
+            currency = RUB
     )
     @Test
     void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
-        SelenideElement rowWithSpending = $(".spendings-table tbody")
-                .$$("tr")
-                .find(text(spendJson.description()))
-                .scrollIntoView(false);
-
-        rowWithSpending.$$("td").first().click();
-        $(".spendings__bulk-actions button").click();
-
-        $(".spendings-table tbody").$$("tr")
-                .shouldHave(size(0));
+        ui.mainPage()
+                .findRowByText(spendJson.description())
+                .chooseSpending()
+                .deleteChosenSpending()
+                .assertThatTableContentHasSize(0);
     }
+
 }

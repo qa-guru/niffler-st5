@@ -19,5 +19,5 @@ docker run --name=kafka -e KAFKA_BROKER_ID=1 \
 echo '### Run front ###'
 cd ./niffler-frontend/
 npm i
-npm run build:dev
+npm run build:windows
 cd ../
