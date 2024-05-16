@@ -59,7 +59,7 @@ public class SpendingTest {
     }
 
     @Category(
-            category = "Обучение3",
+            category = "Обучение5",
             username = "dima"
     )
     @Spend(
