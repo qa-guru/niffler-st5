@@ -4,13 +4,11 @@ import guru.qa.niffler.data.DataBase;
 import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
+import guru.qa.niffler.model.CurrencyValues;
 import io.qameta.allure.Step;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.UUID;
 
 public class SpendRepositoryJdbc implements SpendRepository {
@@ -55,7 +53,7 @@ public class SpendRepositoryJdbc implements SpendRepository {
 					 )) {
 			ps.setString(1, category.getCategory());
 			ps.setString(2, category.getUsername());
-			ps.setString(3, String.valueOf(category.getId()));
+			ps.setObject(3, category.getId());
 			ps.executeUpdate();
 			try (ResultSet result = ps.getResultSet()) {
 				if (result.next()) {
@@ -98,14 +96,14 @@ public class SpendRepositoryJdbc implements SpendRepository {
 							 PreparedStatement.RETURN_GENERATED_KEYS
 					 )) {
 			ps.setString(1, spend.getUsername());
-			ps.setString(2, String.valueOf(spend.getSpendDate()));
-			ps.setString(3, String.valueOf(spend.getCurrency()));
-			ps.setString(4, String.valueOf(spend.getAmount()));
+			ps.setDate(2, new Date(spend.getSpendDate().getTime()));
+			ps.setString(3, spend.getCurrency().name());
+			ps.setDouble(4, spend.getAmount());
 			ps.setString(5, spend.getDescription());
-			ps.setString(6, spend.getCategory());
+			ps.setObject(6, spend.getCategoryId());
 			ps.executeUpdate();
 			UUID generateId = null;
-			try (ResultSet result = ps.getResultSet();) {
+			try (ResultSet result = ps.getGeneratedKeys()) {
 				if (result.next()) {
 					generateId = UUID.fromString(result.getString("id"));
 				} else {
@@ -125,23 +123,25 @@ public class SpendRepositoryJdbc implements SpendRepository {
 					 spendDataSource.getConnection();
 			 PreparedStatement ps =
 					 connection.prepareStatement(
-							 "UPDATE spend set username =?,currency=?,amount=?,description=?," +
+							 "UPDATE spend set username =?,currency=?, spend_data = ?,amount=?,description=?," +
 									 "category_id=? where id = ?;"
-							 )) {
+					 )) {
 			ps.setString(1, spend.getUsername());
-			ps.setString(2, String.valueOf(spend.getCurrency()));
-			ps.setString(3, String.valueOf(spend.getAmount()));
-			ps.setString(4, spend.getDescription());
-			ps.setString(5, spend.getCategory());
-			ps.setString(6, String.valueOf(spend.getId()));
+			ps.setString(2, spend.getCurrency().name());
+			ps.setDate(3, new Date(spend.getSpendDate().getTime()));
+			ps.setDouble(4, spend.getAmount());
+			ps.setString(5, spend.getDescription());
+			ps.setObject(6, spend.getCategoryId());
+			ps.setObject(7, spend.getId());
 			ps.executeUpdate();
 			try (ResultSet result = ps.getResultSet();) {
 				if (result.next()) {
 					spend.setUsername(result.getString("username"));
-					spend.setCategory(result.getString("currency"));
+					spend.setCurrency(CurrencyValues.valueOf(result.getString("currency")));
+					spend.setSpendDate(result.getDate("spend_data"));
 					spend.setAmount(Double.valueOf(result.getString("amount")));
 					spend.setDescription(result.getString("description"));
-					spend.setCategory(result.getString("category_id"));
+					spend.setCategoryId(UUID.fromString(result.getString("category_id")));
 				} else {
 					throw new RuntimeException();
 				}

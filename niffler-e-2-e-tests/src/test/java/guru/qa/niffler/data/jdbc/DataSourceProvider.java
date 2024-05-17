@@ -21,7 +21,8 @@ public enum DataSourceProvider {
 			return pgDataSource;
 		});
 	}
-	public static  DataSource dataSource(DataBase db){
+
+	public static DataSource dataSource(DataBase db) {
 		return DataSourceProvider.INSTANCE.computeDataSource(db);
 	}
 }

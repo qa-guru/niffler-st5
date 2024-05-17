@@ -1,32 +1,62 @@
 package guru.qa.niffler.jupiter.extension;
 
-import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
+import guru.qa.niffler.jupiter.annotation.GenerateSpend;
+import guru.qa.niffler.model.CategoryJson;
+import guru.qa.niffler.model.SpendJson;
 import org.junit.jupiter.api.extension.*;
+import org.junit.platform.commons.support.AnnotationSupport;
+
+import java.io.IOException;
 
 public abstract class AbstractSpendExtension implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
-	protected abstract SpendEntity createSpend(SpendEntity spend);
+	public static final ExtensionContext.Namespace NAMESPACE
+			= ExtensionContext.Namespace.create(AbstractSpendExtension.class);
+
+	protected abstract Object createSpend(GenerateSpend spend, CategoryJson category) throws IOException;
 
 	protected abstract void removeSpend(SpendEntity spend);
 
 	@Override
 	public void beforeEach(ExtensionContext context) throws Exception {
 
+		CategoryJson category = context.getStore(AbstractCategoryExtension.NAMESPACE)
+				.get(context.getUniqueId(), CategoryJson.class);
+
+		AnnotationSupport.findAnnotation(
+				context.getRequiredTestMethod(),
+				GenerateSpend.class
+		).ifPresent(
+				generateSpend -> {
+					try {
+						context.getStore(NAMESPACE).put(
+								context.getUniqueId(),
+								createSpend(generateSpend, category)
+						);
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
+
+				}
+		);
 	}
 
 	@Override
-	public void afterEach(ExtensionContext context) throws Exception {
-
+	public void afterEach(ExtensionContext context) {
+		removeSpend(context.getStore(NAMESPACE).get(context.getUniqueId(), SpendEntity.class));
 	}
 
 	@Override
 	public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-		return false;
+		return parameterContext
+				.getParameter()
+				.getType()
+				.isAssignableFrom(SpendJson.class);
 	}
 
 	@Override
-	public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-		return null;
+	public SpendJson resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
+		return SpendJson.fromEntity(extensionContext.getStore(NAMESPACE).get(extensionContext.getUniqueId(), SpendEntity.class));
 	}
 }

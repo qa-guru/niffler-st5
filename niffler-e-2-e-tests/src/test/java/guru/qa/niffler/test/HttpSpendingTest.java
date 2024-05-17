@@ -3,8 +3,10 @@ package guru.qa.niffler.test;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
-import guru.qa.niffler.jupiter.annotation.meta.WebTest;
-import guru.qa.niffler.model.CategoryJson;
+import guru.qa.niffler.jupiter.annotation.GenerateSpend;
+import guru.qa.niffler.jupiter.annotation.meta.WebTestHttp;
+import guru.qa.niffler.model.CurrencyValues;
+import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.page.AuthorizationPage;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.MainPage;
@@ -17,8 +19,9 @@ import org.openqa.selenium.OutputType;
 import java.io.ByteArrayInputStream;
 import java.util.Objects;
 
-@WebTest
-public class JdbcCategoryTest {
+
+@WebTestHttp
+public class HttpSpendingTest {
 
 	AuthorizationPage authorizationPage = new AuthorizationPage();
 
@@ -34,7 +37,6 @@ public class JdbcCategoryTest {
 	static {
 		Configuration.browserSize = "1920x1080";
 	}
-
 
 	@BeforeEach
 	void doLogin() {
@@ -68,11 +70,16 @@ public class JdbcCategoryTest {
 			category = CATEGORY,
 			username = USER_NAME
 	)
-
+	@GenerateSpend(
+			description = "QA.GURU Advanced 5",
+			amount = 65000.00,
+			currency = CurrencyValues.RUB
+	)
 	@Test
-	void createCategoryByJdbc(CategoryJson category) {
-		mainPage.
-				clickProfileButton().
-				checkCategoriesInList(category.username());
+	void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
+		mainPage
+				.selectSpending(spendJson.description())
+				.clickDeleteSelectButton()
+				.checkListSpendingIsEmpty();
 	}
 }

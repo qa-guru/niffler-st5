@@ -13,44 +13,44 @@ import java.io.ByteArrayInputStream;
 import java.util.Objects;
 
 public class BrowserExtension implements TestExecutionExceptionHandler,
-        AfterEachCallback,
-        LifecycleMethodExecutionExceptionHandler {
+		AfterEachCallback,
+		LifecycleMethodExecutionExceptionHandler {
 
-    @Override
-    public void handleTestExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
-        doScreenShot();
-        throw throwable;
-    }
+	@Override
+	public void handleTestExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
+		doScreenShot();
+		throw throwable;
+	}
 
-    @Override
-    public void handleBeforeEachMethodExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
-        doScreenShot();
-        throw throwable;
-    }
+	@Override
+	public void handleBeforeEachMethodExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
+		doScreenShot();
+		throw throwable;
+	}
 
-    @Override
-    public void handleAfterEachMethodExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
-        doScreenShot();
-        throw throwable;
-    }
+	@Override
+	public void handleAfterEachMethodExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
+		doScreenShot();
+		throw throwable;
+	}
 
-    private void doScreenShot() {
-        if (WebDriverRunner.hasWebDriverStarted()) {
-            Allure.addAttachment(
-                    "Screen on test end",
-                    new ByteArrayInputStream(
-                            Objects.requireNonNull(
-                                    Selenide.screenshot(OutputType.BYTES)
-                            )
-                    )
-            );
-        }
-    }
+	private void doScreenShot() {
+		if (WebDriverRunner.hasWebDriverStarted()) {
+			Allure.addAttachment(
+					"Screen on test end",
+					new ByteArrayInputStream(
+							Objects.requireNonNull(
+									Selenide.screenshot(OutputType.BYTES)
+							)
+					)
+			);
+		}
+	}
 
-    @Override
-    public void afterEach(ExtensionContext context) throws Exception {
-        if (WebDriverRunner.hasWebDriverStarted()) {
-            Selenide.closeWebDriver();
-        }
-    }
+	@Override
+	public void afterEach(ExtensionContext context) throws Exception {
+		if (WebDriverRunner.hasWebDriverStarted()) {
+			Selenide.closeWebDriver();
+		}
+	}
 }

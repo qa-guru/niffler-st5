@@ -2,7 +2,7 @@ package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.User;
-import guru.qa.niffler.jupiter.annotation.meta.WebTest;
+import guru.qa.niffler.jupiter.annotation.meta.WebTestJdbc;
 import guru.qa.niffler.jupiter.extension.UserQueueExtension;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.*;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static guru.qa.niffler.enums.Alert.*;
 import static guru.qa.niffler.jupiter.annotation.User.UserType.*;
 
-@WebTest
+@WebTestJdbc
 @ExtendWith({
 		UserQueueExtension.class
 })
@@ -47,29 +47,31 @@ public class PeopleTest {
 	public void submitInvitationFriend(
 			@User(userType = FRIEND) UserJson userFriend,
 			@User(userType = INVITE_RECEIVED) UserJson userInviteReceived
-	){
+	) {
 		doLogin(userFriend);
 		mainPage.
 				clickFriendsButton().
 				clickSubmit(userInviteReceived.username());
 		common.checkAlert(INVITATION_IS_ACCEPTED);
 	}
+
 	@Test
 	public void declineInvitationFriend(
 			@User(userType = FRIEND) UserJson userFriend,
 			@User(userType = INVITE_RECEIVED) UserJson userInviteReceived
-	){
+	) {
 		doLogin(userFriend);
 		mainPage.
 				clickFriendsButton().
 				clickDecline(userInviteReceived.username());
 		common.checkAlert(INVITATION_IS_DECLINED);
 	}
+
 	@Test
 	public void deleteFriend(
 			@User(userType = FRIEND) UserJson userFriend,
 			@User(userType = FRIEND) UserJson userFriend1
-	){
+	) {
 		doLogin(userFriend);
 		mainPage.
 				clickFriendsButton().

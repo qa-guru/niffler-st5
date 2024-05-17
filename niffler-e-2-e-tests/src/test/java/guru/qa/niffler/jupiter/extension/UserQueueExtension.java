@@ -95,10 +95,10 @@ public class UserQueueExtension implements
 		Optional<User> annotation = AnnotationSupport.findAnnotation(parameterContext.getParameter(), User.class);
 		User.UserType userUserType = annotation.get().userType();
 		Map<User.UserType, List<UserJson>> users = extensionContext.getStore(NAMESPACE).get(extensionContext.getUniqueId(), Map.class);
-		if (users.size() == 1 && users.get(userUserType).size()==1) {
+		if (users.size() == 1 && users.get(userUserType).size() == 1) {
 			return users.get(userUserType).getFirst();
-		}else {
-			return parameterContext.getIndex()==0 ? users.get(userUserType).getFirst():users.get(userUserType).getLast();
+		} else {
+			return parameterContext.getIndex() == 0 ? users.get(userUserType).getFirst() : users.get(userUserType).getLast();
 		}
 	}
 }

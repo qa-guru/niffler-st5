@@ -5,7 +5,7 @@ import guru.qa.niffler.data.repository.SpendRepository;
 import guru.qa.niffler.data.repository.SpendRepositoryJdbc;
 import guru.qa.niffler.model.CategoryJson;
 
-public class JdbcCategoryExtension extends AbstractCategoryExtension{
+public class JdbcCategoryExtension extends AbstractCategoryExtension {
 
 	private final SpendRepository spendRepository = new SpendRepositoryJdbc();
 

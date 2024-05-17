@@ -1,22 +1,23 @@
 package guru.qa.niffler.jupiter.extension;
 
-import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.model.CategoryJson;
 import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
+
+import java.io.IOException;
 
 public abstract class AbstractCategoryExtension implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
 	public static final ExtensionContext.Namespace NAMESPACE
 			= ExtensionContext.Namespace.create(AbstractCategoryExtension.class);
 
-	protected abstract CategoryJson createCategory(CategoryJson category);
+	protected abstract CategoryJson createCategory(CategoryJson category) throws IOException;
 
 	protected abstract void removeCategory(CategoryJson category);
 
 	@Override
-	public void beforeEach(ExtensionContext extensionContext) throws Exception {
+	public void beforeEach(ExtensionContext extensionContext) {
 		AnnotationSupport.findAnnotation(
 				extensionContext.getRequiredTestMethod(),
 				GenerateCategory.class
@@ -27,9 +28,13 @@ public abstract class AbstractCategoryExtension implements BeforeEachCallback, A
 							category.category(),
 							category.username()
 					);
-					extensionContext.
-							getStore(NAMESPACE).
-							put(extensionContext.getUniqueId(), createCategory(categoryJson));
+					try {
+						extensionContext.
+								getStore(NAMESPACE).
+								put(extensionContext.getUniqueId(), createCategory(categoryJson));
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
 				});
 	}
 

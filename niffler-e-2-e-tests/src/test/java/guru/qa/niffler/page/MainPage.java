@@ -1,5 +1,6 @@
 package guru.qa.niffler.page;
 
+import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
@@ -40,14 +41,22 @@ public class MainPage {
 		allPeopleButton.should(visible).click();
 		return new PeoplePage();
 	}
+
 	@Step("Перейти на страницу 'Друзья'")
 	public FriendsPage clickFriendsButton() {
 		friendsButton.should(visible).click();
 		return new FriendsPage();
 	}
+
 	@Step("Перейти на страницу 'Профиль'")
 	public ProfilePage clickProfileButton() {
 		profileButton.should(visible).click();
 		return new ProfilePage();
+	}
+
+	@Step("Проставить, что трата {spending} существует ")
+	public MainPage checkSpendingIsVisible(String spending) {
+		listSpending.shouldHave(CollectionCondition.texts(spending));
+		return this;
 	}
 }

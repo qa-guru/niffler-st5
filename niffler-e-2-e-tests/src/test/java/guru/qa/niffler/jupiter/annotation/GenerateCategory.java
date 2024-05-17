@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
 public @interface GenerateCategory {
 
-    String category();
+	String category();
 
-    String username();
+	String username();
 }
