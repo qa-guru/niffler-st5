@@ -22,5 +22,9 @@ public interface UserRepository {
 
     UserEntity createUserInUserdata(UserEntity user);
 
+    UserAuthEntity updateUserInAuth(UserAuthEntity user);
+    UserEntity updateUserInUserdata(UserEntity user);
+
+
     Optional<UserEntity> findUserInUserdataById(UUID id);
 }

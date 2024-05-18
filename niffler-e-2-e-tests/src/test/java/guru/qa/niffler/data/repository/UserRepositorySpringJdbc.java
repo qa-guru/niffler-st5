@@ -104,6 +104,16 @@ public class UserRepositorySpringJdbc implements UserRepository {
     }
 
     @Override
+    public UserAuthEntity updateUserInAuth(UserAuthEntity user) {
+        return null;
+    }
+
+    @Override
+    public UserEntity updateUserInUserdata(UserEntity user) {
+        return null;
+    }
+
+    @Override
     public Optional<UserEntity> findUserInUserdataById(UUID id) {
         try {
             return Optional.ofNullable(userdataJdbcTemplate.queryForObject(
