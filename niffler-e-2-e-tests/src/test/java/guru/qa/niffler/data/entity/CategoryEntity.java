@@ -52,6 +52,14 @@ public class CategoryEntity implements Serializable {
         return entity;
     }
 
+    public static CategoryEntity simpleCategoryEntity(UUID id, String category, String username) {
+        CategoryEntity entity = new CategoryEntity();
+        entity.setId(id);
+        entity.setCategory(category);
+        entity.setUsername(username);
+        return entity;
+    }
+
     @Override
     public String toString() {
         return category;
