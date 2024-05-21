@@ -4,13 +4,12 @@ import guru.qa.niffler.data.DataBase;
 import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
+import guru.qa.niffler.model.CurrencyValues;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class SpendRepositoryJdbc implements SpendRepository {
@@ -133,5 +132,32 @@ public class SpendRepositoryJdbc implements SpendRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<SpendEntity> findAllByUsername(String username) {
+        List<SpendEntity> entities = new ArrayList<>();
+        try (Connection conn = spendDataSource.getConnection();
+             PreparedStatement userPs = conn.prepareStatement(
+                     "SELECT * FROM \"spend\" WHERE username = ?"
+             )) {
+            userPs.setObject(1, username);
+            try (ResultSet resultSet = userPs.executeQuery()) {
+                SpendEntity entity = new SpendEntity();
+                while (resultSet.next()) {
+                    entity.setId(UUID.fromString(resultSet.getString("id")));
+                    entity.setUsername(username);
+                    entity.setSpendDate(resultSet.getDate("date"));
+                    entity.setCurrency(CurrencyValues.valueOf(resultSet.getString("currency")));
+                    entity.setAmount(resultSet.getDouble("amount"));
+                    entity.setDescription(resultSet.getString("description"));
+                    entity.setCategoryId(UUID.fromString(resultSet.getString("category_id")));
+                    entities.add(entity);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return entities;
     }
 }

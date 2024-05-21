@@ -2,6 +2,7 @@ package guru.qa.niffler.data.repository;
 
 import guru.qa.niffler.data.DataBase;
 import guru.qa.niffler.data.entity.Authority;
+import guru.qa.niffler.data.entity.CurrencyValues;
 import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
@@ -178,6 +179,24 @@ public class UserRepositoryJdbc implements UserRepository {
 
     @Override
     public Optional<UserEntity> findUserInUserdataById(UUID id) {
-        return Optional.empty();
+        UserEntity ue = new UserEntity();
+        try (Connection conn = udDataSource.getConnection();
+             PreparedStatement userPs = conn.prepareStatement(
+                     "SELECT * FROM \"user\" WHERE id = ?"
+             )) {
+            userPs.setObject(1, id);
+            try (ResultSet resultSet = userPs.executeQuery()){
+                if (resultSet.next()) {
+                    ue.setId(UUID.fromString(resultSet.getString("id")));
+                    ue.setUsername(resultSet.getString("username"));
+                    ue.setCurrency(CurrencyValues.valueOf(resultSet.getString("currency")));
+                } else {
+                    return Optional.empty();
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return Optional.of(ue);
     }
 }

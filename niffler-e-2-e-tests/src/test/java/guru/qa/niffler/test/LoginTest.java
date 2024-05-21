@@ -5,9 +5,10 @@ import com.github.javafaker.Faker;
 import guru.qa.niffler.data.entity.CurrencyValues;
 import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
+import guru.qa.niffler.data.repository.SpendRepository;
+import guru.qa.niffler.data.repository.SpendRepositoryJdbc;
 import guru.qa.niffler.data.repository.UserRepository;
 import guru.qa.niffler.data.repository.UserRepositoryJdbc;
-import guru.qa.niffler.data.repository.UserRepositorySpringJdbc;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,8 @@ import static com.codeborne.selenide.Selenide.$;
 @WebTest
 public class LoginTest {
 
-    UserRepository userRepository = new UserRepositorySpringJdbc();
+    UserRepository userRepository = new UserRepositoryJdbc();
+    SpendRepository spendRepository = new SpendRepositoryJdbc();
     UserEntity userDataUser;
     String userName = Faker.instance().name().name();
     UserAuthEntity user;
@@ -53,6 +55,7 @@ public class LoginTest {
         $(".header__avatar").should(visible);
 
         userRepository.findUserInUserdataById(userDataUser.getId());
+        spendRepository.findAllByUsername(userName);
 
         String newUserName = Faker.instance().name().name();
         String newPassword = "123456";

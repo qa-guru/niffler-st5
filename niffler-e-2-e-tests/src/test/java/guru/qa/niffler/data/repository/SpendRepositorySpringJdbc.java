@@ -10,6 +10,7 @@ import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.util.List;
 import java.util.UUID;
 
 public class SpendRepositorySpringJdbc implements SpendRepository {
@@ -98,5 +99,10 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
                 "DELETE FROM spend WHERE id = ?",
                 spend.getId()
         );
+    }
+
+    @Override
+    public List<SpendEntity> findAllByUsername(String username) {
+        return List.of();
     }
 }
