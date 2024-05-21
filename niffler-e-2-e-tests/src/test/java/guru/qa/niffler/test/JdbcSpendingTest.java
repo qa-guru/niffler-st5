@@ -4,7 +4,8 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
-import guru.qa.niffler.jupiter.annotation.meta.WebTest;
+import guru.qa.niffler.jupiter.annotation.meta.WebTestJdbc;
+import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.page.AuthorizationPage;
@@ -19,9 +20,8 @@ import org.openqa.selenium.OutputType;
 import java.io.ByteArrayInputStream;
 import java.util.Objects;
 
-
-@WebTest
-public class SpendingTest {
+@WebTestJdbc
+public class JdbcSpendingTest {
 
 	AuthorizationPage authorizationPage = new AuthorizationPage();
 
@@ -29,10 +29,9 @@ public class SpendingTest {
 
 	LoginPage loginPage = new LoginPage();
 
-	private static final String CATEGORY = "Обучение";
-	private static final String USER_NAME = "dima";
-	private static final String USER_PASSWORD = "12345";
-
+	private static final String CATEGORY = "new Обучение";
+	private static final String USER_NAME = "demidov";
+	private static final String USER_PASSWORD = "123456";
 
 	static {
 		Configuration.browserSize = "1920x1080";
@@ -46,12 +45,6 @@ public class SpendingTest {
 		loginPage.passwordFieldSetValue(USER_PASSWORD);
 		loginPage.signUpClick();
 
-	}
-
-	@Test
-	void anotherTest() {
-		Selenide.open("http://127.0.0.1:3000/");
-		authorizationPage.loginButtonIsVisible();
 	}
 
 	@AfterEach
@@ -70,17 +63,15 @@ public class SpendingTest {
 			category = CATEGORY,
 			username = USER_NAME
 	)
+
 	@GenerateSpend(
 			description = "QA.GURU Advanced 5",
 			amount = 65000.00,
 			currency = CurrencyValues.RUB
 	)
-	@Test
-	void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
-		mainPage
-				.selectSpending(spendJson.description())
-				.clickDeleteSelectButton()
-				.checkListSpendingIsEmpty();
 
+	@Test
+	void spendingShouldBeVisibleAfterCreate(SpendJson spendJson) {
+		mainPage.checkSpendingIsVisible(spendJson.description());
 	}
 }
