@@ -83,7 +83,7 @@ public class SpendRepositoryJdbc implements SpendRepository {
             ps.setDate(3, new Date(spend.getSpendDate().getTime()));
             ps.setDouble(4, spend.getAmount());
             ps.setString(5, spend.getDescription());
-            ps.setObject(6, spend.getCategoryId());
+            ps.setObject(6, spend.getCategory().getId());
 
             ps.executeUpdate();
 
@@ -115,7 +115,7 @@ public class SpendRepositoryJdbc implements SpendRepository {
 
             ps.setDouble(4, spend.getAmount());
             ps.setString(5, spend.getDescription());
-            ps.setObject(6, spend.getCategoryId());
+            ps.setObject(6, spend.getCategory().getId());
             ps.setObject(7, spend.getId());
             ps.executeUpdate();
             return spend;

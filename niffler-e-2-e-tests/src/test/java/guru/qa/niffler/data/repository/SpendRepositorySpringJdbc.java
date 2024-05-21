@@ -68,7 +68,7 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
                     ps.setDate(3, new Date(spend.getSpendDate().getTime()));
                     ps.setDouble(4, spend.getAmount());
                     ps.setString(5, spend.getDescription());
-                    ps.setObject(6, spend.getCategoryId());
+                    ps.setObject(6, spend.getCategory().getId());
                     return ps;
                 }, kh
         );
@@ -86,7 +86,7 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
                 new Date(spend.getSpendDate().getTime()),
                 spend.getAmount(),
                 spend.getDescription(),
-                spend.getCategoryId(),
+                spend.getCategory().getId(),
                 spend.getId()
         );
         return spend;
