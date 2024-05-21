@@ -119,7 +119,8 @@ public class UserRepositoryJdbc implements UserRepository {
                  PreparedStatement authorityPs = conn.prepareStatement(
                          "update \"authority\" SET" +
                                  " authority = ?" +
-                                 " WHERE user_id = ? AND NOT EXISTS (SELECT 1 FROM \"authority\" WHERE user_id = ? AND authority = ?)"
+                                 " WHERE user_id = ? " +
+                                 "AND NOT EXISTS (SELECT 1 FROM \"authority\" WHERE user_id = ? AND authority = ?)"  //проверка на то, что мы не обновляем на то же самое
                  )) {
                 userPs.setString(1, user.getUsername());
                 userPs.setString(2, pe.encode(user.getPassword()));

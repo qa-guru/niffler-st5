@@ -105,12 +105,70 @@ public class UserRepositorySpringJdbc implements UserRepository {
 
     @Override
     public UserAuthEntity updateUserInAuth(UserAuthEntity user) {
-        return null;
+        return authTxTemplate.execute(status -> {
+            KeyHolder kh = new GeneratedKeyHolder();
+            authJdbcTemplate.update(con -> {
+                        PreparedStatement ps = con.prepareStatement(
+                                "update \"user\" SET username = ?, password = ?, enabled = ?, account_non_expired = ?," +
+                                        "account_non_locked = ?, credentials_non_expired = ? WHERE id = ?"
+                        );
+                        ps.setString(1, user.getUsername());
+                        ps.setString(2, pe.encode(user.getPassword()));
+                        ps.setBoolean(3, user.getEnabled());
+                        ps.setBoolean(4, user.getAccountNonExpired());
+                        ps.setBoolean(5, user.getAccountNonLocked());
+                        ps.setBoolean(6, user.getCredentialsNonExpired());
+                        ps.setObject(7, user.getId());
+                        return ps;
+                    }, kh
+            );
+
+            authJdbcTemplate.batchUpdate(
+                    "update \"authority\" SET" +
+                            " authority = ?" +
+                            " WHERE user_id = ? " +
+                            "AND NOT EXISTS (SELECT 1 FROM \"authority\" WHERE user_id = ? AND authority = ?)" , //проверка на то, что мы не обновляем на то же самое,
+                    new BatchPreparedStatementSetter() {
+                        @Override
+                        public void setValues(PreparedStatement ps, int i) throws SQLException {
+                            ps.setString(1, Authority.values()[i].name());
+                            ps.setObject(2, user.getId());
+                            ps.setObject(3, user.getId());
+                            ps.setString(4, Authority.values()[i].name());
+                        }
+
+                        @Override
+                        public int getBatchSize() {
+                            return Authority.values().length;
+                        }
+                    }
+            );
+            return user;
+        });
     }
 
     @Override
     public UserEntity updateUserInUserdata(UserEntity user) {
-        return null;
+        KeyHolder kh = new GeneratedKeyHolder();
+        userdataJdbcTemplate.update(con -> {
+                    PreparedStatement ps = con.prepareStatement(
+                            "UPDATE \"user\" SET" +
+                                    "username = ?, currency = ?, firstname = ?, surname = ?, photo = ?, photo_small = ?)" +
+                                    " WHERE id = ?",
+                            PreparedStatement.RETURN_GENERATED_KEYS
+                    );
+                    ps.setString(1, user.getUsername());
+                    ps.setString(2, user.getCurrency().name());
+                    ps.setString(3, user.getFirstname());
+                    ps.setString(4, user.getSurname());
+                    ps.setObject(5, user.getPhoto());
+                    ps.setObject(6, user.getPhotoSmall());
+                    ps.setObject(7, user.getId());
+                    return ps;
+                }, kh
+        );
+        user.setId((UUID) kh.getKeys().get("id"));
+        return user;
     }
 
     @Override

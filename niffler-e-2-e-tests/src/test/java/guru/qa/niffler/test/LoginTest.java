@@ -18,7 +18,7 @@ import static com.codeborne.selenide.Selenide.$;
 @WebTest
 public class LoginTest {
 
-    UserRepository userRepository = new UserRepositoryJdbc();
+    UserRepository userRepository = new UserRepositorySpringJdbc();
     UserEntity userDataUser;
     String userName = Faker.instance().name().name();
     UserAuthEntity user;
