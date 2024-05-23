@@ -8,15 +8,13 @@ import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.data.repository.UserRepository;
 import guru.qa.niffler.data.repository.UserRepositoryHibernate;
-import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
-@WebTest
-public class LoginTest {
+public class LoginTest extends BaseWebTest {
 
     UserRepository userRepository = new UserRepositoryHibernate();
     UserEntity userDataUser;
@@ -50,7 +48,7 @@ public class LoginTest {
 
     @Test
     void loginTest() {
-        Selenide.open("http://127.0.0.1:3000/");
+        Selenide.open(CFG.frontUrl());
         $("a[href*='redirect']").click();
         $("input[name='username']").setValue("jdbc_user6");
         $("input[name='password']").setValue("12345");
