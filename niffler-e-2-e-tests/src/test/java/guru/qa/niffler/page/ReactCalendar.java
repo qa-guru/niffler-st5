@@ -17,6 +17,7 @@ public class ReactCalendar extends BaseComponent<ReactCalendar> {
     // методы реакт календаря
 
     public ReactCalendar setDate(String date) {
-        self.$(...) // строка с датой..
+//        self.$(...) // строка с датой..
+        return this;
     }
 }
