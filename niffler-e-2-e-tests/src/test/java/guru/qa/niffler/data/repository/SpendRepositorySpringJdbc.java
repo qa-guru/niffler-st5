@@ -4,6 +4,7 @@ import guru.qa.niffler.data.DataBase;
 import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
+import guru.qa.niffler.data.sjdbc.SpendEntityRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -103,6 +104,6 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
 
     @Override
     public List<SpendEntity> findAllByUsername(String username) {
-        return List.of();
+        return jdbcTemplate.query("SELECT * FROM spend where username = ?", SpendEntityRowMapper.instance, username);
     }
 }
