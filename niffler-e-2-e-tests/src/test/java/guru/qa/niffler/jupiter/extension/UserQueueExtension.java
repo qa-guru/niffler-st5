@@ -97,11 +97,9 @@ public class UserQueueExtension implements
         Map<User.UserType, List<UserJson>> usersFromTest =
                 context.getStore(NAMESPACE).get(context.getUniqueId(), Map.class);
 
-        for (Map.Entry<User.UserType, List<UserJson>> user : usersFromTest.entrySet()) {
-            for (UserJson userJson : user.getValue()) {
-                USERS.get(user.getKey()).add(userJson);
-            }
-        }
+        usersFromTest.forEach((userType, userJsonList) ->
+                USERS.get(userType).addAll(userJsonList)
+        );
     }
 
 
