@@ -2,15 +2,15 @@ package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Selenide;
 import com.github.javafaker.Faker;
-import guru.qa.niffler.data.entity.CurrencyValues;
 import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.data.repository.SpendRepository;
-import guru.qa.niffler.data.repository.SpendRepositoryJdbc;
+import guru.qa.niffler.data.repository.SpendRepositorySpringJdbc;
 import guru.qa.niffler.data.repository.UserRepository;
 import guru.qa.niffler.data.repository.UserRepositoryJdbc;
+import guru.qa.niffler.jupiter.annotation.TestUser;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
-import org.junit.jupiter.api.BeforeEach;
+import guru.qa.niffler.model.UserJson;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.visible;
@@ -20,13 +20,13 @@ import static com.codeborne.selenide.Selenide.$;
 public class LoginTest {
 
     UserRepository userRepository = new UserRepositoryJdbc();
-    SpendRepository spendRepository = new SpendRepositoryJdbc();
+    SpendRepository spendRepository = new SpendRepositorySpringJdbc();
     UserEntity userDataUser;
     String userName = Faker.instance().name().name();
     UserAuthEntity user;
     UserEntity userEntity;
 
-    @BeforeEach
+    /*@BeforeEach
     void createUserForTest() {
 
         user = new UserAuthEntity();
@@ -43,21 +43,22 @@ public class LoginTest {
         userEntity.setUsername(userName);
         userEntity.setCurrency(CurrencyValues.RUB);
         userDataUser = userRepository.createUserInUserdata(userEntity);
-    }
+    }*/
 
+    @TestUser()
     @Test
-    void loginTest() {
+    void loginTest(UserJson userJson) {
         Selenide.open("http://127.0.0.1:3000/");
         $("a[href*='redirect']").click();
-        $("input[name='username']").setValue(userName);
-        $("input[name='password']").setValue("12345");
+        $("input[name='username']").setValue(userJson.username());
+        $("input[name='password']").setValue(userJson.testData().password());
         $("button[type='submit']").click();
         $(".header__avatar").should(visible);
 
-        userRepository.findUserInUserdataById(userDataUser.getId());
-        spendRepository.findAllByUsername(userName);
+        userRepository.findUserInUserdataById(userJson.id());
+        spendRepository.findAllByUsername(userJson.username());
 
-        String newUserName = Faker.instance().name().name();
+        /*String newUserName = Faker.instance().name().name();
         String newPassword = "123456";
         user.setUsername(newUserName);
         user.setPassword(newPassword);
@@ -69,7 +70,7 @@ public class LoginTest {
         $("a[href*='redirect']").click();
         $("input[name='username']").setValue(newUserName);
         $("input[name='password']").setValue(newPassword);
-        $("button[type='submit']").click();
+        $("button[type='submit']").click();*/
     }
 
 }
