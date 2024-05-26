@@ -19,4 +19,14 @@ public class UserAuthEntity implements Serializable {
     private Boolean accountNonLocked;
     private Boolean credentialsNonExpired;
     private List<AuthorityEntity> authorities = new ArrayList<>();
+
+
+    public void setAuthorities(List<Authority> authorities) {
+        for (Authority a : authorities) {
+            AuthorityEntity tae = new AuthorityEntity();
+            tae.setAuthority(a);
+            tae.setUser_id(this.id);
+            this.authorities.add(tae);
+        }
+    }
 }

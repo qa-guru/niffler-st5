@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class UserRepositoryJdbc implements UserRepository {
 
@@ -117,12 +118,13 @@ public class UserRepositoryJdbc implements UserRepository {
                     "update \"user\" SET username = ?, password = ?, enabled = ?, account_non_expired = ?," +
                             "account_non_locked = ?, credentials_non_expired = ? WHERE id = ?"
             );
-                 PreparedStatement authorityPs = conn.prepareStatement(
-                         "update \"authority\" SET" +
-                                 " authority = ?" +
-                                 " WHERE user_id = ? " +
-                                 "AND NOT EXISTS (SELECT 1 FROM \"authority\" WHERE user_id = ? AND authority = ?)"  //проверка на то, что мы не обновляем на то же самое
-                 )) {
+                 PreparedStatement authorityDeletePs = conn.prepareStatement(
+                         "delete from authority WHERE user_id = ?"
+                 );
+                 PreparedStatement authorityInsertPs = conn.prepareStatement("INSERT INTO \"authority\" (" +
+                         "user_id, authority)" +
+                         " VALUES (?, ?)")
+                 ) {
                 userPs.setString(1, user.getUsername());
                 userPs.setString(2, pe.encode(user.getPassword()));
                 userPs.setBoolean(3, user.getEnabled());
@@ -132,15 +134,17 @@ public class UserRepositoryJdbc implements UserRepository {
                 userPs.setObject(7, user.getId());
                 userPs.executeUpdate();
 
-                for (Authority a : Authority.values()) {
-                    authorityPs.setString(1, a.name());
-                    authorityPs.setObject(2, user.getId());
-                    authorityPs.setObject(3, user.getId());
-                    authorityPs.setString(4, a.name());
-                    authorityPs.addBatch();
-                    authorityPs.clearParameters();
+                authorityDeletePs.setObject(1, user.getId());
+                authorityDeletePs.addBatch();
+                authorityDeletePs.executeBatch();
+
+                for (Authority a : user.getAuthorities().stream().map(ae -> ae.getAuthority()).collect(Collectors.toList())) {
+                    authorityInsertPs.setObject(1, user.getId());
+                    authorityInsertPs.setString(2, a.name());
+                    authorityInsertPs.addBatch();
+                    authorityInsertPs.clearParameters();
                 }
-                authorityPs.executeBatch();
+                authorityInsertPs.executeBatch();
                 conn.commit();
                 return user;
             } catch (SQLException e) {

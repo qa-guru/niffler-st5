@@ -23,7 +23,6 @@ public class DbCreateUserExtension extends CreateUserExtension {
         tempUserAuthEntity.setCredentialsNonExpired(true);
         UUID id = userRepository.createUserInAuth(tempUserAuthEntity).getId();
 
-        userRepository.createUserInAuth(tempUserAuthEntity);
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername(user.username());
         userEntity.setCurrency(CurrencyValues.valueOf(String.valueOf(user.currency())));
