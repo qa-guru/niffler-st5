@@ -4,8 +4,8 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
-import guru.qa.niffler.jupiter.extension.CategoryExtension;
-import guru.qa.niffler.jupiter.extension.SpendExtension;
+import guru.qa.niffler.jupiter.extension.CategoryExtensionHttp;
+import guru.qa.niffler.jupiter.extension.SpendExtensionHttp;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.pages.AuthPage;
@@ -19,8 +19,8 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 
-@ExtendWith({CategoryExtension.class, SpendExtension.class})
-public class SpendingTest {
+@ExtendWith({CategoryExtensionHttp.class, SpendExtensionHttp.class})
+public class SpendingTestHttp {
 
     static {
         Configuration.browserSize = "1920x1080";
@@ -35,7 +35,7 @@ public class SpendingTest {
 
         Selenide.open("http://127.0.0.1:3000/");
         startPage.clickLoginButton();
-        authPage.login("dima", "12345");
+        authPage.login("Nastiletko", "bB!123456");
     }
 
     @Test
@@ -51,7 +51,7 @@ public class SpendingTest {
     )
     @GenerateCategory(
             category = "Обучение",
-            username = "dima"
+            username = "Nastiletko"
     )
     @Test
     void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
