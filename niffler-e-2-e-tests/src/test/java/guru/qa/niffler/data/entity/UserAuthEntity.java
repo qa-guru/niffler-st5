@@ -22,6 +22,7 @@ public class UserAuthEntity implements Serializable {
 
 
     public void setAuthorities(List<Authority> authorities) {
+        this.authorities = new ArrayList<>();
         for (Authority a : authorities) {
             AuthorityEntity tae = new AuthorityEntity();
             tae.setAuthority(a);

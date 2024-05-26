@@ -20,6 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class UserRepositorySpringJdbc implements UserRepository {
 
@@ -123,23 +124,27 @@ public class UserRepositorySpringJdbc implements UserRepository {
                     }, kh
             );
 
+            authJdbcTemplate.update(con -> {
+                PreparedStatement authorityDeletePs = con.prepareStatement(
+                        "delete from authority WHERE user_id = ?"
+                );
+                authorityDeletePs.setObject(1, user.getId());
+                return authorityDeletePs;
+            }, kh);
+
+
             authJdbcTemplate.batchUpdate(
-                    "update \"authority\" SET" +
-                            " authority = ?" +
-                            " WHERE user_id = ? " +
-                            "AND NOT EXISTS (SELECT 1 FROM \"authority\" WHERE user_id = ? AND authority = ?)" , //проверка на то, что мы не обновляем на то же самое,
+                    "INSERT INTO \"authority\" (user_id, authority) VALUES (?, ?)",
                     new BatchPreparedStatementSetter() {
                         @Override
                         public void setValues(PreparedStatement ps, int i) throws SQLException {
-                            ps.setString(1, Authority.values()[i].name());
-                            ps.setObject(2, user.getId());
-                            ps.setObject(3, user.getId());
-                            ps.setString(4, Authority.values()[i].name());
+                            ps.setObject(1, user.getId());
+                            ps.setString(2, user.getAuthorities().stream().map(ae -> ae.getAuthority()).collect(Collectors.toList()).get(i).name());
                         }
 
                         @Override
                         public int getBatchSize() {
-                            return Authority.values().length;
+                            return user.getAuthorities().stream().map(ae -> ae.getAuthority()).collect(Collectors.toList()).size();
                         }
                     }
             );

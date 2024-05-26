@@ -5,10 +5,7 @@ import com.github.javafaker.Faker;
 import guru.qa.niffler.data.entity.Authority;
 import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
-import guru.qa.niffler.data.repository.SpendRepository;
-import guru.qa.niffler.data.repository.SpendRepositorySpringJdbc;
-import guru.qa.niffler.data.repository.UserRepository;
-import guru.qa.niffler.data.repository.UserRepositoryJdbc;
+import guru.qa.niffler.data.repository.*;
 import guru.qa.niffler.jupiter.annotation.TestUser;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.model.UserJson;
@@ -24,6 +21,7 @@ import static com.codeborne.selenide.Selenide.$;
 public class LoginTest {
 
     UserRepository userRepository = new UserRepositoryJdbc();
+    UserRepository userSpringRepository = new UserRepositorySpringJdbc();
     SpendRepository spendRepository = new SpendRepositorySpringJdbc();
     UserEntity userDataUser;
     String userName = Faker.instance().name().name();
@@ -52,5 +50,8 @@ public class LoginTest {
 
         user.setAuthorities(Arrays.asList(Authority.read));
         userRepository.updateUserInAuth(user); //было 2 Authority , стала одна
+
+        user.setAuthorities(Arrays.asList(Authority.read, Authority.write));
+        userSpringRepository.updateUserInAuth(user); // и опять два
     }
 }
