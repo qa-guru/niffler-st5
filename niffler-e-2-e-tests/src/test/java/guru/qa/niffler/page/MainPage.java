@@ -17,7 +17,9 @@ public class MainPage {
 			deleteSelectButton = $x("//button[contains(text(),'Delete selected')]"),
 			allPeopleButton = $x("//*[@href='/people']"),
 			friendsButton = $x("//*[@href='/friends']"),
-			profileButton = $x("//*[@href='/profile']");
+			profileButton = $x("//*[@href='/profile']"),
+			title = $x("//h1[contains(text(),'Niffler. The coin keeper.')]"),
+			logout = $x("//button[contains(@class,'logout')]");
 
 	@Step("Проставить чек-бокс напротив трат ")
 	public MainPage selectSpending(String spending) {
@@ -58,5 +60,17 @@ public class MainPage {
 	public MainPage checkSpendingIsVisible(String spending) {
 		listSpending.shouldHave(CollectionCondition.texts(spending));
 		return this;
+	}
+
+	@Step("Проверить, что заголовок виден  ")
+	public MainPage checkTitleIsVisible() {
+		title.shouldBe(visible);
+		return this;
+	}
+
+	@Step("Нажать на кнопку logout")
+	public AuthorizationPage clickLogout() {
+		logout.click();
+		return new AuthorizationPage();
 	}
 }

@@ -4,11 +4,14 @@ import guru.qa.niffler.data.DataBase;
 import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
+import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.CurrencyValues;
 import io.qameta.allure.Step;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class SpendRepositoryJdbc implements SpendRepository {
@@ -163,6 +166,48 @@ public class SpendRepositoryJdbc implements SpendRepository {
 			ps.setObject(1, spend.getId());
 			ps.executeUpdate();
 
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public void removeSpendByCategoryId(CategoryJson category) {
+		try (Connection connection =
+					 spendDataSource.getConnection();
+			 PreparedStatement ps =
+					 connection.prepareStatement(
+							 "DELETE FROM spend WHERE category_id=?;"
+					 )) {
+			ps.setObject(1, category.id());
+			ps.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public List<SpendEntity> findAllByUsername(String username) {
+		try (Connection conn = spendDataSource.getConnection();
+			 PreparedStatement ps = conn.prepareStatement(
+					 "SELECT * FROM spend WHERE username = ?"
+			 )) {
+			ps.setObject(1, username);
+			//ps.executeUpdate();
+			ResultSet resultSet = ps.executeQuery();
+			ArrayList<SpendEntity> listSpend = new ArrayList<>();
+			while (resultSet.next()) {
+				SpendEntity spend = new SpendEntity();
+				spend.setId((UUID) resultSet.getObject("id"));
+				spend.setUsername(resultSet.getString("username"));
+				spend.setCurrency(CurrencyValues.valueOf(resultSet.getString("currency")));
+				spend.setAmount(Double.valueOf(resultSet.getString("amount")));
+				spend.setDescription(resultSet.getString("description"));
+				spend.setCategoryId(UUID.fromString(resultSet.getString("category_id")));
+				listSpend.add(spend);
+			}
+			return listSpend;
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}

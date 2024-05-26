@@ -5,7 +5,6 @@ import guru.qa.niffler.data.repository.SpendRepository;
 import guru.qa.niffler.data.repository.SpendRepositoryJdbc;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
 import guru.qa.niffler.model.CategoryJson;
-import guru.qa.niffler.model.SpendJson;
 
 import java.sql.Date;
 

@@ -19,6 +19,7 @@ public class JdbcCategoryExtension extends AbstractCategoryExtension {
 
 	@Override
 	protected void removeCategory(CategoryJson category) {
+		spendRepository.removeSpendByCategoryId(category);//Категорию можно удалить только после удаления трат
 		spendRepository.removeCategory(CategoryEntity.fromJson(category));
 	}
 }
