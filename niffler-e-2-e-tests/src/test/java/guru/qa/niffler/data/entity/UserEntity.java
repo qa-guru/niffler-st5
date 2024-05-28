@@ -1,45 +1,46 @@
 package guru.qa.niffler.data.entity;
 
-import guru.qa.niffler.model.CurrencyValues;
+import guru.qa.niffler.enums.CurrencyValues;
+import guru.qa.niffler.model.UserJson;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "spend")
-public class SpendEntity implements Serializable {
+public class UserEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", nullable = false, columnDefinition = "UUID default gen_random_uuid()")
 	private UUID id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String username;
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private CurrencyValues currency;
 
-	@Column(name = "spend_date", columnDefinition = "DATE", nullable = false)
-	private Date spendDate;
+	@Column()
+	private String firstname;
 
-	@Column(nullable = false)
-	private Double amount;
+	@Column()
+	private String surname;
 
-	@Column(nullable = false)
-	private String description;
+	@Column(name = "photo", columnDefinition = "bytea")
+	private byte[] photo;
 
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "category_id", referencedColumnName = "id")
-	private CategoryEntity category;
+	@Column(name = "photo_small", columnDefinition = "bytea")
+	private byte[] photoSmall;
+
+	@OneToMany(mappedBy = "requester", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<FriendshipEntity> friendshipRequests = new ArrayList<>();
+
+	@OneToMany(mappedBy = "addressee", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<FriendshipEntity> friendshipAddressees = new ArrayList<>();
 
 	@Override
 	public final boolean equals(Object o) {
@@ -48,12 +49,21 @@ public class SpendEntity implements Serializable {
 		Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
 		Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
 		if (thisEffectiveClass != oEffectiveClass) return false;
-		SpendEntity that = (SpendEntity) o;
+		UserEntity that = (UserEntity) o;
 		return getId() != null && Objects.equals(getId(), that.getId());
 	}
 
 	@Override
 	public final int hashCode() {
 		return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+	}
+
+	static public UserEntity fromJson(UserJson userJson) {
+		UserEntity user = new UserEntity();
+		user.setUsername(userJson.username());
+		user.setCurrency(userJson.currency());
+		user.setFirstname(userJson.firstname());
+		user.setSurname(userJson.surname());
+		return user;
 	}
 }

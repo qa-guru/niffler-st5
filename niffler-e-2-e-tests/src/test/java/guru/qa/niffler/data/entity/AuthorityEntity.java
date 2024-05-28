@@ -1,45 +1,34 @@
-package guru.qa.niffler.data.entity;
+package guru.qa.niffler.data;
 
-import guru.qa.niffler.model.CurrencyValues;
+import guru.qa.niffler.data.entity.UserEntity;
+import guru.qa.niffler.enums.Authority;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
+
 
 @Getter
 @Setter
 @Entity
-@Table(name = "spend")
-public class SpendEntity implements Serializable {
+@Table(name = "authority")
+public class AuthorityEntity implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", nullable = false, columnDefinition = "UUID default gen_random_uuid()")
 	private UUID id;
 
 	@Column(nullable = false)
-	private String username;
-
-	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private CurrencyValues currency;
+	private Authority authority;
 
-	@Column(name = "spend_date", columnDefinition = "DATE", nullable = false)
-	private Date spendDate;
-
-	@Column(nullable = false)
-	private Double amount;
-
-	@Column(nullable = false)
-	private String description;
-
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "category_id", referencedColumnName = "id")
-	private CategoryEntity category;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private UserEntity user;
 
 	@Override
 	public final boolean equals(Object o) {
@@ -48,7 +37,7 @@ public class SpendEntity implements Serializable {
 		Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
 		Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
 		if (thisEffectiveClass != oEffectiveClass) return false;
-		SpendEntity that = (SpendEntity) o;
+		AuthorityEntity that = (AuthorityEntity) o;
 		return getId() != null && Objects.equals(getId(), that.getId());
 	}
 
