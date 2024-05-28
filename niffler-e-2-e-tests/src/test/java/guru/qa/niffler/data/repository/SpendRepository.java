@@ -20,7 +20,7 @@ public interface SpendRepository {
 
 	void removeSpend(SpendEntity spend);
 
-	void removeSpendByCategoryId(CategoryJson category);
+	void removeSpendByCategoryIdOfUser(CategoryJson category);
 
 	List<SpendEntity> findAllByUsername(String username);
 }

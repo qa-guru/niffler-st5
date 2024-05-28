@@ -8,7 +8,6 @@ import lombok.Setter;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -42,7 +41,7 @@ public class UserEntity {
 
 	@OneToMany(mappedBy = "addressee", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FriendshipEntity> friendshipAddressees = new ArrayList<>();
-	
+
 	@Override
 	public final boolean equals(Object o) {
 		if (this == o) return true;
@@ -59,7 +58,7 @@ public class UserEntity {
 		return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
 	}
 
-	public UserEntity fromUserJson(UserJson userJson) {
+	static public UserEntity fromJson(UserJson userJson) {
 		UserEntity user = new UserEntity();
 		user.setUsername(userJson.username());
 		user.setCurrency(userJson.currency());

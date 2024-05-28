@@ -23,17 +23,38 @@ public class SpendRepositoryStringJdbc implements SpendRepository {
 
 	@Override
 	public CategoryEntity createCategory(CategoryEntity category) {
-		return null;
+		KeyHolder kh = new GeneratedKeyHolder();
+		jdbcTemplate.update(con -> {
+					PreparedStatement ps = con.prepareStatement(
+							"INSERT INTO category (category, username) VALUES (?, ?)",
+							PreparedStatement.RETURN_GENERATED_KEYS
+					);
+					ps.setString(1, category.getCategory());
+					ps.setString(2, category.getUsername());
+					return ps;
+				}, kh
+		);
+		category.setId((UUID) kh.getKeys().get("id"));
+		return category;
 	}
 
 	@Override
 	public CategoryEntity editCategory(CategoryEntity category) {
-		return null;
+		jdbcTemplate.update(
+				"UPDATE category SET category = ?, username = ? WHERE id = ?",
+				category.getCategory(),
+				category.getUsername(),
+				category.getId()
+		);
+		return category;
 	}
 
 	@Override
 	public void removeCategory(CategoryEntity category) {
-
+		jdbcTemplate.update(
+				"DELETE FROM category WHERE id = ?",
+				category.getId()
+		);
 	}
 
 	@Override
@@ -50,7 +71,7 @@ public class SpendRepositoryStringJdbc implements SpendRepository {
 					ps.setDate(3, new Date(spend.getSpendDate().getTime()));
 					ps.setDouble(4, spend.getAmount());
 					ps.setString(5, spend.getDescription());
-					ps.setObject(6, spend.getCategoryId());
+					ps.setObject(6, spend.getCategory().getId());
 					return ps;
 				}, kh
 		);
@@ -60,16 +81,30 @@ public class SpendRepositoryStringJdbc implements SpendRepository {
 
 	@Override
 	public SpendEntity editSpend(SpendEntity spend) {
-		return null;
+		jdbcTemplate.update(
+				"UPDATE spend SET username = ?, currency = ?," +
+						" spend_date = ?, amount = ?, description = ?, category_id = ? WHERE id = ?",
+				spend.getUsername(),
+				spend.getCurrency().name(),
+				new Date(spend.getSpendDate().getTime()),
+				spend.getAmount(),
+				spend.getDescription(),
+				spend.getCategory().getId(),
+				spend.getId()
+		);
+		return spend;
 	}
 
 	@Override
 	public void removeSpend(SpendEntity spend) {
-
+		jdbcTemplate.update(
+				"DELETE FROM spend WHERE id = ?",
+				spend.getId()
+		);
 	}
 
 	@Override
-	public void removeSpendByCategoryId(CategoryJson category) {
+	public void removeSpendByCategoryIdOfUser(CategoryJson category) {
 
 	}
 

@@ -61,7 +61,7 @@ public class LoginTest {
 		UserJson editUser = UserJson.dataFromUser(userJson.username());
 		UserAuthEntity newAuthEntity = new UserAuthEntity().testUserFromJson(editUser);
 		userRepositoryJdbc.updateUserInAuth(newAuthEntity, List.of(write));
-		userRepositoryJdbc.updateUserInUserdata(new UserEntity().fromUserJson(editUser));
+		userRepositoryJdbc.updateUserInUserdata(new UserEntity().fromJson(editUser));
 		doLogin(editUser);
 		mainPage.clickProfileButton();
 		profilePage.checkUsername(editUser.username()).
@@ -76,7 +76,7 @@ public class LoginTest {
 		UserJson editUser = UserJson.dataFromUser(userJson.username());
 		UserAuthEntity newAuthEntity = new UserAuthEntity().testUserFromJson(editUser);
 		userRpStringJdbc.updateUserInAuth(newAuthEntity, List.of(write));
-		userRpStringJdbc.updateUserInUserdata(new UserEntity().fromUserJson(editUser));
+		userRpStringJdbc.updateUserInUserdata(new UserEntity().fromJson(editUser));
 		doLogin(editUser);
 		mainPage.clickProfileButton();
 		profilePage.checkUsername(editUser.username()).

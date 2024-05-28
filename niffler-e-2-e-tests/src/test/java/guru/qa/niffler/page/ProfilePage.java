@@ -33,13 +33,13 @@ public class ProfilePage {
 
 	@Step("Проверить имя пользователя ")
 	public ProfilePage checkFirstname(String firstname) {
-		firstnameInput.getAttribute("value").equalsIgnoreCase(firstname);
+		firstnameInput.shouldHave(text(firstname));
 		return this;
 	}
 
 	@Step("Проверить фамилию пользователя ")
 	public ProfilePage checkSurname(String surname) {
-		surnameInput.getAttribute("value").equalsIgnoreCase(surname);
+		surnameInput.shouldHave(text(surname));
 		return this;
 	}
 

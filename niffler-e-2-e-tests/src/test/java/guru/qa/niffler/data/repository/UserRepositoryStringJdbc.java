@@ -64,7 +64,7 @@ public class UserRepositoryStringJdbc implements UserRepository {
 
 						@Override
 						public int getBatchSize() {
-							return Authority.values().length;
+							return userAuthEntity.getAuthorities().size();
 						}
 					}
 			);
