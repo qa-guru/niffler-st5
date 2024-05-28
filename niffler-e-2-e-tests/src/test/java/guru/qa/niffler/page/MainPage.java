@@ -12,6 +12,7 @@ public class MainPage {
 
     private final ElementsCollection tableRows = $(".spendings-table").$(" tbody").$$("tr");
     private final SelenideElement deleteSpendingBtn = $(".spendings__table-controls").find(byText("Delete selected"));
+    private final SelenideElement allPeople = $("[href='/people']");
     private SelenideElement spendingRow;
 
     public MainPage findRowByText(String text) {
@@ -27,6 +28,11 @@ public class MainPage {
     public MainPage deleteChosenSpending() {
         deleteSpendingBtn.click();
         return this;
+    }
+
+    public PeoplePage clickAllPeople() {
+        allPeople.click();
+        return new PeoplePage();
     }
 
     public void assertThatTableContentHasSize(int expectedSize) {
