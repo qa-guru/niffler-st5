@@ -22,8 +22,6 @@ public record UserJson(
         String photo,
         @JsonProperty("photoSmall")
         String photoSmall,
-        @JsonProperty("friendState")
-        FriendState friendState,
         @JsonIgnore
         TestData testData) {
 
@@ -31,7 +29,6 @@ public record UserJson(
         return new UserJson(
                 null,
                 username,
-                null,
                 null,
                 null,
                 null,

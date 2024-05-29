@@ -14,7 +14,6 @@ public class MainPage {
     private final SelenideElement progressBar = $("div[role='progressbar']");
     private final SelenideElement deleteAllSelectedBtn = $(".spendings__bulk-actions button");
 
-
     /**
      * Выбрать строку расходов по описанию
      */
