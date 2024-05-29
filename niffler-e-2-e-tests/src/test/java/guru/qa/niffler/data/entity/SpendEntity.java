@@ -31,4 +31,5 @@ public class SpendEntity implements Serializable {
         entity.setCategory(spendJson.category());
         return entity;
     }
+
 }

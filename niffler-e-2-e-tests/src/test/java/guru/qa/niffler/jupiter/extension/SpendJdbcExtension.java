@@ -31,15 +31,6 @@ public class SpendJdbcExtension extends AbstractSpendExtension {
 
     @Override
     protected void removeSpend(SpendJson spend) {
-        SpendJson spendJson =
-                new SpendJson(spend.id(),
-                        spend.spendDate(),
-                        spend.category(),
-                        spend.currency(),
-                        spend.amount(),
-                        spend.description(),
-                        spend.username());
-
-        spendRepository.removeSpend(SpendEntity.fromJson(spendJson));
+        spendRepository.removeSpend(SpendEntity.fromJson(spend));
     }
 }
