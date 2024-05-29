@@ -32,14 +32,14 @@ public class UsersFriendsBeforeMethodTest {
         loginPage.login(
                 sender.username(),
                 sender.testData().password());
-        menu.getAvatar().should(exist);
+        menu.checkPageLoaded();
 
         menu.getLogout().click();
         welcomePage.goToLogin();
         loginPage.login(
                 friend.username(),
                 friend.testData().password());
-        menu.getAvatar().should(exist);
+        menu.checkPageLoaded();
     }
 
     //**************** INVITATION SEND ********************//
