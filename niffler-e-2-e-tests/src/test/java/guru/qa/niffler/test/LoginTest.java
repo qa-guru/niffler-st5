@@ -59,7 +59,7 @@ public class LoginTest {
 	@TestUser
 	public void loginUserAfterEditByJdbc(UserJson userJson) {
 		UserJson editUser = UserJson.dataFromUser(userJson.username());
-		UserAuthEntity newAuthEntity = new UserAuthEntity().testUserFromJson(editUser);
+		UserAuthEntity newAuthEntity = new UserAuthEntity().fromJson(editUser);
 		userRepositoryJdbc.updateUserInAuth(newAuthEntity, List.of(write));
 		userRepositoryJdbc.updateUserInUserdata(new UserEntity().fromJson(editUser));
 		doLogin(editUser);
@@ -74,7 +74,7 @@ public class LoginTest {
 	@TestUser
 	public void loginUserAfterEditBySpringJdbc(UserJson userJson) {
 		UserJson editUser = UserJson.dataFromUser(userJson.username());
-		UserAuthEntity newAuthEntity = new UserAuthEntity().testUserFromJson(editUser);
+		UserAuthEntity newAuthEntity = new UserAuthEntity().fromJson(editUser);
 		userRpStringJdbc.updateUserInAuth(newAuthEntity, List.of(write));
 		userRpStringJdbc.updateUserInUserdata(new UserEntity().fromJson(editUser));
 		doLogin(editUser);

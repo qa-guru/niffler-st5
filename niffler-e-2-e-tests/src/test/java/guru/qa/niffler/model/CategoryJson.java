@@ -1,6 +1,7 @@
 package guru.qa.niffler.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.javafaker.Faker;
 import guru.qa.niffler.data.entity.CategoryEntity;
 
 import java.util.UUID;
@@ -17,6 +18,14 @@ public record CategoryJson(
 				entity.getId(),
 				entity.getCategory(),
 				entity.getUsername()
+		);
+	}
+
+	public static CategoryJson randomByUsername(String username) {
+		return new CategoryJson(
+				null,
+				new Faker().job().field(),
+				username
 		);
 	}
 }

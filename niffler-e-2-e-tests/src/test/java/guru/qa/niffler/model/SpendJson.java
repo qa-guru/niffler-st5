@@ -33,5 +33,4 @@ public record SpendJson(
 				spendEntity.getUsername()
 		);
 	}
-
 }

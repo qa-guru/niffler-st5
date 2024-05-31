@@ -4,6 +4,7 @@ import guru.qa.niffler.data.DataBase;
 import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
+import guru.qa.niffler.data.sjdbc.UserAuthEntityRowMapper;
 import guru.qa.niffler.data.sjdbc.UserEntityRowMapper;
 import guru.qa.niffler.enums.Authority;
 import org.springframework.dao.DataRetrievalFailureException;
@@ -156,4 +157,31 @@ public class UserRepositoryStringJdbc implements UserRepository {
 			return Optional.empty();
 		}
 	}
+
+	@Override
+	public Optional<UserAuthEntity> findUserInAuthByUsername(String username) {
+		try {
+			return Optional.ofNullable(jdbcAuthTemplate.queryForObject(
+					"SELECT * FROM \"user\" WHERE username = ?",
+					UserAuthEntityRowMapper.instance,
+					username
+			));
+		} catch (DataRetrievalFailureException e) {
+			return Optional.empty();
+		}
+	}
+
+	@Override
+	public Optional<UserEntity> findInUserdataByUsername(String username) {
+		try {
+			return Optional.ofNullable(jdbcUDTemplate.queryForObject(
+					"SELECT * FROM \"user\" WHERE username = ?",
+					UserEntityRowMapper.instance,
+					username
+			));
+		} catch (DataRetrievalFailureException e) {
+			return Optional.empty();
+		}
+	}
+
 }

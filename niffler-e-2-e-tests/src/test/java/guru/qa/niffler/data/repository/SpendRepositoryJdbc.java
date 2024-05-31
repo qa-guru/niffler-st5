@@ -203,4 +203,9 @@ public class SpendRepositoryJdbc implements SpendRepository {
 			throw new RuntimeException(e);
 		}
 	}
+
+	@Override
+	public CategoryEntity findCategory(String category) {
+		return null;
+	}
 }

@@ -1,6 +1,5 @@
-package guru.qa.niffler.data;
+package guru.qa.niffler.data.entity;
 
-import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.enums.Authority;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -28,7 +27,7 @@ public class AuthorityEntity implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
-	private UserEntity user;
+	private UserAuthEntity user;
 
 	@Override
 	public final boolean equals(Object o) {

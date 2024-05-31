@@ -1,5 +1,6 @@
 package guru.qa.niffler.data.sjdbc;
 
+import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.model.CurrencyValues;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,13 +20,16 @@ public class SendEntityRowMapper implements RowMapper<SpendEntity> {
 	@Override
 	public SpendEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
 		SpendEntity spendEntity = new SpendEntity();
+		CategoryEntity categoryEntity = new CategoryEntity();
+		categoryEntity.setId((UUID) rs.getObject("category_id"));
+		categoryEntity.setUsername(rs.getString("username"));
 		spendEntity.setId((UUID) rs.getObject("id"));
 		spendEntity.setUsername(rs.getString("username"));
 		spendEntity.setSpendDate(rs.getDate("spend_date"));
 		spendEntity.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
 		spendEntity.setAmount(rs.getDouble("amount"));
 		spendEntity.setDescription(rs.getString("description"));
-		spendEntity.setCurrency(CurrencyValues.valueOf(rs.getString("category_id")));
+		spendEntity.setCategory(categoryEntity);
 		return spendEntity;
 	}
 }

@@ -1,12 +1,12 @@
 package guru.qa.niffler.data.entity;
 
-import guru.qa.niffler.data.AuthorityEntity;
 import guru.qa.niffler.model.UserJson;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,7 +18,7 @@ import static jakarta.persistence.FetchType.EAGER;
 @Setter
 @Entity
 @Table(name = "\"user\"")
-public class UserAuthEntity {
+public class UserAuthEntity implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", nullable = false, columnDefinition = "UUID default gen_random_uuid()")
@@ -61,7 +61,7 @@ public class UserAuthEntity {
 		return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
 	}
 
-	public UserAuthEntity testUserFromJson(UserJson userJson) {
+	public UserAuthEntity fromJson(UserJson userJson) {
 		UserAuthEntity userAuthEntity = new UserAuthEntity();
 		userAuthEntity.setUsername(userJson.username());
 		userAuthEntity.setPassword(userJson.testData().password());

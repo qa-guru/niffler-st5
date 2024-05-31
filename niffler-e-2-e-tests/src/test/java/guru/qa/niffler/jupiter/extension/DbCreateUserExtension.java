@@ -14,7 +14,7 @@ public class DbCreateUserExtension extends CreateUserExtension {
 	@Override
 	UserJson createUser(UserJson user) {
 		UserEntity userEntity = userRepositoryStringJdbc.createUserInUserdata(new UserEntity().fromJson(user));
-		userRepositoryStringJdbc.createUserInAuth(new UserAuthEntity().testUserFromJson(user));
+		userRepositoryStringJdbc.createUserInAuth(new UserAuthEntity().fromJson(user));
 
 		return new UserJson(
 				userEntity.getId(),

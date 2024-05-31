@@ -14,28 +14,19 @@ public enum EmProvider {
 
 	private final Map<DataBase, EntityManagerFactory> store = new ConcurrentHashMap<>();
 
-	private EntityManagerFactory computeEmf(DataBase db) {
-		return store.computeIfAbsent(db, key -> {
+	private EntityManagerFactory computeEmf(DataBase dataBase) {
+		return store.computeIfAbsent(dataBase, key -> {
 			Map<String, String> props = new HashMap<>();
-
-			props.put("hibernate.connection.url", db.getJdbcUrl());
+			props.put("hibernate.connection.url", dataBase.getJdbcUrl());
 			props.put("hibernate.connection.username", "postgres");
 			props.put("hibernate.connection.password", "secret");
 			props.put("hibernate.connection.driver_class", "org.postgresql.Driver");
 			props.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-
-			return Persistence.createEntityManagerFactory(
-					"niffler-st5",
-					props
-			);
+			return Persistence.createEntityManagerFactory("niffler-st5", props);
 		});
 	}
 
 	public static EntityManager entityManager(DataBase db) {
-		return new TransactionalEntityManager(
-				new ThreadSafeEntityManager(
-						EmProvider.INSTANCE.computeEmf(db).createEntityManager()
-				)
-		);
+		return new TransactionalEntityManager(new ThreadSafeEntityManager(EmProvider.INSTANCE.computeEmf(db).createEntityManager()));
 	}
 }

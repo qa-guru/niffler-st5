@@ -9,7 +9,7 @@ public abstract class CreateUserExtension implements BeforeEachCallback, Paramet
 	abstract UserJson createUser(UserJson user);
 
 	public static final ExtensionContext.Namespace NAMESPACE
-			= ExtensionContext.Namespace.create(AbstractCategoryExtension.class);
+			= ExtensionContext.Namespace.create(CreateUserExtension.class);
 
 	@Override
 	public void beforeEach(ExtensionContext context) {

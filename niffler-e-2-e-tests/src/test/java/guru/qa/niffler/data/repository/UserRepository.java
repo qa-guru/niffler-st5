@@ -15,7 +15,7 @@ public interface UserRepository {
 			return new UserRepositoryStringJdbc();
 		}
 		if ("hibernate".equals(System.getProperty("repo"))) {
-			return new UserRepositoryStringHibernate();
+			return new UserRepositoryHibernate();
 		}
 		return new UserRepositoryJdbc();
 	}
@@ -29,4 +29,9 @@ public interface UserRepository {
 	UserEntity updateUserInUserdata(UserEntity userEntity);
 
 	Optional<UserEntity> findUserInUserDataByID(UUID id);
+
+	Optional<UserAuthEntity> findUserInAuthByUsername(String username);
+
+	Optional<UserEntity> findInUserdataByUsername(String username);
+
 }

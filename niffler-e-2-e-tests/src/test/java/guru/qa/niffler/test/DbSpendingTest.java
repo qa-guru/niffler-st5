@@ -7,9 +7,10 @@ import guru.qa.niffler.data.repository.SpendRepositoryJdbc;
 import guru.qa.niffler.data.repository.SpendRepositoryStringJdbc;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
+import guru.qa.niffler.jupiter.annotation.TestUser;
 import guru.qa.niffler.jupiter.annotation.meta.WebTestJdbc;
-import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
+import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.AuthorizationPage;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.MainPage;
@@ -24,7 +25,7 @@ import java.util.List;
 import java.util.Objects;
 
 @WebTestJdbc
-public class JdbcSpendingTest {
+public class DbSpendingTest {
 
 	AuthorizationPage authorizationPage = new AuthorizationPage();
 
@@ -35,20 +36,17 @@ public class JdbcSpendingTest {
 	SpendRepositoryJdbc spendRepositoryJdbc = new SpendRepositoryJdbc();
 	SpendRepositoryStringJdbc spendRepositoryStringJdbc = new SpendRepositoryStringJdbc();
 
-	private static final String CATEGORY = "new Обучение";
-	private static final String USER_NAME = "demidov";
-	private static final String USER_PASSWORD = "123456";
 
 	static {
 		Configuration.browserSize = "1920x1080";
 	}
 
 	@BeforeEach
-	void doLogin() {
+	void doLogin(UserJson userJson) {
 		Selenide.open("http://127.0.0.1:3000/");
 		authorizationPage.clickLoginButton();
-		loginPage.userNameFieldSetValue(USER_NAME);
-		loginPage.passwordFieldSetValue(USER_PASSWORD);
+		loginPage.userNameFieldSetValue(userJson.username());
+		loginPage.passwordFieldSetValue(userJson.testData().password());
 		loginPage.signUpClick();
 	}
 
@@ -64,32 +62,17 @@ public class JdbcSpendingTest {
 		);
 	}
 
-	@GenerateCategory(
-			category = CATEGORY,
-			username = USER_NAME
-	)
-
-	@GenerateSpend(
-			description = "QA.GURU Advanced 5",
-			amount = 65000.00,
-			currency = CurrencyValues.RUB
-	)
-
+	@TestUser
+	@GenerateCategory
+	@GenerateSpend
 	@Test
 	void spendingShouldBeVisibleAfterCreate(SpendJson spendJson) {
 		mainPage.checkSpendingIsVisible(spendJson.description());
 	}
 
-	@GenerateCategory(
-			category = CATEGORY,
-			username = USER_NAME
-	)
-
-	@GenerateSpend(
-			description = "QA.GURU Advanced 5",
-			amount = 65000.00,
-			currency = CurrencyValues.RUB
-	)
+	@TestUser
+	@GenerateCategory
+	@GenerateSpend
 	@Test
 	void checkSpendingAfterCreateJdbc(SpendJson spendJson) {
 		List<SpendEntity> listSpend = spendRepositoryJdbc.findAllByUsername(spendJson.username());
@@ -98,16 +81,9 @@ public class JdbcSpendingTest {
 		}
 	}
 
-	@GenerateCategory(
-			category = CATEGORY,
-			username = USER_NAME
-	)
-
-	@GenerateSpend(
-			description = "QA.GURU Advanced 5",
-			amount = 65000.00,
-			currency = CurrencyValues.RUB
-	)
+	@TestUser
+	@GenerateCategory
+	@GenerateSpend
 	@Test
 	void checkSpendingAfterCreateStringJdbc(SpendJson spendJson) {
 		List<SpendEntity> listSpend = spendRepositoryStringJdbc.findAllByUsername(spendJson.username());

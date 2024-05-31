@@ -4,9 +4,10 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
+import guru.qa.niffler.jupiter.annotation.TestUser;
 import guru.qa.niffler.jupiter.annotation.meta.WebTestHttp;
-import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
+import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.AuthorizationPage;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.MainPage;
@@ -29,21 +30,17 @@ public class HttpSpendingTest {
 
 	LoginPage loginPage = new LoginPage();
 
-	private static final String CATEGORY = "Мое Обучение";
-	private static final String USER_NAME = "demidov";
-	private static final String USER_PASSWORD = "123456";
-
 
 	static {
 		Configuration.browserSize = "1920x1080";
 	}
 
 	@BeforeEach
-	void doLogin() {
+	void doLogin(UserJson userJson) {
 		Selenide.open("http://127.0.0.1:3000/");
 		authorizationPage.clickLoginButton();
-		loginPage.userNameFieldSetValue(USER_NAME);
-		loginPage.passwordFieldSetValue(USER_PASSWORD);
+		loginPage.userNameFieldSetValue(userJson.username());
+		loginPage.passwordFieldSetValue(userJson.testData().password());
 		loginPage.signUpClick();
 
 	}
@@ -66,15 +63,9 @@ public class HttpSpendingTest {
 		);
 	}
 
-	@GenerateCategory(
-			category = CATEGORY,
-			username = USER_NAME
-	)
-	@GenerateSpend(
-			description = "QA.GURU Advanced 5",
-			amount = 65000.00,
-			currency = CurrencyValues.RUB
-	)
+	@TestUser
+	@GenerateCategory
+	@GenerateSpend
 	@Test
 	void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
 		mainPage

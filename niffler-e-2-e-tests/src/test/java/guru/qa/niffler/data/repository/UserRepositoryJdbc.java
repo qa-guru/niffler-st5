@@ -203,4 +203,51 @@ public class UserRepositoryJdbc implements UserRepository {
 			return Optional.empty();
 		}
 	}
+
+	@Override
+	public Optional<UserAuthEntity> findUserInAuthByUsername(String username) {
+		try (Connection conn = authDataSource.getConnection();
+			 PreparedStatement userPs = conn.prepareStatement(
+					 "SELECT * FROM \"user\" WHERE username = ?"
+			 )) {
+			userPs.setObject(1, username);
+			UserAuthEntity user = new UserAuthEntity();
+			try (ResultSet resultSet = userPs.executeQuery()) {
+				while (resultSet.next()) {
+					user.setUsername(resultSet.getString("username"));
+					user.setEnabled(resultSet.getBoolean("enabled"));
+					user.setAccountNonExpired(resultSet.getBoolean("account_non_expired"));
+					user.setAccountNonLocked(resultSet.getBoolean("account_non_locked"));
+					user.setCredentialsNonExpired(resultSet.getBoolean("credentials_non_expired"));
+					user.setId(UUID.fromString(resultSet.getString("id")));
+				}
+			}
+			return Optional.of(user);
+		} catch (SQLException e) {
+			return Optional.empty();
+		}
+	}
+
+	@Override
+	public Optional<UserEntity> findInUserdataByUsername(String username) {
+		try (Connection conn = udDataSource.getConnection();
+			 PreparedStatement userPs = conn.prepareStatement(
+					 "SELECT * FROM \"user\" WHERE username = ?"
+			 )) {
+			userPs.setObject(1, username);
+			UserEntity user = new UserEntity();
+			try (ResultSet resultSet = userPs.executeQuery()) {
+				while (resultSet.next()) {
+					user.setUsername(resultSet.getString("username"));
+					user.setFirstname(resultSet.getString("firstname"));
+					user.setCurrency(CurrencyValues.valueOf(resultSet.getString("currency")));
+					user.setSurname(resultSet.getString("surname"));
+					user.setId(UUID.fromString(resultSet.getString("id")));
+				}
+			}
+			return Optional.of(user);
+		} catch (SQLException e) {
+		}
+		return Optional.empty();
+	}
 }

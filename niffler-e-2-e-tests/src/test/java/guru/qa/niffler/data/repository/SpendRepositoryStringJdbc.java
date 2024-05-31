@@ -114,4 +114,9 @@ public class SpendRepositoryStringJdbc implements SpendRepository {
 				SendEntityRowMapper.instance,
 				username);
 	}
+
+	@Override
+	public CategoryEntity findCategory(String category) {
+		return null;
+	}
 }

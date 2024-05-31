@@ -14,7 +14,7 @@ public abstract class AbstractSpendExtension implements BeforeEachCallback, Afte
 	public static final ExtensionContext.Namespace NAMESPACE
 			= ExtensionContext.Namespace.create(AbstractSpendExtension.class);
 
-	protected abstract Object createSpend(GenerateSpend spend, CategoryJson category) throws IOException;
+	protected abstract Object createSpend(SpendEntity spendJson) throws IOException;
 
 	protected abstract void removeSpend(SpendEntity spend);
 
@@ -29,10 +29,11 @@ public abstract class AbstractSpendExtension implements BeforeEachCallback, Afte
 				GenerateSpend.class
 		).ifPresent(
 				generateSpend -> {
+					SpendEntity randomSpend = SpendEntity.randomByCategory(category);
 					try {
 						context.getStore(NAMESPACE).put(
 								context.getUniqueId(),
-								createSpend(generateSpend, category)
+								createSpend(randomSpend)
 						);
 					} catch (IOException e) {
 						throw new RuntimeException(e);

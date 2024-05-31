@@ -23,4 +23,7 @@ public interface SpendRepository {
 	void removeSpendByCategoryIdOfUser(CategoryJson category);
 
 	List<SpendEntity> findAllByUsername(String username);
+
+	CategoryEntity findCategory(String category);
+
 }
