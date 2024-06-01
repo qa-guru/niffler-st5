@@ -71,6 +71,11 @@ public class SpendRepositoryJdbc implements SpendRepository {
     }
 
     @Override
+    public CategoryEntity getCategory(String categoryName) {
+        return null;
+    }
+
+    @Override
     public SpendEntity createSpend(SpendEntity spend) {
         try (Connection conn = spendDataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(

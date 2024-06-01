@@ -55,6 +55,11 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
     }
 
     @Override
+    public CategoryEntity getCategory(String categoryName) {
+        return null;
+    }
+
+    @Override
     public SpendEntity createSpend(SpendEntity spend) {
         KeyHolder kh = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {

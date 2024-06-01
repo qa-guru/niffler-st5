@@ -112,4 +112,14 @@ public class UserRepositoryJdbc implements UserRepository {
     public Optional<UserEntity> findUserInUserdataById(UUID id) {
         return Optional.empty();
     }
+
+    @Override
+    public UserAuthEntity getUserFromAuthByUsername(String username) {
+        return null;
+    }
+
+    @Override
+    public UserEntity getUserFromUserdataByUsername(String username) {
+        return null;
+    }
 }

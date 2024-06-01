@@ -20,6 +20,7 @@ public interface SpendRepository {
     CategoryEntity editCategory(CategoryEntity category);
 
     void removeCategory(CategoryEntity category);
+    CategoryEntity getCategory(String categoryName);
 
     SpendEntity createSpend(SpendEntity spend);
 

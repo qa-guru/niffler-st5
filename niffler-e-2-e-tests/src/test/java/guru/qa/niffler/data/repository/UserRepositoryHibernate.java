@@ -1,6 +1,7 @@
 package guru.qa.niffler.data.repository;
 
 import guru.qa.niffler.data.DataBase;
+import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.data.jpa.EmProvider;
@@ -33,5 +34,19 @@ public class UserRepositoryHibernate implements UserRepository {
     @Override
     public Optional<UserEntity> findUserInUserdataById(UUID id) {
         return Optional.ofNullable(udEm.find(UserEntity.class, id));
+    }
+
+    @Override
+    public UserAuthEntity getUserFromAuthByUsername(String username) {
+        return authEm.createQuery("from \"user\" WHERE username=:username", UserAuthEntity.class)
+                .setParameter(username, username)
+                .getSingleResult();
+    }
+
+    @Override
+    public UserEntity getUserFromUserdataByUsername(String username) {
+        return udEm.createQuery("from \"user\" WHERE username=:username", UserEntity.class)
+                .setParameter(username, username)
+                .getSingleResult();
     }
 }

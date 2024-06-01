@@ -115,4 +115,14 @@ public class UserRepositorySpringJdbc implements UserRepository {
             return Optional.empty();
         }
     }
+
+    @Override
+    public UserAuthEntity getUserFromAuthByUsername(String username) {
+        return null;
+    }
+
+    @Override
+    public UserEntity getUserFromUserdataByUsername(String username) {
+        return null;
+    }
 }
