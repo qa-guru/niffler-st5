@@ -1,14 +1,12 @@
 package guru.qa.niffler.jupiter.extension;
 
+import guru.qa.niffler.data.entity.SpendEntity;
+import guru.qa.niffler.data.repository.SpendRepository;
+import guru.qa.niffler.data.repository.SpendRepositoryHibernate;
 import guru.qa.niffler.jupiter.annotation.Spend;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
-import org.junit.jupiter.api.extension.AfterEachCallback;
-import org.junit.jupiter.api.extension.BeforeEachCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.api.extension.ParameterContext;
-import org.junit.jupiter.api.extension.ParameterResolutionException;
-import org.junit.jupiter.api.extension.ParameterResolver;
+import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
 
 import java.util.Date;
@@ -17,6 +15,8 @@ public abstract class SpendExtension implements BeforeEachCallback, AfterEachCal
 
     public static final ExtensionContext.Namespace NAMESPACE
             = ExtensionContext.Namespace.create(SpendExtension.class);
+
+    SpendRepository spendRepository = new SpendRepositoryHibernate();
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
@@ -37,11 +37,23 @@ public abstract class SpendExtension implements BeforeEachCallback, AfterEachCal
                             spend.currency(),
                             spend.amount(),
                             spend.description(),
-                            category.username()
+                            category.username(),
+                            category.id()
                     );
+                    SpendEntity tempSpendEntity = spendRepository.createSpend(SpendEntity.fromJsons(spendJson, category));
+
                     extensionContext
                             .getStore(NAMESPACE)
-                            .put(extensionContext.getUniqueId(), createSpend(spendJson));
+                            .put(extensionContext.getUniqueId(), new SpendJson(
+                                    tempSpendEntity.getId(),
+                                    new Date(),
+                                    category.category(),
+                                    spend.currency(),
+                                    spend.amount(),
+                                    spend.description(),
+                                    category.username(),
+                                    category.id()
+                            ));
                 }
         );
     }

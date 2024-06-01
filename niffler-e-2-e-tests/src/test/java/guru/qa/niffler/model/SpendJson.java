@@ -19,6 +19,7 @@ public record SpendJson(
         @JsonProperty("description")
         String description,
         @JsonProperty("username")
-        String username) {
+        String username,
+        @JsonProperty("category_id") UUID uuid){
 
 }

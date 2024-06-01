@@ -19,7 +19,6 @@ import java.util.Objects;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 
@@ -40,12 +39,6 @@ public class SpendingTest {
         $("button[type='submit']").click();
     }
 
-    @Test
-    void anotherTest() {
-        Selenide.open("http://127.0.0.1:3000/");
-        $("a[href*='redirect']").should(visible);
-    }
-
     @AfterEach
     void doScreenshot() {
         Allure.addAttachment(
@@ -59,11 +52,11 @@ public class SpendingTest {
     }
 
     @Category(
-            category = "Обучение5",
+            category = "Обучение565150",
             username = "dima"
     )
     @Spend(
-            description = "QA.GURU Advanced 5",
+            description = "QA.GURU Advanced 01617",
             amount = 65000.00,
             currency = CurrencyValues.RUB
     )

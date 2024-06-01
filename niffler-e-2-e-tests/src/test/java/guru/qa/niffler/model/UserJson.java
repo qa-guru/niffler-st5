@@ -42,4 +42,20 @@ public record UserJson(
                 )
         );
     }
+
+    public static UserJson setId(UserJson userJson, UUID id) {
+        return new UserJson(
+                id,
+                userJson.username,
+                userJson.firstname,
+                userJson.surname,
+                userJson.currency,
+                userJson.photo,
+                userJson.photoSmall,
+                userJson.friendState,
+                new TestData(
+                        userJson.testData.password()
+                )
+        );
+    }
 }

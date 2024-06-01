@@ -1,61 +1,46 @@
 package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Selenide;
-import guru.qa.niffler.data.entity.Authority;
-import guru.qa.niffler.data.entity.AuthorityEntity;
-import guru.qa.niffler.data.entity.CurrencyValues;
+import com.github.javafaker.Faker;
 import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.data.repository.UserRepository;
 import guru.qa.niffler.data.repository.UserRepositoryHibernate;
-import org.junit.jupiter.api.BeforeEach;
+import guru.qa.niffler.jupiter.annotation.TestUser;
+import guru.qa.niffler.jupiter.annotation.meta.WebTest;
+import guru.qa.niffler.model.UserJson;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
-public class LoginTest extends BaseWebTest {
+@WebTest
+public class LoginTest {
 
     UserRepository userRepository = new UserRepositoryHibernate();
     UserEntity userDataUser;
-
-    @BeforeEach
-    void createUserForTest() {
-        AuthorityEntity read = new AuthorityEntity();
-        read.setAuthority(Authority.read);
-        AuthorityEntity write = new AuthorityEntity();
-        write.setAuthority(Authority.write);
+    String userName = Faker.instance().name().name();
+    UserAuthEntity user;
+    UserEntity userEntity;
 
 
-        UserAuthEntity user = new UserAuthEntity();
-        user.setUsername("jdbc_user6");
+    @TestUser()
+    @Test
+    void loginTest(UserJson userJson) {
+        Selenide.open("http://127.0.0.1:3000/");
+        $("a[href*='redirect']").click();
+        $("input[name='username']").setValue(userJson.username());
+        $("input[name='password']").setValue(userJson.testData().password());
+        $("button[type='submit']").click();
+        $(".header__avatar").should(visible);
+
+        user = new UserAuthEntity();
+        user.setUsername(userName);
         user.setPassword("12345");
         user.setEnabled(true);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
-        user.addAuthorities(
-                read, write
-        );
-
         userRepository.createUserInAuth(user);
-
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUsername("jdbc_user6");
-        userEntity.setCurrency(CurrencyValues.RUB);
-        userDataUser = userRepository.createUserInUserdata(userEntity);
     }
-
-    @Test
-    void loginTest() {
-        Selenide.open(CFG.frontUrl());
-        $("a[href*='redirect']").click();
-        $("input[name='username']").setValue("jdbc_user6");
-        $("input[name='password']").setValue("12345");
-        $("button[type='submit']").click();
-        $(".header__avatar").should(visible);
-
-        userRepository.findUserInUserdataById(userDataUser.getId());
-    }
-
 }

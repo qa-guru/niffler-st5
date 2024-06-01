@@ -1,5 +1,8 @@
 package guru.qa.niffler.jupiter.extension;
 
+import guru.qa.niffler.data.entity.CategoryEntity;
+import guru.qa.niffler.data.repository.SpendRepository;
+import guru.qa.niffler.data.repository.SpendRepositoryHibernate;
 import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.model.CategoryJson;
 import org.junit.jupiter.api.extension.AfterEachCallback;
@@ -12,6 +15,8 @@ public abstract class CategoryExtension implements BeforeEachCallback, AfterEach
     public static final ExtensionContext.Namespace NAMESPACE
             = ExtensionContext.Namespace.create(CategoryExtension.class);
 
+    SpendRepository spendRepository = new SpendRepositoryHibernate();
+
     @Override
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
         AnnotationSupport.findAnnotation(
@@ -23,9 +28,11 @@ public abstract class CategoryExtension implements BeforeEachCallback, AfterEach
                             cat.category(),
                             cat.username()
                     );
+            CategoryEntity tempCategoryEntity = spendRepository.createCategory(CategoryEntity.fromJson(categoryJson));
                     extensionContext
                             .getStore(NAMESPACE)
-                            .put(extensionContext.getUniqueId(), createCategory(categoryJson));
+                            .put(extensionContext.getUniqueId(), new CategoryJson(tempCategoryEntity.getId(),
+                                    categoryJson.category(), categoryJson.username()));
                 }
         );
     }
