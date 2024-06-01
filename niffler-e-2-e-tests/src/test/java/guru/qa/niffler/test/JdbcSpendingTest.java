@@ -4,21 +4,25 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
-import guru.qa.niffler.jupiter.annotation.meta.WebTest;
+import guru.qa.niffler.jupiter.extension.category.JdbcCategoryExtension;
+import guru.qa.niffler.jupiter.extension.spend.JdbcSpendExtension;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.page.UiBot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static guru.qa.niffler.model.CurrencyValues.RUB;
 
-
-@WebTest
-public class SpendingTest {
+@ExtendWith({
+        JdbcCategoryExtension.class,
+        JdbcSpendExtension.class
+})
+public class JdbcSpendingTest {
 
     private final UiBot ui = new UiBot();
 
-    private final static String USERNAME = "zhanna1";
+    private final static String USERNAME = "tester";
 
     static {
         Configuration.browserSize = "1920x1080";
@@ -30,23 +34,16 @@ public class SpendingTest {
         ui.startPage()
                 .clickLogin()
                 .setUsername(USERNAME)
-                .setPassword("test")
+                .setPassword("qa_pass_666")
                 .clickSignIn();
     }
 
-    @GenerateCategory(
-            category = "Обучение",
-            username = USERNAME
-    )
-    @GenerateSpend(
-            description = "QA.GURU Advanced 5",
-            amount = 65000.00,
-            currency = RUB
-    )
     @Test
+    @GenerateCategory(category = "Обучение", username = USERNAME)
+    @GenerateSpend(description = "QA.GURU Advanced 5", amount = 65000.00, currency = RUB)
     void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
         ui.mainPage()
-                .findRowByText(spendJson.description())
+                .findSpendingByDescription(spendJson)
                 .chooseSpending()
                 .deleteChosenSpending()
                 .assertThatTableContentHasSize(0);

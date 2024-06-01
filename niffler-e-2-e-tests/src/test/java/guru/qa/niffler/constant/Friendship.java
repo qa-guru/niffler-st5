@@ -1,10 +1,12 @@
 package guru.qa.niffler.constant;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public enum Friendship {
 
     PENDING_INVITATION("Pending invitation"),
@@ -13,9 +15,5 @@ public enum Friendship {
     DEFAULT;
 
     private String message;
-
-    Friendship(String message) {
-        this.message = message;
-    }
 
 }

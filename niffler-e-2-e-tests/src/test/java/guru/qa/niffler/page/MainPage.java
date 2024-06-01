@@ -2,6 +2,7 @@ package guru.qa.niffler.page;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import guru.qa.niffler.model.SpendJson;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
@@ -15,8 +16,8 @@ public class MainPage {
     private final SelenideElement allPeople = $("[href='/people']");
     private SelenideElement spendingRow;
 
-    public MainPage findRowByText(String text) {
-        spendingRow = tableRows.find(text(text));
+    public MainPage findSpendingByDescription(SpendJson spend) {
+        spendingRow = tableRows.find(text(spend.description()));
         return this;
     }
 
