@@ -2,6 +2,7 @@ package guru.qa.niffler.data.repository;
 
 import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 public interface SpendRepository {
 
