@@ -27,19 +27,15 @@ public record UserJson(
         @JsonIgnore
         TestData testData) {
 
-    public static UserJson simpleUser(String username, String password) {
-        return new UserJson(
-                null,
-                username,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                new TestData(
-                        password
-                )
-        );
+    public UserJson(String username) {
+        this(username, null);
+    }
+
+    public UserJson(String username, TestData testData) {
+        this(null, username, null, null, null, null, null, null, testData);
+    }
+
+    public UserJson addTestData(TestData testData) {
+        return new UserJson(id, username, firstname, surname, currency, photo, photoSmall, friendState, testData);
     }
 }

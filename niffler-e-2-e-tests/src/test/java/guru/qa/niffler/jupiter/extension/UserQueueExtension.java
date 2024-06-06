@@ -1,5 +1,6 @@
 package guru.qa.niffler.jupiter.extension;
 
+import guru.qa.niffler.model.TestData;
 import guru.qa.niffler.model.UserJson;
 import io.qameta.allure.Allure;
 import org.junit.jupiter.api.extension.AfterEachCallback;
@@ -13,9 +14,7 @@ import java.util.Date;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import static guru.qa.niffler.model.UserJson.simpleUser;
 
-// Любой тест проходит через него
 public class UserQueueExtension implements
         BeforeEachCallback,
         AfterEachCallback,
@@ -27,11 +26,10 @@ public class UserQueueExtension implements
     private static final Queue<UserJson> USERS = new ConcurrentLinkedQueue<>();
 
     static {
-        USERS.add(simpleUser("dima", "12345"));
-        USERS.add(simpleUser("duck", "12345"));
-        USERS.add(simpleUser("barsik", "12345"));
+        USERS.add(new UserJson("dima", new TestData("12345")));
+        USERS.add(new UserJson("duck", new TestData("12345")));
+        USERS.add(new UserJson("barsik", new TestData("12345")));
     }
-
 
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {

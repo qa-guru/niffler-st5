@@ -1,10 +1,12 @@
 package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.jupiter.annotation.Spend;
+import guru.qa.niffler.jupiter.annotation.Spends;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
@@ -21,6 +23,7 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
+import static guru.qa.niffler.condition.SpendsCondition.spendsInTable;
 
 
 @WebTest
@@ -59,7 +62,7 @@ public class SpendingTest {
     }
 
     @Category(
-            category = "Обучение5",
+            category = "Обучение1",
             username = "dima"
     )
     @Spend(
@@ -79,5 +82,29 @@ public class SpendingTest {
 
         $(".spendings-table tbody").$$("tr")
                 .shouldHave(size(0));
+    }
+
+    @Category(
+            category = "Обучение3",
+            username = "dima"
+    )
+    @Spends({
+            @Spend(
+                    description = "QA.GURU Advanced 5 - обучение",
+                    amount = 65000.00,
+                    currency = CurrencyValues.RUB
+            ),
+            @Spend(
+                    description = "QA.GURU Advanced 5 - написание диплома",
+                    amount = 1.00,
+                    currency = CurrencyValues.RUB
+            )
+    })
+    @Test
+    void checkSpendingContent(SpendJson[] spends) {
+        ElementsCollection spendings = $(".spendings-table tbody")
+                .$$("tr");
+
+        spendings.shouldHave(spendsInTable(spends));
     }
 }

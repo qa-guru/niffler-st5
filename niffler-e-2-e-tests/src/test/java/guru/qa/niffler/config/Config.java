@@ -14,7 +14,13 @@ public interface Config {
 
     String frontUrl();
 
+    String gatewayUrl();
+
+    String authUrl();
+
     String spendUrl();
+
+    String userdataUrl();
 
     String dbHost();
 

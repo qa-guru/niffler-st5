@@ -10,9 +10,9 @@ public class ProfileTest extends BaseWebTest {
     @Test
     void updateProfileTest() {
         open(ProfilePage.URL, ProfilePage.class)
-                .setName()
-                .checkMessage("Profile successfully updated")
-                .checkFields()
-                .checkMessage("");
+                .setName("")
+                .checkToasterMessage("Profile successfully updated")
+                .checkName("")
+                .checkToasterMessage("Profile successfully updated");
     }
 }

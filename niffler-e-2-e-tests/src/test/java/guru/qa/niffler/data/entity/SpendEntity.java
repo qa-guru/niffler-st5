@@ -1,6 +1,5 @@
 package guru.qa.niffler.data.entity;
 
-import guru.qa.niffler.model.CurrencyValues;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

@@ -15,7 +15,11 @@ public class ApiSpendExtension extends SpendExtension {
     }
 
     @Override
+    @SneakyThrows
     protected void removeSpend(SpendJson spend) {
-
+        spendApiClient.removeSpends(
+                spend.username(),
+                spend.id().toString()
+        );
     }
 }

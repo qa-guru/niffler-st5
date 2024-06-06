@@ -17,10 +17,14 @@ public class UserEntityRowMapper implements RowMapper<UserEntity> {
 
     @Override
     public UserEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId((UUID) rs.getObject("id"));
-        userEntity.setUsername(rs.getString("username"));
-        userEntity.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
-        return userEntity;
+        UserEntity user = new UserEntity();
+        user.setId(rs.getObject("id", UUID.class));
+        user.setUsername(rs.getString("username"));
+        user.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
+        user.setFirstname(rs.getString("firstname"));
+        user.setSurname(rs.getString("surname"));
+        user.setPhoto(rs.getBytes("photo"));
+        user.setPhotoSmall(rs.getBytes("photo_small"));
+        return user;
     }
 }

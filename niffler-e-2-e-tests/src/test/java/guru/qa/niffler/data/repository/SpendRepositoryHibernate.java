@@ -5,6 +5,10 @@ import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.data.jpa.EmProvider;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+
+import java.util.Optional;
+import java.util.UUID;
 
 public class SpendRepositoryHibernate implements SpendRepository {
 
@@ -22,6 +26,26 @@ public class SpendRepositoryHibernate implements SpendRepository {
     }
 
     @Override
+    public Optional<CategoryEntity> findCategoryById(UUID id) {
+        return Optional.ofNullable(
+                em.find(CategoryEntity.class, id)
+        );
+    }
+
+    @Override
+    public Optional<CategoryEntity> findUserCategoryByName(String username,
+                                                           String category) {
+        try {
+            return Optional.of(em.createQuery("select c from CategoryEntity c where c.category=:category and c.username=:username", CategoryEntity.class)
+                    .setParameter("category", category)
+                    .setParameter("username", username)
+                    .getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
     public void removeCategory(CategoryEntity category) {
         em.remove(category);
     }
@@ -35,6 +59,13 @@ public class SpendRepositoryHibernate implements SpendRepository {
     @Override
     public SpendEntity editSpend(SpendEntity spend) {
         return em.merge(spend);
+    }
+
+    @Override
+    public Optional<SpendEntity> findSpendById(UUID id) {
+        return Optional.ofNullable(
+                em.find(SpendEntity.class, id)
+        );
     }
 
     @Override

@@ -2,14 +2,17 @@ package guru.qa.niffler.data.repository;
 
 import guru.qa.niffler.data.DataBase;
 import guru.qa.niffler.data.entity.CategoryEntity;
+import guru.qa.niffler.data.entity.CurrencyValues;
 import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
+import guru.qa.niffler.data.sjdbc.CategoryEntityRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.util.Optional;
 import java.util.UUID;
 
 public class SpendRepositorySpringJdbc implements SpendRepository {
@@ -23,7 +26,7 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
         KeyHolder kh = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
                     PreparedStatement ps = con.prepareStatement(
-                            "INSERT INTO category (category, username) VALUES (?, ?)",
+                            "INSERT INTO \"category\" (category, username) VALUES (?, ?)",
                             PreparedStatement.RETURN_GENERATED_KEYS
                     );
                     ps.setString(1, category.getCategory());
@@ -38,7 +41,7 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
     @Override
     public CategoryEntity editCategory(CategoryEntity category) {
         jdbcTemplate.update(
-                "UPDATE category SET category = ?, username = ? WHERE id = ?",
+                "UPDATE \"category\" SET category = ?, username = ? WHERE id = ?",
                 category.getCategory(),
                 category.getUsername(),
                 category.getId()
@@ -47,9 +50,32 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
     }
 
     @Override
+    public Optional<CategoryEntity> findCategoryById(UUID id) {
+        return Optional.ofNullable(
+                jdbcTemplate.queryForObject(
+                        "SELECT * FROM \"category\" WHERE id = ? ",
+                        CategoryEntityRowMapper.instance,
+                        id
+                )
+        );
+    }
+
+    @Override
+    public Optional<CategoryEntity> findUserCategoryByName(String username, String category) {
+        return Optional.ofNullable(
+                jdbcTemplate.queryForObject(
+                        "SELECT * FROM \"category\" WHERE \"category\".category = ? and username = ?",
+                        CategoryEntityRowMapper.instance,
+                        category,
+                        username
+                )
+        );
+    }
+
+    @Override
     public void removeCategory(CategoryEntity category) {
         jdbcTemplate.update(
-                "DELETE FROM category WHERE id = ?",
+                "DELETE FROM \"category\" WHERE id = ?",
                 category.getId()
         );
     }
@@ -90,6 +116,30 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
                 spend.getId()
         );
         return spend;
+    }
+
+    @Override
+    public Optional<SpendEntity> findSpendById(UUID id) {
+        return Optional.ofNullable(
+                jdbcTemplate.queryForObject(
+                        "SELECT * FROM spend WHERE id = ? ",
+                        (rs, rowNum) -> {
+                            SpendEntity spend = new SpendEntity();
+                            spend.setId(rs.getObject("id", UUID.class));
+                            spend.setUsername(rs.getString("username"));
+                            spend.setSpendDate(rs.getDate("spend_date"));
+                            spend.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
+                            spend.setAmount(rs.getDouble("amount"));
+                            spend.setDescription(rs.getString("description"));
+                            spend.setCategory(
+                                    findCategoryById(
+                                            rs.getObject("category_id", UUID.class)
+                                    ).orElseThrow()
+                            );
+                            return spend;
+                        }, id
+                )
+        );
     }
 
     @Override
