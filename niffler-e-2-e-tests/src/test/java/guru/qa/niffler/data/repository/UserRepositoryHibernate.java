@@ -27,4 +27,14 @@ public class UserRepositoryHibernate implements UserRepository{
     public Optional<UserEntity> findUserInUserDataById(UUID id) {
         return Optional.empty();
     }
+
+    @Override
+    public UserAuthEntity updateUserInAuth(UserAuthEntity user) {
+        return null;
+    }
+
+    @Override
+    public UserEntity updateUserInUserdata(UserEntity user) {
+        return null;
+    }
 }

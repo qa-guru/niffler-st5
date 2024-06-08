@@ -1,4 +1,4 @@
-package guru.qa.niffler.test.user;
+package guru.qa.niffler.test.user.friends;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.User;

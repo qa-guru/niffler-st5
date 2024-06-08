@@ -4,12 +4,18 @@ import guru.qa.niffler.data.DataBase;
 import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
+import guru.qa.niffler.data.sjdbc.SpendEntityRowMapper;
+import org.springframework.dao.DataRetrievalFailureException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
-import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 public class SpendRepositorySpringJdbc implements SpendRepository {
@@ -67,11 +73,11 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
                     ps.setDate(3, new Date(spend.getSpendDate().getTime()));
                     ps.setDouble(4, spend.getAmount());
                     ps.setString(5, spend.getDescription());
-                    ps.setObject(6, getCategoryId(spend.getCategory()));
+                    ps.setObject(6, categoryId(spend.getCategory()));
                     return ps;
                 }, kh
         );
-        spend.setId((UUID) kh.getKeys().get("id"));
+        spend.setId((UUID) Objects.requireNonNull(kh.getKeys()).get("id"));
         return spend;
     }
 
@@ -85,7 +91,7 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
                 new Date(spend.getSpendDate().getTime()),
                 spend.getAmount(),
                 spend.getDescription(),
-                getCategoryId(spend.getCategory()),
+                spend.getCategory(),
                 spend.getId()
         );
         return spend;
@@ -99,23 +105,36 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
         );
     }
 
-    private static final DataSource dateSource = DataSourceProvider.dataSource(DataBase.SPEND);
+    public UUID categoryId(String categoryName) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT id FROM category WHERE category = ?",
+                    UUID.class,
+                    categoryName);
+        } catch (EmptyResultDataAccessException e) {
+            // Обрабатываем ситуацию, когда категории не найдены
+            return null; // или возвращаем ошибку, если это необходимо
+        }
+    }
 
-    public UUID getCategoryId(String categoryName) {
-        try (Connection conn = dateSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement("SELECT id FROM category WHERE category = ?")) {
-            ps.setString(1, categoryName);
-            ps.execute();
 
-            try (ResultSet resultSet = ps.getResultSet()) {
-                if (resultSet.next()) {
-                    return UUID.fromString(resultSet.getString("id"));
-                } else {
-                    throw new IllegalStateException("Can`t access to id");
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+    //В этом примере Optional используется для безопасного обхода ситуации, когда запрос к базе данных может не вернуть результат.
+    //Если запрос успешно выполнен, то возвращается Optional с результатом. Если возникла ошибка, то возвращается пустой Optional.
+    @Override
+    public Optional<List<SpendEntity>> findAllSpendsByUsername(String username) {
+        try {
+            List<SpendEntity> spendEntities = jdbcTemplate.query(
+                    """
+                            SELECT * FROM "spend" WHERE username = ?
+                            """,
+                    SpendEntityRowMapper.instance,
+                    username
+            );
+
+            return Optional.of(spendEntities);
+        } catch (DataRetrievalFailureException e) {
+            // В случае ошибки при извлечении данных возвращаем Optional.empty()
+            return Optional.empty();
         }
     }
 }
