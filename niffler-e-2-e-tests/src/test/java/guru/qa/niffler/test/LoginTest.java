@@ -28,7 +28,7 @@ public class LoginTest extends BaseWebTest {
 
 
         UserAuthEntity user = new UserAuthEntity();
-        user.setUsername("jdbc_user6");
+        user.setUsername("jdbc_user8");
         user.setPassword("12345");
         user.setEnabled(true);
         user.setAccountNonExpired(true);
@@ -41,7 +41,7 @@ public class LoginTest extends BaseWebTest {
         userRepository.createUserInAuth(user);
 
         UserEntity userEntity = new UserEntity();
-        userEntity.setUsername("jdbc_user6");
+        userEntity.setUsername("jdbc_user8");
         userEntity.setCurrency(CurrencyValues.RUB);
         userDataUser = userRepository.createUserInUserdata(userEntity);
     }
@@ -50,7 +50,7 @@ public class LoginTest extends BaseWebTest {
     void loginTest() {
         Selenide.open(CFG.frontUrl());
         $("a[href*='redirect']").click();
-        $("input[name='username']").setValue("jdbc_user6");
+        $("input[name='username']").setValue("jdbc_user8");
         $("input[name='password']").setValue("12345");
         $("button[type='submit']").click();
         $(".header__avatar").should(visible);

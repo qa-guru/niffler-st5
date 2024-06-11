@@ -41,6 +41,8 @@ logging:
     org.springframework.security: DEBUG
     org.springframework.security.oauth2: DEBUG
 #    org.springframework.boot.autoconfigure: DEBUG
+  file:
+    name: "spend.log"
 
 ---
 spring:

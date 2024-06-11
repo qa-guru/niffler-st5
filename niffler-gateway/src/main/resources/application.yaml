@@ -16,6 +16,8 @@ logging:
     org.springframework.security.oauth2: DEBUG
     net.devh.boot.grpc: DEBUG
 #    org.springframework.boot.autoconfigure: DEBUG
+  file:
+    name: "gateway.log"
 
 niffler-userdata:
   client: soap

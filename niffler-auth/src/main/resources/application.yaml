@@ -49,6 +49,8 @@ logging:
     org.springframework.web.cors: INFO
     org.apache.catalina.filters.RequestDumperFilter: DEBUG
 #    org.springframework.boot.autoconfigure: DEBUG
+  file:
+    name: "auth.log"
 
 ---
 spring:

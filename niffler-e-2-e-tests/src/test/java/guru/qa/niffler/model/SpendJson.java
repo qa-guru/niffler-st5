@@ -31,7 +31,7 @@ public record SpendJson(
                 entity.getId(),
                 entity.getSpendDate(),
                 entity.getAmount(),
-                entity.getCurrency(),
+                CurrencyValues.valueOf(entity.getCurrency().name()),
                 entity.getCategory().getCategory(),
                 entity.getDescription(),
                 entity.getUsername()
