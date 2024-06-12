@@ -4,9 +4,13 @@ import guru.qa.niffler.data.DataBase;
 import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
+import guru.qa.niffler.model.CurrencyValues;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
@@ -15,6 +19,7 @@ public class SpendRepositoryJdbc implements SpendRepository {
 
     private static final DataSource dateSource = DataSourceProvider.dataSource(DataBase.SPEND);
 
+    //Метод создает новую категорию в базе данных. Он принимает объект CategoryEntity и возвращает созданную категорию.
     @Override
     public CategoryEntity createCategory(CategoryEntity category) {
         try (Connection conn = dateSource.getConnection();
@@ -39,6 +44,7 @@ public class SpendRepositoryJdbc implements SpendRepository {
         }
     }
 
+    //Обновляет существующую категорию в базе данных
     @Override
     public CategoryEntity editCategory(CategoryEntity category) {
         try (Connection conn = dateSource.getConnection();
@@ -165,6 +171,42 @@ public class SpendRepositoryJdbc implements SpendRepository {
                 } else {
                     throw new IllegalStateException("Can`t access to id");
                 }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //Возвращает список расходов для указанного пользователя.
+    @Override
+    public List<SpendEntity> findAllSpendsByUsername(String username) {
+        try (Connection conn = dateSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(
+                     """
+                             SELECT * FROM "spend" where username = ?
+                             """)) {
+            ps.setString(1, username);
+            ps.executeQuery();
+
+            List<SpendEntity> spendList = new ArrayList<>();
+
+            try (ResultSet resultSet = ps.getResultSet()) {
+                while (resultSet.next()) {
+                    SpendEntity spend = new SpendEntity();
+
+                    spend.setId(resultSet.getObject("id", UUID.class));
+                    spend.setUsername(resultSet.getString("username"));
+                    spend.setSpendDate(resultSet.getDate("spend_date"));
+                    spend.setCurrency(CurrencyValues.valueOf(resultSet.getString("currency")));
+                    spend.setAmount(resultSet.getDouble("amount"));
+                    spend.setDescription(resultSet.getString("description"));
+                    spend.setCategory(resultSet.getString("category_id"));
+
+                    spendList.add(spend);
+                }
+                return spendList;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
