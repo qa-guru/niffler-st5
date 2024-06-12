@@ -1,4 +1,4 @@
-package guru.qa.niffler.jupiter.extension;
+package guru.qa.niffler.jupiter.extension.user;
 
 import guru.qa.niffler.constant.Friendship;
 import guru.qa.niffler.jupiter.annotation.User;

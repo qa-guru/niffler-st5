@@ -1,4 +1,4 @@
-package guru.qa.niffler.data.repository;
+package guru.qa.niffler.data.repository.spend;
 
 import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
@@ -10,6 +10,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static guru.qa.niffler.data.Database.SPEND;
@@ -86,7 +88,7 @@ public class SpendRepositoryJdbc implements SpendRepository {
     public SpendEntity createSpend(SpendEntity spend) {
         try (Connection connection = spendDataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "INSERT INTO \"spend\" (username, spend_date, currency, amount, description, category_id) VALUES (?, ?, ?, ?, ?, ?)",
+                     "INSERT INTO spend (username, spend_date, currency, amount, description, category_id) VALUES (?, ?, ?, ?, ?, ?)",
                      PreparedStatement.RETURN_GENERATED_KEYS
              )) {
 
@@ -117,10 +119,9 @@ public class SpendRepositoryJdbc implements SpendRepository {
 
     @Override
     public SpendEntity editSpend(SpendEntity spend) {
-
         try (Connection connection = spendDataSource.getConnection();
              PreparedStatement updateStatement = connection.prepareStatement(""" 
-                     UPDATE "spend" SET
+                     UPDATE spend SET
                      username=?,
                      spend_date=?,
                      currency=?,
@@ -149,10 +150,44 @@ public class SpendRepositoryJdbc implements SpendRepository {
     public void removeSpend(SpendEntity spend) {
         try (Connection connection = spendDataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "DELETE FROM \"spend\" WHERE ID = ?"
+                     "DELETE FROM spend WHERE ID = ?"
              )) {
             preparedStatement.setObject(1, spend.getId());
             preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<SpendEntity> findAllByUsername(String username) {
+        try (Connection connection = spendDataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                     "SELECT * FROM spend WHERE username = ?"
+             )) {
+
+            preparedStatement.setString(1, username);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            List<SpendEntity> spendEntities = new ArrayList<>();
+
+            while (resultSet.next()) {
+                SpendEntity spend = new SpendEntity();
+                CategoryEntity category = new CategoryEntity();
+                category.setId(resultSet.getObject("category_id", UUID.class));
+
+                spend.setId((UUID) resultSet.getObject("id"));
+                spend.setUsername(resultSet.getString("username"));
+                spend.setSpendDate(resultSet.getDate("spend_date"));
+                spend.setAmount(resultSet.getDouble("amount"));
+                spend.setDescription(resultSet.getString("description"));
+                spend.setCategory(category);
+                spendEntities.add(spend);
+            }
+
+            return spendEntities;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

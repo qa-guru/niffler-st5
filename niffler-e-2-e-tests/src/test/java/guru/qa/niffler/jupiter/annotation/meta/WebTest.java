@@ -2,7 +2,7 @@ package guru.qa.niffler.jupiter.annotation.meta;
 
 import guru.qa.niffler.jupiter.extension.BrowserExtension;
 import guru.qa.niffler.jupiter.extension.spend.HttpSpendExtension;
-import guru.qa.niffler.jupiter.extension.UserQueueExtension;
+import guru.qa.niffler.jupiter.extension.user.UserQueueExtension;
 import guru.qa.niffler.jupiter.extension.category.HttpCategoryExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 
