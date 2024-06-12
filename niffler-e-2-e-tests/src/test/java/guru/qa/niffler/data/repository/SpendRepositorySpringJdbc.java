@@ -15,7 +15,6 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 public class SpendRepositorySpringJdbc implements SpendRepository {
@@ -117,24 +116,18 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
         }
     }
 
-
-    //В этом примере Optional используется для безопасного обхода ситуации, когда запрос к базе данных может не вернуть результат.
-    //Если запрос успешно выполнен, то возвращается Optional с результатом. Если возникла ошибка, то возвращается пустой Optional.
     @Override
-    public Optional<List<SpendEntity>> findAllSpendsByUsername(String username) {
+    public List<SpendEntity> findAllSpendsByUsername(String username) {
         try {
-            List<SpendEntity> spendEntities = jdbcTemplate.query(
+            return jdbcTemplate.query(
                     """
                             SELECT * FROM "spend" WHERE username = ?
                             """,
                     SpendEntityRowMapper.instance,
                     username
             );
-
-            return Optional.of(spendEntities);
         } catch (DataRetrievalFailureException e) {
-            // В случае ошибки при извлечении данных возвращаем Optional.empty()
-            return Optional.empty();
+            throw new RuntimeException(e);
         }
     }
 }

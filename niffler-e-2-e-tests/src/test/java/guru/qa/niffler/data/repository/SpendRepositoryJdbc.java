@@ -179,7 +179,7 @@ public class SpendRepositoryJdbc implements SpendRepository {
 
     //Возвращает список расходов для указанного пользователя.
     @Override
-    public Optional<List<SpendEntity>> findAllSpendsByUsername(String username) {
+    public List<SpendEntity> findAllSpendsByUsername(String username) {
         try (Connection conn = dateSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(
                      """
@@ -204,11 +204,12 @@ public class SpendRepositoryJdbc implements SpendRepository {
 
                     spendList.add(spend);
                 }
+                return spendList;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-
-            return Optional.of(spendList);
         } catch (SQLException e) {
-            return Optional.empty();
+            throw new RuntimeException(e);
         }
     }
 }

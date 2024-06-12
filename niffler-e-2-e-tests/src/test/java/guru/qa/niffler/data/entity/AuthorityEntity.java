@@ -17,5 +17,5 @@ public class AuthorityEntity implements Serializable {
     private Authority authority;
 
     // Уникальный идентификатор пользователя, которому принадлежит это полномочие
-    private UUID user_id;
+    private UUID userId;
 }

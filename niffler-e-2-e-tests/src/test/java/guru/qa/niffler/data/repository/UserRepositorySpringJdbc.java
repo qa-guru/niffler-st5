@@ -87,13 +87,13 @@ public class UserRepositorySpringJdbc implements UserRepository {
                         public void setValues(PreparedStatement ps, int i) throws SQLException {
                             // Устанавливаем значения для полей запроса
                             ps.setObject(1, user.getId());
-                            ps.setString(2, Authority.values()[i].name());
+                            ps.setString(2, user.getAuthorities().get(i).getAuthority().name());
                         }
 
                         @Override
                         public int getBatchSize() {
                             // Возвращаем количество ролей для создания
-                            return Authority.values().length;
+                            return user.getAuthorities().size();
                         }
                     }
             );
@@ -227,7 +227,7 @@ public class UserRepositorySpringJdbc implements UserRepository {
                         public void setValues(PreparedStatement ps, int i) throws SQLException {
                             // Устанавливаем значения для полей запроса
                             ps.setObject(1, user.getId());
-                            ps.setString(2, Authority.values()[i].name());
+                            ps.setString(2, user.getAuthorities().get(i).getAuthority().name());
                         }
 
                         @Override
