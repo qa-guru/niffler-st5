@@ -16,10 +16,10 @@ public class SpendJdbcExtension extends AbstractSpendExtension {
     private final SpendRepository spendRepository = new SpendRepositoryJdbc();
 
     @Override
-    protected SpendJson createSpend(ExtensionContext context, Spend spend) {
+    protected SpendJson createSpend(ExtensionContext context, Spend spend, CategoryJson category) {
         SpendEntity spendEntity = new SpendEntity();
         spendEntity.setSpendDate(convertStringToDate(spend.spendDate()));
-        spendEntity.setCategory(spend.category());
+        spendEntity.setCategory(CategoryEntity.fromJson(category));
         spendEntity.setCurrency(spend.currency());
         spendEntity.setAmount(spend.amount());
         spendEntity.setDescription(spend.description());
@@ -32,7 +32,7 @@ public class SpendJdbcExtension extends AbstractSpendExtension {
     }
 
     @Override
-    protected void removeSpend(SpendJson spend) {
-        spendRepository.removeSpend(SpendEntity.fromJson(spend));
+    protected void removeSpend(SpendEntity spend) {
+        spendRepository.removeSpend(spend);
     }
 }

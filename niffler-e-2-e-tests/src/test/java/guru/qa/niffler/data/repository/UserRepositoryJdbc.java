@@ -67,9 +67,9 @@ public class UserRepositoryJdbc implements UserRepository {
                 user.setId(generatedUserId);
 
                 // Вставка полномочий пользователя
-                for (Authority a : Authority.values()) {
-                    authorityPs.setObject(1, generatedUserId);
-                    authorityPs.setString(2, a.name());
+                for (AuthorityEntity authority : user.getAuthorities()) {
+                    authorityPs.setObject(1, user.getId());
+                    authorityPs.setString(2, authority.getAuthority().name());
                     authorityPs.addBatch();
                     authorityPs.clearParameters();
                 }

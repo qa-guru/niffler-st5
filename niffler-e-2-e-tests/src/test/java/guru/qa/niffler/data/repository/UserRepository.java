@@ -9,13 +9,13 @@ import java.util.UUID;
 // Интерфейс UserRepository определяет методы для работы с пользователями в базе данных
 public interface UserRepository {
 
+    String repoType = "sjdbс";
+
     // Статический метод getInstance() возвращает экземпляр UserRepository
     // в зависимости от значения системного свойства "repo"
     static UserRepository getInstance() {
 
-        //todo-удалить после завершения работы с ДЗ
-        //для дебага с разными репо
-        System.setProperty("repo", "sjdbс");
+        System.setProperty("repo", repoType);
 
         // Если свойство "repo" равно "sjdbс", возвращается экземпляр UserRepositorySpringJdbc
         if ("sjdbс".equals(System.getProperty("repo"))) {

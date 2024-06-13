@@ -1,6 +1,7 @@
 package guru.qa.niffler.data.sjdbc;
 
 import guru.qa.niffler.data.entity.SpendEntity;
+import guru.qa.niffler.data.repository.SpendRepositorySpringJdbc;
 import guru.qa.niffler.model.CurrencyValues;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -17,6 +18,8 @@ public class SpendEntityRowMapper implements RowMapper<SpendEntity> {
     private SpendEntityRowMapper() {
     }
 
+    SpendRepositorySpringJdbc spendRepository = new SpendRepositorySpringJdbc();
+
     @Override
     public SpendEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
         SpendEntity spend = new SpendEntity();
@@ -26,7 +29,7 @@ public class SpendEntityRowMapper implements RowMapper<SpendEntity> {
         spend.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
         spend.setAmount(rs.getDouble("amount"));
         spend.setDescription(rs.getString("description"));
-        spend.setCategory(rs.getString("category_id"));
+        spend.setCategory(spendRepository.getCategoryEntityById(UUID.fromString(rs.getString("category_id"))).get());
         return spend;
     }
 }

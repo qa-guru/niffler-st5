@@ -1,11 +1,9 @@
 package guru.qa.niffler.test.user;
 
 import com.codeborne.selenide.Selenide;
-import guru.qa.niffler.data.entity.CurrencyValues;
-import guru.qa.niffler.data.entity.UserAuthEntity;
-import guru.qa.niffler.data.entity.UserEntity;
+import guru.qa.niffler.data.entity.*;
 import guru.qa.niffler.data.repository.UserRepository;
-import guru.qa.niffler.data.repository.UserRepositorySpringJdbc;
+import guru.qa.niffler.data.repository.UserRepositoryHibernate;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.pages.LoginPage;
 import guru.qa.niffler.pages.WelcomePage;
@@ -22,7 +20,7 @@ public class LoginTest {
     // по умолчанию UserRepositoryJdbc до тех пор пока не добавили системные переменные
     // UserRepository userRepository = UserRepository.getInstance();
 
-    UserRepository userRepository = new UserRepositorySpringJdbc();
+    UserRepository userRepository = new UserRepositoryHibernate();
 
     private final WelcomePage welcomePage = new WelcomePage();
     private final LoginPage loginPage = new LoginPage();
@@ -33,6 +31,11 @@ public class LoginTest {
 
     @BeforeEach
     void createUserForTest() {
+        AuthorityEntity read = new AuthorityEntity();
+        read.setAuthority(Authority.read);
+        AuthorityEntity write = new AuthorityEntity();
+        write.setAuthority(Authority.write);
+
         UserAuthEntity user = new UserAuthEntity();
         user.setUsername(userLogin);
         user.setPassword("12345");
@@ -40,6 +43,8 @@ public class LoginTest {
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
+        user.addAuthorities(read, write);
+
         userRepository.createUserInAuth(user);
 
         UserEntity userEntity = new UserEntity();

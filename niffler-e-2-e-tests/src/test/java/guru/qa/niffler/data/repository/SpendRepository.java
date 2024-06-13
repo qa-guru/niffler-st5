@@ -20,5 +20,5 @@ public interface SpendRepository {
 
     void removeSpend(SpendEntity category);
 
-    Optional<List<SpendEntity>> findAllSpendsByUsername(String username);
+    List<SpendEntity> findAllSpendsByUsername(String username);
 }

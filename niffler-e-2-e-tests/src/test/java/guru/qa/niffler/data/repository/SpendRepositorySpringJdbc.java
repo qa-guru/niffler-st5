@@ -4,6 +4,7 @@ import guru.qa.niffler.data.DataBase;
 import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
+import guru.qa.niffler.data.sjdbc.CategoryEntityRowMapper;
 import guru.qa.niffler.data.sjdbc.SpendEntityRowMapper;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -73,7 +74,7 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
                     ps.setDate(3, new Date(spend.getSpendDate().getTime()));
                     ps.setDouble(4, spend.getAmount());
                     ps.setString(5, spend.getDescription());
-                    ps.setObject(6, categoryId(spend.getCategory()));
+                    ps.setObject(6, spend.getCategory().getId());
                     return ps;
                 }, kh
         );
@@ -91,7 +92,7 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
                 new Date(spend.getSpendDate().getTime()),
                 spend.getAmount(),
                 spend.getDescription(),
-                spend.getCategory(),
+                spend.getCategory().getId(),
                 spend.getId()
         );
         return spend;
@@ -117,23 +118,31 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
         }
     }
 
-
-    //В этом примере Optional используется для безопасного обхода ситуации, когда запрос к базе данных может не вернуть результат.
-    //Если запрос успешно выполнен, то возвращается Optional с результатом. Если возникла ошибка, то возвращается пустой Optional.
     @Override
-    public Optional<List<SpendEntity>> findAllSpendsByUsername(String username) {
+    public List<SpendEntity> findAllSpendsByUsername(String username) {
         try {
-            List<SpendEntity> spendEntities = jdbcTemplate.query(
+            return jdbcTemplate.query(
                     """
                             SELECT * FROM "spend" WHERE username = ?
                             """,
                     SpendEntityRowMapper.instance,
                     username
             );
-
-            return Optional.of(spendEntities);
         } catch (DataRetrievalFailureException e) {
-            // В случае ошибки при извлечении данных возвращаем Optional.empty()
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Optional<CategoryEntity> getCategoryEntityById(UUID categoryId) {
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(
+                    """
+                            SELECT * FROM category where id = ?
+                            """,
+                    CategoryEntityRowMapper.instance,
+                    categoryId
+            ));
+        } catch (DataRetrievalFailureException e) {
             return Optional.empty();
         }
     }

@@ -10,7 +10,6 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
@@ -71,6 +70,30 @@ public class SpendRepositoryJdbc implements SpendRepository {
         }
     }
 
+    public CategoryEntity getCategory(UUID categoryId) {
+        try (Connection conn = dateSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement("SELECT * FROM \"category\" WHERE id = ?")) {
+            ps.setObject(1, categoryId);
+            ps.execute();
+
+            try (ResultSet resultSet = ps.getResultSet()) {
+                if (resultSet.next()) {
+                    CategoryEntity category = new CategoryEntity();
+
+                    category.setId(UUID.fromString(resultSet.getString("id")));
+                    category.setCategory(resultSet.getString("category"));
+                    category.setUsername(resultSet.getString("username"));
+
+                    return category;
+                } else {
+                    throw new IllegalStateException("Can`t access to category");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public SpendEntity createSpend(SpendEntity spend) {
         String request =
@@ -88,7 +111,7 @@ public class SpendRepositoryJdbc implements SpendRepository {
 
             ps.setDouble(4, spend.getAmount());
             ps.setString(5, spend.getDescription());
-            ps.setObject(6, getCategoryId(spend.getCategory()));
+            ps.setObject(6, spend.getCategory());
 
             ps.executeUpdate();
 
@@ -121,8 +144,8 @@ public class SpendRepositoryJdbc implements SpendRepository {
 
             ps.setDouble(4, spend.getAmount());
             ps.setString(5, spend.getDescription());
-            ps.setObject(6, getCategoryId(spend.getCategory()));
-            ps.setObject(7, getSpendIdByCategoryId(getCategoryId(spend.getCategory())));
+            ps.setObject(6, spend.getCategory());
+            ps.setObject(7, spend.getId());
             ps.executeUpdate();
             return spend;
         } catch (SQLException e) {
@@ -179,7 +202,7 @@ public class SpendRepositoryJdbc implements SpendRepository {
 
     //Возвращает список расходов для указанного пользователя.
     @Override
-    public Optional<List<SpendEntity>> findAllSpendsByUsername(String username) {
+    public List<SpendEntity> findAllSpendsByUsername(String username) {
         try (Connection conn = dateSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(
                      """
@@ -200,15 +223,16 @@ public class SpendRepositoryJdbc implements SpendRepository {
                     spend.setCurrency(CurrencyValues.valueOf(resultSet.getString("currency")));
                     spend.setAmount(resultSet.getDouble("amount"));
                     spend.setDescription(resultSet.getString("description"));
-                    spend.setCategory(resultSet.getString("category_id"));
+                    spend.setCategory((getCategory((UUID) resultSet.getObject("category_id"))));
 
                     spendList.add(spend);
                 }
+                return spendList;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-
-            return Optional.of(spendList);
         } catch (SQLException e) {
-            return Optional.empty();
+            throw new RuntimeException(e);
         }
     }
 }
