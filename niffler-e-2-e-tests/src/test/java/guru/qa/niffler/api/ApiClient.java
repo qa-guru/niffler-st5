@@ -1,7 +1,9 @@
 package guru.qa.niffler.api;
 
+import guru.qa.niffler.api.cookie.ThreadSafeCookieStore;
 import guru.qa.niffler.config.Config;
 import okhttp3.Interceptor;
+import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
@@ -9,6 +11,9 @@ import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+import java.net.CookieManager;
+
+import static java.net.CookiePolicy.ACCEPT_ALL;
 import static okhttp3.logging.HttpLoggingInterceptor.Level.BODY;
 
 public abstract class ApiClient {
@@ -61,6 +66,12 @@ public abstract class ApiClient {
                 okHttpClientBuilder.addNetworkInterceptor(interceptor);
             }
         }
+
+        okHttpClientBuilder.cookieJar(
+                new JavaNetCookieJar(
+                        new CookieManager(ThreadSafeCookieStore.INSTANCE, ACCEPT_ALL)
+                )
+        );
 
         this.okHttpClient = okHttpClientBuilder.addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(loggingLevel))
                 .followRedirects(followRedirect)

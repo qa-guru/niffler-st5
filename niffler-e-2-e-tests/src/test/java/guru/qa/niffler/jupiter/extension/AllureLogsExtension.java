@@ -9,8 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
 
-import static io.qameta.allure.model.Status.PASSED;
-
 public class AllureLogsExtension implements SuiteExtension {
 
     public static final String caseName = "logs";
@@ -20,7 +18,7 @@ public class AllureLogsExtension implements SuiteExtension {
     public void afterSuite() {
         String caseId = UUID.randomUUID().toString();
         AllureLifecycle lifecycle = Allure.getLifecycle();
-        lifecycle.scheduleTestCase(new TestResult().setUuid(caseId).setName(caseName).setStatus(PASSED));
+        lifecycle.scheduleTestCase(new TestResult().setUuid(caseId).setName(caseName));
         lifecycle.startTestCase(caseId);
 
         lifecycle.addAttachment("auth log", "text/html", ".log", Files.newInputStream(
