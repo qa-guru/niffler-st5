@@ -78,7 +78,7 @@ public class TransactionalEntityManager implements EntityManager {
     // Remove - удаляет объект из базы данных
     public void remove(Object entity) {
         tx(entityManager -> entityManager.remove(entity));
-        logger.info(() -> entity.toString() + " removed!");
+        System.out.println(entity.toString() + " DELETED");
     }
 
     @Override

@@ -14,6 +14,7 @@ import guru.qa.niffler.pages.LoginPage;
 import guru.qa.niffler.pages.MainPage;
 import guru.qa.niffler.pages.WelcomePage;
 import guru.qa.niffler.pages.common.HeaderMenu;
+import io.qameta.allure.Description;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class HibernateTest {
     UserRepository userRepository = UserRepository.getInstance();
     SpendRepository spendRepository = SpendRepository.getInstance();
 
-    private final String CATEGORY = "Обучение Advanced 2339191";
+    private final String CATEGORY = "Обучение Advanced 5";
 
     @BeforeEach
     void doLogin() {
@@ -52,11 +53,11 @@ public class HibernateTest {
             description = "testDescription",
             username = "dima"
     )
+    @Description("Перед тестом создаётся категория и трата, после теста удаляются")
     @DisplayName("Создание Spend через запрос в БД (для дз 'Hibernate')")
     @Test()
     void spendTest(SpendJson spendJson) {
         loginPage.login("dima", "12345");
-        mainPage.selectSpendingByDescription(spendJson.description());
 
         assertNotNull(spendRepository.findCategory(spendJson.category(), spendJson.username()));
     }

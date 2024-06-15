@@ -32,7 +32,7 @@ public abstract class AbstractSpendExtension implements BeforeEachCallback, Afte
     @Override
     public void afterEach(ExtensionContext context) {
         // Получаем объект расхода из хранилища
-        SpendEntity spendJson = context.getStore(NAMESPACE).get(context.getUniqueId(), SpendEntity.class);
+        SpendJson spendJson = context.getStore(NAMESPACE).get(context.getUniqueId(), SpendJson.class);
         // Удаляем расход
         removeSpend(spendJson);
     }
@@ -41,7 +41,7 @@ public abstract class AbstractSpendExtension implements BeforeEachCallback, Afte
     protected abstract SpendJson createSpend(ExtensionContext extensionContext, Spend spend, CategoryJson category);
 
     // Абстрактный метод для удаления объекта расхода
-    protected abstract void removeSpend(SpendEntity spend);
+    protected abstract void removeSpend(SpendJson spend);
 
     // Метод, проверяющий, поддерживается ли параметр типа SpendJson
     @Override

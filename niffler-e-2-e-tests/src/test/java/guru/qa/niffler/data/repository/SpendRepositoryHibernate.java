@@ -4,9 +4,11 @@ import guru.qa.niffler.data.DataBase;
 import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.data.jpa.EmProvider;
+import guru.qa.niffler.model.SpendJson;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
+import java.util.UUID;
 
 public class SpendRepositoryHibernate implements SpendRepository {
 
@@ -37,13 +39,25 @@ public class SpendRepositoryHibernate implements SpendRepository {
                 // Устанавливаем параметры запроса
                 .setParameter("category", category)
                 .setParameter("username", username)
-                // Получаем результат запроса.  В этом случае мы ожидаем, что будет возвращен только один результат.
+                // Получаем результат запроса. В этом случае мы ожидаем, что будет возвращен только один результат.
+                .getSingleResult();
+    }
+
+    // Нахождение траты по id
+    public SpendEntity findSpend(UUID id) {
+        // Создаем запрос к базе данных, используя EntityManager.
+        // В запросе мы указываем, что хотим найти spend по условию,
+        return em.createQuery("FROM SpendEntity WHERE id = :id", SpendEntity.class)
+                // Устанавливаем параметры запроса
+                .setParameter("id", id)
+                // Получаем результат запроса. В этом случае мы ожидаем, что будет возвращен только один результат.
                 .getSingleResult();
     }
 
     @Override
     public void removeCategory(CategoryEntity category) {
-        em.remove(category);
+        CategoryEntity cat = findCategory(category.getCategory(), category.getUsername());
+        em.remove(cat);
     }
 
     @Override
@@ -58,8 +72,9 @@ public class SpendRepositoryHibernate implements SpendRepository {
     }
 
     @Override
-    public void removeSpend(SpendEntity spend) {
-        em.remove(spend);
+    public void removeSpend(SpendJson spend) {
+        SpendEntity spendEntity = findSpend(spend.id());
+        em.remove(spendEntity);
     }
 
     @Override

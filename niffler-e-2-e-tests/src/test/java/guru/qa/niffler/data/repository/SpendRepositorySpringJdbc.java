@@ -6,6 +6,7 @@ import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
 import guru.qa.niffler.data.sjdbc.CategoryEntityRowMapper;
 import guru.qa.niffler.data.sjdbc.SpendEntityRowMapper;
+import guru.qa.niffler.model.SpendJson;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -103,10 +104,10 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
     }
 
     @Override
-    public void removeSpend(SpendEntity spend) {
+    public void removeSpend(SpendJson spend) {
         jdbcTemplate.update(
                 "DELETE FROM spend WHERE id = ?",
-                spend.getId()
+                spend.id()
         );
     }
 

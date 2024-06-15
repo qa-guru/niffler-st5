@@ -5,6 +5,7 @@ import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
 import guru.qa.niffler.model.CurrencyValues;
+import guru.qa.niffler.model.SpendJson;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -183,10 +184,10 @@ public class SpendRepositoryJdbc implements SpendRepository {
     }
 
     @Override
-    public void removeSpend(SpendEntity spend) {
+    public void removeSpend(SpendJson spend) {
         try (Connection conn = dateSource.getConnection();
              PreparedStatement ps = conn.prepareStatement("DELETE FROM \"spend\" WHERE id = ?")) {
-            ps.setObject(1, spend.getId());
+            ps.setObject(1, spend.id());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -2,6 +2,7 @@ package guru.qa.niffler.data.repository;
 
 import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
+import guru.qa.niffler.model.SpendJson;
 
 import java.util.List;
 
@@ -42,7 +43,7 @@ public interface SpendRepository {
 
     SpendEntity editSpend(SpendEntity category);
 
-    void removeSpend(SpendEntity category);
+    void removeSpend(SpendJson category);
 
     List<SpendEntity> findAllSpendsByUsername(String username);
 }

@@ -67,6 +67,6 @@ public class SpendHttpExtension extends AbstractSpendExtension {
 
     // Метод для удаления объекта расхода
     @Override
-    protected void removeSpend(SpendEntity spend) {
+    protected void removeSpend(SpendJson spend) {
     }
 }
