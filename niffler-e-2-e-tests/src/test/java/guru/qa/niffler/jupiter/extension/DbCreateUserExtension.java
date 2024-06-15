@@ -6,12 +6,21 @@ import guru.qa.niffler.data.repository.UserRepository;
 import guru.qa.niffler.model.UserJson;
 
 public class DbCreateUserExtension extends AbstractCreateUserExtension {
-    private final UserRepository userRepository = UserRepository.getInstance();
+    private final ThreadLocal<UserRepository> userRepositoryThreadLocal = new ThreadLocal<>();
 
     @Override
     protected UserJson createUser(UserJson user) {
-        userRepository.createUserInAuth(UserAuthEntity.fromJson(user));
-        userRepository.createUserInUserData(UserEntity.fromJson(user));
+        getThreadLocalRepoInstance().createUserInAuth(UserAuthEntity.fromJson(user));
+        getThreadLocalRepoInstance().createUserInUserData(UserEntity.fromJson(user));
         return user;
+    }
+
+    private UserRepository getThreadLocalRepoInstance() {
+        UserRepository userRepository = userRepositoryThreadLocal.get();
+        if (userRepository == null) {
+            userRepository = UserRepository.getInstance();
+            userRepositoryThreadLocal.set(userRepository);
+        }
+        return userRepository;
     }
 }

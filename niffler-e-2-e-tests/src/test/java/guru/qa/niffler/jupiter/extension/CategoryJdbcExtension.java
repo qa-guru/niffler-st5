@@ -7,7 +7,7 @@ import guru.qa.niffler.model.CategoryJson;
 
 public class CategoryJdbcExtension extends AbstractCategoryExtension {
 
-    private final SpendRepository spendRepository = SpendRepository.getInstance();
+    private final ThreadLocal<SpendRepository> spendRepositoryThreadLocal = new ThreadLocal<>();
 
     @Override
     protected CategoryJson createCategory(Category category) {
@@ -16,18 +16,28 @@ public class CategoryJdbcExtension extends AbstractCategoryExtension {
         categoryEntity.setUsername(category.username());
 
         // присваиваем ответ из бд - categoryEntity теперь уже с id
-        categoryEntity = spendRepository.createCategory(categoryEntity);
+        categoryEntity = getThreadLocalRepoInstance().createCategory(categoryEntity);
 
         return CategoryJson.fromEntity(categoryEntity);
     }
 
     @Override
     protected void removeCategory(CategoryJson category) {
-        if(category == null) return;
+        if (category == null) return;
 
         CategoryJson categoryJson =
                 new CategoryJson(category.id(), category.category(), category.username());
 
-        spendRepository.removeCategory(CategoryEntity.fromJson(categoryJson));
+        getThreadLocalRepoInstance().removeCategory(CategoryEntity.fromJson(categoryJson));
     }
+
+    private SpendRepository getThreadLocalRepoInstance() {
+        SpendRepository spendRepository = spendRepositoryThreadLocal.get();
+        if (spendRepository == null) {
+            spendRepository = SpendRepository.getInstance();
+            spendRepositoryThreadLocal.set(spendRepository);
+        }
+        return spendRepository;
+    }
+
 }

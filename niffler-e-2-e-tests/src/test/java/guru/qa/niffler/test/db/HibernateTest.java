@@ -11,7 +11,6 @@ import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.pages.LoginPage;
-import guru.qa.niffler.pages.MainPage;
 import guru.qa.niffler.pages.WelcomePage;
 import guru.qa.niffler.pages.common.HeaderMenu;
 import io.qameta.allure.Description;
@@ -27,13 +26,12 @@ public class HibernateTest {
 
     private final WelcomePage welcomePage = new WelcomePage();
     private final LoginPage loginPage = new LoginPage();
-    private final MainPage mainPage = new MainPage();
     private final HeaderMenu menu = new HeaderMenu();
 
     UserRepository userRepository = UserRepository.getInstance();
     SpendRepository spendRepository = SpendRepository.getInstance();
 
-    private final String CATEGORY = "Обучение Advanced 5";
+    private final String CATEGORY = "Обучение Advanced 666213";
 
     @BeforeEach
     void doLogin() {

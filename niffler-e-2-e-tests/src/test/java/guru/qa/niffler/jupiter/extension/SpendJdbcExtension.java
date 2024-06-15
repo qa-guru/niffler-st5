@@ -12,7 +12,7 @@ import static guru.qa.niffler.utils.DateHelper.convertStringToDate;
 
 public class SpendJdbcExtension extends AbstractSpendExtension {
 
-    private final SpendRepository spendRepository = SpendRepository.getInstance();
+    private final ThreadLocal<SpendRepository> spendRepositoryThreadLocal = new ThreadLocal<>();
 
     @Override
     protected SpendJson createSpend(ExtensionContext context, Spend spend, CategoryJson category) {
@@ -25,7 +25,7 @@ public class SpendJdbcExtension extends AbstractSpendExtension {
         spendEntity.setUsername(spend.username());
 
         // присваиваем ответ из бд - spendEntity теперь уже с id
-        spendEntity = spendRepository.createSpend(spendEntity);
+        spendEntity = getThreadLocalRepoInstance().createSpend(spendEntity);
 
         return SpendJson.fromEntity(spendEntity);
     }
@@ -33,6 +33,15 @@ public class SpendJdbcExtension extends AbstractSpendExtension {
     @Override
     protected void removeSpend(SpendJson spend) {
         if (spend == null) return;
-        spendRepository.removeSpend(spend);
+        getThreadLocalRepoInstance().removeSpend(spend);
+    }
+
+    private SpendRepository getThreadLocalRepoInstance() {
+        SpendRepository spendRepository = spendRepositoryThreadLocal.get();
+        if (spendRepository == null) {
+            spendRepository = SpendRepository.getInstance();
+            spendRepositoryThreadLocal.set(spendRepository);
+        }
+        return spendRepository;
     }
 }
