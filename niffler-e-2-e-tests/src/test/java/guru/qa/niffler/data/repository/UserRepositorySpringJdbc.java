@@ -1,7 +1,6 @@
 package guru.qa.niffler.data.repository;
 
 import guru.qa.niffler.data.DataBase;
-import guru.qa.niffler.data.entity.Authority;
 import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
@@ -135,6 +134,22 @@ public class UserRepositorySpringJdbc implements UserRepository {
         return user;
     }
 
+    // Метод ищет пользователя в таблице аутентификации по его имени
+    @Override
+    public Optional<UserAuthEntity> findUserInAuth(String userName) {
+        try {
+
+            return Optional.ofNullable(userDataJdbcTemplate.queryForObject( // возвращает объект, соответствующий первой строке результата запроса
+                    """
+                            SELECT * FROM "user" WHERE username = ?
+                            """,
+                    UserAuthEntityRowMapper.instance, // Используем UserAuthEntityRowMapper для маппинга результатов запроса в объекты UserAuthEntity
+                    userName));
+        } catch (DataRetrievalFailureException e) {
+            return Optional.empty();
+        }
+    }
+
     // Метод findUserInUserDataById ищет пользователя в таблице данных пользователя по его идентификатору
     @Override
     public Optional<UserEntity> findUserInUserDataById(UUID id) {
@@ -150,6 +165,19 @@ public class UserRepositorySpringJdbc implements UserRepository {
             ));
         } catch (DataRetrievalFailureException e) {
             // В случае ошибки при извлечении данных возвращаем Optional.empty()
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<Object> findUserInUserData(String userName) {
+        try {
+            return Optional.ofNullable(userDataJdbcTemplate.queryForObject(
+                    """
+                            SELECT * FROM "user" WHERE username = ?
+                            """,
+                    UserEntityRowMapper.instance, userName));
+        } catch (DataRetrievalFailureException e) {
             return Optional.empty();
         }
     }

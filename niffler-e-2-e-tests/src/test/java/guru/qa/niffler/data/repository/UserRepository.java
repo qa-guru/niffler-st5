@@ -9,7 +9,7 @@ import java.util.UUID;
 // Интерфейс UserRepository определяет методы для работы с пользователями в базе данных
 public interface UserRepository {
 
-    String repoType = "sjdbс";
+    String repoType = "hibernate";
 
     // Статический метод getInstance() возвращает экземпляр UserRepository
     // в зависимости от значения системного свойства "repo"
@@ -40,8 +40,14 @@ public interface UserRepository {
     // и принимает в качестве аргумента объект UserEntity
     UserEntity createUserInUserData(UserEntity user);
 
+    // Метод findUserInAuth ищет пользователя в таблице аутентификации по его имени
+    Optional<UserAuthEntity> findUserInAuth(String userName);
+
     // Метод findUserInUserDataById ищет пользователя в таблице данных пользователя по его идентификатору
     Optional<UserEntity> findUserInUserDataById(UUID id);
+
+    // Метод findUserInUserData ищет пользователя в таблице данных пользователя по его имени
+    Optional<Object> findUserInUserData(String userName);
 
     // Метод updateUserInAuth обновляет информацию о пользователе в таблице аутентификации
     UserAuthEntity updateUserInAuth(UserAuthEntity user);

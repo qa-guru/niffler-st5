@@ -16,6 +16,7 @@ import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 public class SpendRepositoryJdbc implements SpendRepository {
 
+    // Static field для доступа к источнику данных
     private static final DataSource dateSource = DataSourceProvider.dataSource(DataBase.SPEND);
 
     //Метод создает новую категорию в базе данных. Он принимает объект CategoryEntity и возвращает созданную категорию.
@@ -54,6 +55,34 @@ public class SpendRepositoryJdbc implements SpendRepository {
             ps.setObject(3, category.getId());
             ps.executeUpdate();
             return category;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Поиск Category по полям category (текстовое название категории) и username пользователя.
+    @Override
+    public CategoryEntity findCategory(String category, String username) {
+        try (Connection connection = dateSource.getConnection();
+             PreparedStatement statement = connection
+                     .prepareStatement("SELECT * FROM \"category\" where category = ? and username = ?;",
+                             PreparedStatement.RETURN_GENERATED_KEYS
+                     )) {
+            statement.setString(1, category);
+            statement.setString(2, username);
+            statement.execute();
+
+            CategoryEntity categoryEntity = new CategoryEntity();
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    categoryEntity.setId(UUID.fromString(resultSet.getString("id")));
+                    categoryEntity.setUsername(resultSet.getString("userName"));
+                    categoryEntity.setCategory(resultSet.getString("category"));
+                } else {
+                    throw new IllegalArgumentException("Can`t access to category");
+                }
+            }
+            return categoryEntity;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

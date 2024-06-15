@@ -3,7 +3,6 @@ package guru.qa.niffler.jupiter.extension;
 import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.data.repository.SpendRepository;
-import guru.qa.niffler.data.repository.SpendRepositoryJdbc;
 import guru.qa.niffler.jupiter.annotation.Spend;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
@@ -13,7 +12,7 @@ import static guru.qa.niffler.utils.DateHelper.convertStringToDate;
 
 public class SpendJdbcExtension extends AbstractSpendExtension {
 
-    private final SpendRepository spendRepository = new SpendRepositoryJdbc();
+    private final SpendRepository spendRepository = SpendRepository.getInstance();
 
     @Override
     protected SpendJson createSpend(ExtensionContext context, Spend spend, CategoryJson category) {

@@ -7,7 +7,6 @@ import guru.qa.niffler.data.jdbc.DataSourceProvider;
 import guru.qa.niffler.data.sjdbc.CategoryEntityRowMapper;
 import guru.qa.niffler.data.sjdbc.SpendEntityRowMapper;
 import org.springframework.dao.DataRetrievalFailureException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -16,7 +15,6 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 public class SpendRepositorySpringJdbc implements SpendRepository {
@@ -50,6 +48,12 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
                 category.getId()
         );
         return category;
+    }
+
+    @Override
+    public CategoryEntity findCategory(String category, String username) {
+        return jdbcTemplate.queryForObject("SELECT * FROM category where category = ? and  username = ?",
+                new CategoryEntityRowMapper(), category, username);
     }
 
     @Override
@@ -106,18 +110,6 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
         );
     }
 
-    public UUID categoryId(String categoryName) {
-        try {
-            return jdbcTemplate.queryForObject(
-                    "SELECT id FROM category WHERE category = ?",
-                    UUID.class,
-                    categoryName);
-        } catch (EmptyResultDataAccessException e) {
-            // Обрабатываем ситуацию, когда категории не найдены
-            return null; // или возвращаем ошибку, если это необходимо
-        }
-    }
-
     @Override
     public List<SpendEntity> findAllSpendsByUsername(String username) {
         try {
@@ -133,17 +125,17 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
         }
     }
 
-    public Optional<CategoryEntity> getCategoryEntityById(UUID categoryId) {
+    public CategoryEntity getCategoryEntityById(UUID categoryId) {
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(
+            return jdbcTemplate.queryForObject(
                     """
                             SELECT * FROM category where id = ?
                             """,
                     CategoryEntityRowMapper.instance,
                     categoryId
-            ));
+            );
         } catch (DataRetrievalFailureException e) {
-            return Optional.empty();
+            throw new RuntimeException("Не найдена категория по id " + e);
         }
     }
 }

@@ -2,6 +2,7 @@ package guru.qa.niffler.jupiter.annotation.meta;
 
 import guru.qa.niffler.jupiter.extension.BrowserExtension;
 import guru.qa.niffler.jupiter.extension.CategoryJdbcExtension;
+import guru.qa.niffler.jupiter.extension.DbCreateUserExtension;
 import guru.qa.niffler.jupiter.extension.SpendJdbcExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -13,6 +14,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @ExtendWith({
+        DbCreateUserExtension.class,
         CategoryJdbcExtension.class,
         SpendJdbcExtension.class,
         BrowserExtension.class

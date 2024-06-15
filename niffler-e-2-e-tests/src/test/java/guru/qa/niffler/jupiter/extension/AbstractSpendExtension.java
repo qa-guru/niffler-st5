@@ -1,6 +1,5 @@
 package guru.qa.niffler.jupiter.extension;
 
-import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.jupiter.annotation.Spend;
 import guru.qa.niffler.model.CategoryJson;
@@ -8,7 +7,7 @@ import guru.qa.niffler.model.SpendJson;
 import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
 
-public abstract class AbstractSpendExtension implements BeforeEachCallback, AfterTestExecutionCallback, ParameterResolver {
+public abstract class AbstractSpendExtension implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
     // Создаем пространство имен для хранения данных расходов
     public static final ExtensionContext.Namespace NAMESPACE
@@ -18,8 +17,8 @@ public abstract class AbstractSpendExtension implements BeforeEachCallback, Afte
     @Override
     public void beforeEach(ExtensionContext extensionContext) {
         // Получаем категорию из хранилища расширения AbstractCategoryExtension
-        CategoryJson category = CategoryJson.fromEntity(extensionContext.getStore(AbstractCategoryExtension.NAMESPACE)
-                .get(extensionContext.getUniqueId(), CategoryEntity.class));
+        CategoryJson category = extensionContext.getStore(AbstractCategoryExtension.NAMESPACE)
+                .get(extensionContext.getUniqueId(), CategoryJson.class);
 
         // Находим аннотацию Spend на методе теста и создает объект расхода
         AnnotationSupport.findAnnotation(extensionContext.getRequiredTestMethod(), Spend.class)
@@ -31,7 +30,7 @@ public abstract class AbstractSpendExtension implements BeforeEachCallback, Afte
 
     // Метод, вызываемый после выполнения каждого теста
     @Override
-    public void afterTestExecution(ExtensionContext context) {
+    public void afterEach(ExtensionContext context) {
         // Получаем объект расхода из хранилища
         SpendEntity spendJson = context.getStore(NAMESPACE).get(context.getUniqueId(), SpendEntity.class);
         // Удаляем расход
