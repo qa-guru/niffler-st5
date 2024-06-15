@@ -32,6 +32,7 @@ public class SpendJdbcExtension extends AbstractSpendExtension {
 
     @Override
     protected void removeSpend(SpendJson spend) {
+        if (spend == null) return;
         spendRepository.removeSpend(spend);
     }
 }

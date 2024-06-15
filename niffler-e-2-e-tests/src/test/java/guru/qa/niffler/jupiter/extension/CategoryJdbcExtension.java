@@ -23,6 +23,8 @@ public class CategoryJdbcExtension extends AbstractCategoryExtension {
 
     @Override
     protected void removeCategory(CategoryJson category) {
+        if(category == null) return;
+
         CategoryJson categoryJson =
                 new CategoryJson(category.id(), category.category(), category.username());
 

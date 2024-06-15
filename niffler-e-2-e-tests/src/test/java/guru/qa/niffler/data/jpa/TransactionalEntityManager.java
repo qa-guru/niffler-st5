@@ -6,8 +6,6 @@ import jakarta.persistence.criteria.CriteriaDelete;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.metamodel.Metamodel;
-import org.junit.platform.commons.logging.Logger;
-import org.junit.platform.commons.logging.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -15,8 +13,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class TransactionalEntityManager implements EntityManager {
-
-    private static final Logger logger = LoggerFactory.getLogger(TransactionalEntityManager.class);
 
     // Объект, который будет использоваться для выполнения транзакций
     private final EntityManager delegate;
@@ -26,7 +22,6 @@ public class TransactionalEntityManager implements EntityManager {
     }
 
     // Обертка для выполнения транзакции
-    // принимает объект EntityManager и не возвращает результата.
     private void tx(Consumer<EntityManager> consumer) {
         // Начинаем транзакцию
         EntityTransaction entityTransaction = delegate.getTransaction();
