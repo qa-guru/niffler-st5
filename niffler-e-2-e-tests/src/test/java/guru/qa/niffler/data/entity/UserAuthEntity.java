@@ -51,11 +51,15 @@ public class UserAuthEntity implements Serializable {
         // Создание сущностей полномочий для чтения и записи
         AuthorityEntity read = new AuthorityEntity();
         read.setAuthority(Authority.read);
+
         AuthorityEntity write = new AuthorityEntity();
         write.setAuthority(Authority.write);
 
         // Создание сущности UserAuthEntity
         UserAuthEntity userAuthEntity = new UserAuthEntity();
+
+        read.setUser(userAuthEntity);
+        write.setUser(userAuthEntity);
 
         userAuthEntity.setUsername(userJson.username());
         userAuthEntity.setPassword(userJson.testData().password());
