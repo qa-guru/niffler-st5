@@ -72,7 +72,7 @@ public class SpendingJdbcTest {
 
         spendEntity.setId(spendId);
         spendEntity.setSpendDate(convertStringToDate("2022-02-11"));
-        spendEntity.setCategory("CHANGED");
+        spendEntity.setCategory(categoryEntity);
         spendEntity.setCurrency(CurrencyValues.RUB);
         spendEntity.setAmount(110000.00);
         spendEntity.setDescription("Обучение_CHANGED");

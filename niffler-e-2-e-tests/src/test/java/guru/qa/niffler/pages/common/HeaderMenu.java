@@ -13,7 +13,11 @@ public class HeaderMenu {
     private final SelenideElement logout = $("div[data-tooltip-id='logout']");
     private final SelenideElement avatar = $(".header__avatar");
 
-    public boolean isAvatarVisible(){
+    public boolean isAvatarVisible() {
         return avatar.is(visible);
+    }
+
+    public void logout() {
+        getLogout().click();
     }
 }

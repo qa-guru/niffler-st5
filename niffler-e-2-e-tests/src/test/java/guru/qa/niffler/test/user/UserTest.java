@@ -69,8 +69,13 @@ public class UserTest {
         createSpend(user.getUsername()); // раз
         createSpend(user.getUsername()); // два
 
-        assertEquals(spendSpringJdbcRepo.findAllSpendsByUsername(user.getUsername()).get().size(), 2);
-        assertEquals(spendJdbcRepo.findAllSpendsByUsername(user.getUsername()).get().size(), 2);
+        assertEquals(spendSpringJdbcRepo.findAllSpendsByUsername(user.getUsername()).size(), 2);
+        assertEquals(spendJdbcRepo.findAllSpendsByUsername(user.getUsername()).size(), 2);
+
+        menu.logout();
+        welcomePage.goToLogin();
+        loginPage.login(userJson.username(), userJson.testData().password());
+        int i = 0;//todo - пусто в база авторизации в табличке пользователь, продебажить
     }
 
     private void createSpend(String userName) {
@@ -86,7 +91,7 @@ public class UserTest {
         spend.setSpendDate(faker.date().birthday());
         spend.setAmount(100.000);
         spend.setDescription(faker.animal().name());
-        spend.setCategory(category.getCategory());
+        spend.setCategory(category);
 
         spendSpringJdbcRepo.createCategory(category);
         spendSpringJdbcRepo.createSpend(spend);
