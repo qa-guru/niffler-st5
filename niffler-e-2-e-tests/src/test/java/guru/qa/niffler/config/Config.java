@@ -1,4 +1,4 @@
-package guru.qa.niffler.data.config;
+package guru.qa.niffler.config;
 
 public interface Config {
 
@@ -20,6 +20,11 @@ public interface Config {
      * Возвращает URL фронта.
      */
     String frontUrl();
+
+    /**
+     * Возвращает gateway-URL.
+     */
+    String gatewayUrl();
 
     /**
      * Возвращает URL расходов.

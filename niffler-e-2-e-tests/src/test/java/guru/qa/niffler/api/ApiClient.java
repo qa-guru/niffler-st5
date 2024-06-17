@@ -1,6 +1,6 @@
 package guru.qa.niffler.api;
 
-import guru.qa.niffler.data.config.Config;
+import guru.qa.niffler.config.Config;
 import okhttp3.Interceptor; // Это интерфейс, который позволяет перехватывать и модифицировать HTTP-запросы и ответы. Он используется для добавления дополнительной логики, такой как авторизация, логирование и т.д.
 import okhttp3.OkHttpClient; // Это основной клиент для выполнения HTTP-запросов. Он настраивается с помощью OkHttpClient. Builder и используется Retrofit для отправки запросов.
 import okhttp3.logging.HttpLoggingInterceptor; // Это реализация Interceptor, которая позволяет логировать HTTP-трафик. Она используется для отладки и мониторинга API-взаимодействий.

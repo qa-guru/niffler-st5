@@ -1,6 +1,6 @@
 package guru.qa.niffler.data;
 
-import guru.qa.niffler.data.config.Config;
+import guru.qa.niffler.config.Config;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor //объявляем конструктор для работы полей
