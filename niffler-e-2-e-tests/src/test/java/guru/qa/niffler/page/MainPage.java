@@ -1,24 +1,34 @@
-package guru.qa.niffler.pages;
+package guru.qa.niffler.page;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.selector.ByText;
+import guru.qa.niffler.page.component.Calendar;
 
 import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
-import static java.lang.String.format;
 
-public class MainPage {
+public class MainPage extends BasePage<MainPage>{
 
     private final ElementsCollection spendings = $(".spendings-table tbody").$$("tr");
     private final SelenideElement progressBar = $("div[role='progressbar']");
     private final SelenideElement deleteAllSelectedBtn = $(".spendings__bulk-actions button");
     private final SelenideElement categoryDropdown =
             $x("//div[contains(text(), 'Choose spending category')]/parent::div/following-sibling::div");
+
+    private final SelenideElement addSpendingSection = $(".main-content__section-add-spending");
+    private final Calendar calendar = new Calendar(addSpendingSection.$(".react-datepicker"));
+
+    @Override
+    public MainPage waitForPageLoaded() {
+        return null;
+    }
+
+
 
     /**
      * Выбрать строку расходов по описанию
@@ -53,4 +63,5 @@ public class MainPage {
             throw new RuntimeException("Category not found");
         }
     }
+
 }

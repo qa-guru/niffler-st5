@@ -1,4 +1,4 @@
-package guru.qa.niffler.pages.common;
+package guru.qa.niffler.page.common;
 
 import com.codeborne.selenide.SelenideElement;
 import lombok.Getter;

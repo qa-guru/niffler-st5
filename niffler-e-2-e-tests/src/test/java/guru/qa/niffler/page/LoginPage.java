@@ -1,4 +1,4 @@
-package guru.qa.niffler.pages;
+package guru.qa.niffler.page;
 
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;

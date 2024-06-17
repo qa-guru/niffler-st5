@@ -10,9 +10,9 @@ import guru.qa.niffler.jupiter.annotation.TestUser;
 import guru.qa.niffler.jupiter.extension.DbCreateUserExtension;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.UserJson;
-import guru.qa.niffler.pages.LoginPage;
-import guru.qa.niffler.pages.WelcomePage;
-import guru.qa.niffler.pages.common.HeaderMenu;
+import guru.qa.niffler.page.LoginPage;
+import guru.qa.niffler.page.WelcomePage;
+import guru.qa.niffler.page.common.HeaderMenu;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 

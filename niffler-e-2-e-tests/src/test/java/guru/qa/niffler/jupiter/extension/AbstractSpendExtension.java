@@ -40,6 +40,8 @@ public abstract class AbstractSpendExtension implements BeforeEachCallback, Afte
     // Абстрактный метод для создания объекта расхода
     protected abstract SpendJson createSpend(ExtensionContext extensionContext, Spend spend, CategoryJson category);
 
+    protected abstract SpendJson createSpend(SpendJson spend);
+
     // Абстрактный метод для удаления объекта расхода
     protected abstract void removeSpend(SpendJson spend);
 

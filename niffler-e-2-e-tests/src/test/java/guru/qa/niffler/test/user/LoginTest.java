@@ -4,18 +4,18 @@ import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.data.entity.*;
 import guru.qa.niffler.data.repository.UserRepository;
 import guru.qa.niffler.data.repository.UserRepositoryHibernate;
-import guru.qa.niffler.jupiter.annotation.meta.WebTest;
-import guru.qa.niffler.pages.LoginPage;
-import guru.qa.niffler.pages.WelcomePage;
-import guru.qa.niffler.pages.common.HeaderMenu;
+import guru.qa.niffler.page.LoginPage;
+import guru.qa.niffler.page.WelcomePage;
+import guru.qa.niffler.page.common.HeaderMenu;
+import guru.qa.niffler.test.BaseWebTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@WebTest
-public class LoginTest {
+
+public class LoginTest extends BaseWebTest {
 
     // по умолчанию UserRepositoryJdbc до тех пор пока не добавили системные переменные
     // UserRepository userRepository = UserRepository.getInstance();
@@ -55,7 +55,7 @@ public class LoginTest {
 
     @Test
     void loginTest() {
-        Selenide.open("http://127.0.0.1:3000");
+        Selenide.open(CFG.frontUrl());
         welcomePage.goToLogin();
         loginPage.login(userLogin, "12345");
 
