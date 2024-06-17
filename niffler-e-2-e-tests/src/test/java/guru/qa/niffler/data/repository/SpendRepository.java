@@ -8,27 +8,17 @@ import java.util.List;
 
 public interface SpendRepository {
 
-    String repoType = "hibernate";
-
     // Статический метод getInstance() возвращает экземпляр SpendRepository
     // в зависимости от значения системного свойства "repo"
     static SpendRepository getInstance() {
-
-        System.setProperty("repo", repoType);
-
         // Если свойство "repo" равно "sjdbс", возвращается экземпляр SpendRepositorySpringJdbc
-        if ("sjdbс".equals(System.getProperty("repo"))) {
-            System.out.println("SPRING_JDBС");
-            return new SpendRepositorySpringJdbc();
-        }
         // Если свойство "repo" равно "hibernate", возвращается экземпляр SpendRepositoryHibernate
-        if ("hibernate".equals(System.getProperty("repo"))) {
-            System.out.println("HIBERNATE");
-            return new SpendRepositoryHibernate();
-        }
         // Если ни одно из предыдущих условий не выполнено, возвращается экземпляр SpendRepositoryJdbc
-        System.out.println("JDBC");
-        return new SpendRepositoryJdbc();
+        return switch (System.getProperty("repo")) {
+            case "sjdbс" -> new SpendRepositorySpringJdbc();
+            case "hibernate" -> new SpendRepositoryHibernate();
+            default -> new SpendRepositoryJdbc();
+        };
     }
 
     CategoryEntity createCategory(CategoryEntity category);

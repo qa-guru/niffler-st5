@@ -8,28 +8,17 @@ import java.util.UUID;
 
 // Интерфейс UserRepository определяет методы для работы с пользователями в базе данных
 public interface UserRepository {
-
-    String repoType = "hibernate";
-
     // Статический метод getInstance() возвращает экземпляр UserRepository
     // в зависимости от значения системного свойства "repo"
     static UserRepository getInstance() {
-
-        System.setProperty("repo", repoType);
-
         // Если свойство "repo" равно "sjdbс", возвращается экземпляр UserRepositorySpringJdbc
-        if ("sjdbс".equals(System.getProperty("repo"))) {
-            System.out.println("SPRING_JDBС");
-            return new UserRepositorySpringJdbc();
-        }
         // Если свойство "repo" равно "hibernate", возвращается экземпляр UserRepositoryHibernate
-        if ("hibernate".equals(System.getProperty("repo"))) {
-            System.out.println("HIBERNATE");
-            return new UserRepositoryHibernate();
-        }
         // Если ни одно из предыдущих условий не выполнено, возвращается экземпляр UserRepositoryJdbc
-        System.out.println("JDBC");
-        return new UserRepositoryJdbc();
+        return switch (System.getProperty("repo")) {
+            case "sjdbс" -> new UserRepositorySpringJdbc();
+            case "hibernate" -> new UserRepositoryHibernate();
+            default -> new UserRepositoryJdbc();
+        };
     }
 
     // Метод createUserInAuth создает нового пользователя в таблице аутентификации

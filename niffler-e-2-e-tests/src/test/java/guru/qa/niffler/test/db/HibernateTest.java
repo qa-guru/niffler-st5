@@ -14,6 +14,7 @@ import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.WelcomePage;
 import guru.qa.niffler.page.common.HeaderMenu;
 import io.qameta.allure.Description;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,12 @@ public class HibernateTest {
     UserRepository userRepository = UserRepository.getInstance();
     SpendRepository spendRepository = SpendRepository.getInstance();
 
-    private final String CATEGORY = "Обучение Advanced 666213";
+    private final String CATEGORY = "Обучение Advanced 5";
+
+    @BeforeAll
+    public static void setupEnvironment() {
+        System.setProperty("repo", "hibernate");
+    }
 
     @BeforeEach
     void doLogin() {
@@ -58,6 +64,7 @@ public class HibernateTest {
         loginPage.login("dima", "12345");
 
         assertNotNull(spendRepository.findCategory(spendJson.category(), spendJson.username()));
+        assertNotNull(spendRepository.findAllSpendsByUsername(spendJson.username()));
     }
 
     @DisplayName("Создание User через запрос в БД (для дз 'Hibernate')")
