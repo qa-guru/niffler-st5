@@ -79,6 +79,8 @@ public class SpendRepositoryHibernate implements SpendRepository {
 
     @Override
     public List<SpendEntity> findAllSpendsByUsername(String username) {
-        return List.of();
+        return em.createQuery("FROM SpendEntity WHERE username = :username", SpendEntity.class)
+                .setParameter("username", username)
+                .getResultList();
     }
 }
