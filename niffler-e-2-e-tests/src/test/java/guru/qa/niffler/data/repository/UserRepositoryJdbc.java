@@ -5,6 +5,7 @@ import guru.qa.niffler.data.entity.AuthorityEntity;
 import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
+import guru.qa.niffler.model.CurrencyValues;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -110,9 +111,107 @@ public class UserRepositoryJdbc implements UserRepository {
         }
     }
 
+
+    @Override
+    public UserAuthEntity updateUserInAuth(UserAuthEntity user) {
+        try (Connection connection = authDataSource.getConnection()) {
+            connection.setAutoCommit(false);
+            try (PreparedStatement updateUserStmt = connection.prepareStatement(
+                    "UPDATE \"user\" SET username = ?, password = ?, enabled = ?, account_non_expired = ?," +
+                            " account_non_locked = ?, credentials_non_expired = ? WHERE id = ?");
+                 PreparedStatement deleteAuthorityStmt = connection.prepareStatement(
+                         "DELETE FROM\"authority\" WHERE user_id = ?");
+                 PreparedStatement insertAuthorityStmt = connection.prepareStatement(
+                         "INSERT INTO \"authority\" (" +
+                                 "user_id, authority)" +
+                                 " VALUES (?, ?)"
+                 )) {
+
+                updateUserStmt.setString(1, user.getUsername());
+                updateUserStmt.setString(2, pe.encode(user.getPassword()));
+                updateUserStmt.setBoolean(3, user.getEnabled());
+                updateUserStmt.setBoolean(4, user.getAccountNonExpired());
+                updateUserStmt.setBoolean(5, user.getAccountNonLocked());
+                updateUserStmt.setBoolean(6, user.getCredentialsNonExpired());
+                updateUserStmt.setObject(7, user.getId());
+                updateUserStmt.executeUpdate();
+
+                deleteAuthorityStmt.setObject(1, user.getId());
+                deleteAuthorityStmt.executeUpdate();
+
+                for (AuthorityEntity authorityEntity : user.getAuthorities()) {
+                    insertAuthorityStmt.setObject(1, user.getId());
+                    insertAuthorityStmt.setString(2, authorityEntity.getAuthority().name());
+                    insertAuthorityStmt.addBatch();
+                    insertAuthorityStmt.clearParameters();
+                }
+
+                insertAuthorityStmt.executeBatch();
+                connection.commit();
+                connection.setAutoCommit(true);
+
+                return user;
+            } catch (SQLException e) {
+                throw new RuntimeException("Error updating user in userdata and authority using batch update", e);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @Override
+    public UserEntity updateUserInUserdata(UserEntity user) {
+        try (Connection conn = udDataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement("UPDATE \"user\" SET username = ?, currency = ?, " +
+                     "firstname = ?, surname = ?, photo = ?, photo_small = ? WHERE id = ?")) {
+
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getCurrency().name());
+            ps.setString(3, user.getFirstname());
+            ps.setString(4, user.getSurname());
+            ps.setObject(5, user.getPhoto());
+            ps.setObject(6, user.getPhotoSmall());
+            ps.setObject(7, user.getId());
+            ps.executeUpdate();
+
+            int rowsUpdated = ps.executeUpdate();
+            if (rowsUpdated > 0) {
+                return user;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating user in userdata", e);
+        }
+
+        return null;
+    }
+
     @Override
     public Optional<UserEntity> findUserInUserdataById(UUID id) {
-        return Optional.empty();
+        UserEntity user = new UserEntity();
+        try (Connection conn = udDataSource.getConnection();
+             PreparedStatement userPs = conn.prepareStatement(
+                     "SELECT * FROM \"user\" WHERE id = ?")) {
+            userPs.setObject(1, id);
+            userPs.execute();
+
+            try (ResultSet resultSet = userPs.getResultSet()) {
+                if (resultSet.next()) {
+                    user.setId(resultSet.getObject("id", UUID.class));
+                    user.setUsername(resultSet.getString("username"));
+                    user.setCurrency(CurrencyValues.valueOf(resultSet.getString("currency")));
+                    user.setFirstname(resultSet.getString("firstname"));
+                    user.setSurname(resultSet.getString("surname"));
+                    user.setPhoto(resultSet.getBytes("photo"));
+                    user.setPhotoSmall(resultSet.getBytes("photo_small"));
+                } else {
+                    return Optional.empty();
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return Optional.of(user);
     }
 
 }
