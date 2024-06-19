@@ -10,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
-import org.junit.platform.commons.support.AnnotationSupport;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -20,7 +19,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import static guru.qa.niffler.model.UserJson.simpleUser;
 
 // Любой тест проходит через него
-public class UserQueueExtension implements
+public class    UserQueueExtension implements
         BeforeEachCallback,
         AfterEachCallback,
         ParameterResolver {

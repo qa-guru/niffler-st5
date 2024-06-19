@@ -4,8 +4,10 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
-import guru.qa.niffler.jupiter.extension.CategoryExtensionJdbc;
+import guru.qa.niffler.jupiter.annotation.TestUser;
+import guru.qa.niffler.jupiter.extension.JdbcCategoryExtension;
 import guru.qa.niffler.jupiter.extension.SpendExtensionJdbc;
+import guru.qa.niffler.jupiter.extension.UserQueueExtension;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.pages.AuthPage;
@@ -19,7 +21,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 
-@ExtendWith({CategoryExtensionJdbc.class, SpendExtensionJdbc.class})
+@ExtendWith({JdbcCategoryExtension.class, SpendExtensionJdbc.class, UserQueueExtension.class})
 public class SpendingTestJdbc {
 
     static {
@@ -38,6 +40,7 @@ public class SpendingTestJdbc {
         authPage.login("Nastiletko", "bB!123456");
     }
 
+    @TestUser
     @Test
     void anotherTest() {
         Selenide.open("http://127.0.0.1:3000/main");
