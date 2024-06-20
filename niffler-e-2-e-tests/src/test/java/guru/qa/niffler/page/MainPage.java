@@ -4,7 +4,8 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.selector.ByText;
-import guru.qa.niffler.page.component.Calendar;
+import guru.qa.niffler.page.component.ReactCalendar;
+import lombok.Getter;
 
 import java.time.Duration;
 
@@ -12,7 +13,7 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
 
-public class MainPage extends BasePage<MainPage>{
+public class MainPage extends BasePage<MainPage> {
 
     private final ElementsCollection spendings = $(".spendings-table tbody").$$("tr");
     private final SelenideElement progressBar = $("div[role='progressbar']");
@@ -21,14 +22,14 @@ public class MainPage extends BasePage<MainPage>{
             $x("//div[contains(text(), 'Choose spending category')]/parent::div/following-sibling::div");
 
     private final SelenideElement addSpendingSection = $(".main-content__section-add-spending");
-    private final Calendar calendar = new Calendar(addSpendingSection.$(".react-datepicker"));
+
+    @Getter
+    private final ReactCalendar reactCalendar = new ReactCalendar(addSpendingSection.$(".react-datepicker"));
 
     @Override
     public MainPage waitForPageLoaded() {
         return null;
     }
-
-
 
     /**
      * Выбрать строку расходов по описанию
