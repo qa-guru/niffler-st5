@@ -12,7 +12,7 @@ import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.WelcomePage;
-import guru.qa.niffler.page.common.HeaderMenu;
+import guru.qa.niffler.page.component.Header;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -26,7 +26,7 @@ public class UserTest {
 
     private final WelcomePage welcomePage = new WelcomePage();
     private final LoginPage loginPage = new LoginPage();
-    private final HeaderMenu menu = new HeaderMenu();
+    private final Header menu = new Header();
 
     UserRepository userJdbcRepo = new UserRepositoryJdbc();
     UserRepositorySpringJdbc userSpringJdbcRepo = new UserRepositorySpringJdbc();

@@ -1,4 +1,4 @@
-package guru.qa.niffler.page;
+package guru.qa.niffler.page.component;
 
 import com.codeborne.selenide.SelenideElement;
 

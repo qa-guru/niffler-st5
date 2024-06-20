@@ -5,7 +5,7 @@ import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.MainPage;
 import guru.qa.niffler.page.WelcomePage;
-import guru.qa.niffler.page.common.HeaderMenu;
+import guru.qa.niffler.page.component.Header;
 
 @WebTest
 public class BaseWebTest {
@@ -15,5 +15,5 @@ public class BaseWebTest {
     protected static final MainPage mainPage = new MainPage();
     protected static final WelcomePage welcomePage = new WelcomePage();
     protected static final LoginPage loginPage = new LoginPage();
-    protected static final HeaderMenu menu = new HeaderMenu();
+    protected static final Header menu = new Header();
 }

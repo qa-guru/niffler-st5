@@ -26,4 +26,9 @@ public class LocalConfig implements Config {
     public String dbHost() {
         return "127.0.0.1";
     }
+
+    @Override
+    public String authUrl() {
+        return "http://127.0.0.1:9000/";
+    }
 }

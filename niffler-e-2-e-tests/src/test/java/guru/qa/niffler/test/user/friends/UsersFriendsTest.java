@@ -8,7 +8,7 @@ import guru.qa.niffler.page.FriendsBrowsePage;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.PeopleBrowsePage;
 import guru.qa.niffler.page.WelcomePage;
-import guru.qa.niffler.page.common.HeaderMenu;
+import guru.qa.niffler.page.component.Header;
 import io.qameta.allure.Description;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -25,7 +25,7 @@ public class UsersFriendsTest {
 
     private final WelcomePage welcomePage = new WelcomePage();
     private final LoginPage loginPage = new LoginPage();
-    private final HeaderMenu menu = new HeaderMenu();
+    private final Header menu = new Header();
     private final FriendsBrowsePage friendsPage = new FriendsBrowsePage();
     private final PeopleBrowsePage peoplePage = new PeopleBrowsePage();
 

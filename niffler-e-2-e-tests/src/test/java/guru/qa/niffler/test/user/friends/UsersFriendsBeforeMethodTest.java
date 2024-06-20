@@ -6,7 +6,7 @@ import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.WelcomePage;
-import guru.qa.niffler.page.common.HeaderMenu;
+import guru.qa.niffler.page.component.Header;
 import io.qameta.allure.Description;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ public class UsersFriendsBeforeMethodTest {
 
     private final WelcomePage welcomePage = new WelcomePage();
     private final LoginPage loginPage = new LoginPage();
-    private final HeaderMenu menu = new HeaderMenu();
+    private final Header menu = new Header();
 
     @BeforeEach
     void doLogin(@User(INVITATION_SEND) UserJson sender, @User(WITH_FRIENDS) UserJson friend) {

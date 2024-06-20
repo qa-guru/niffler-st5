@@ -3,7 +3,6 @@ package guru.qa.niffler.page.component;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
-import guru.qa.niffler.page.BaseComponent;
 import io.qameta.allure.Step;
 
 import java.time.LocalDate;

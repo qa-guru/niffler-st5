@@ -28,4 +28,9 @@ public class DockerConfig implements Config {
     public String dbHost() {
         return "niffler-all-db";
     }
+
+    @Override
+    public String authUrl() {
+        return "http://auth.niffler.dc:9000/";
+    }
 }

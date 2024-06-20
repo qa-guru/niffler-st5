@@ -37,6 +37,11 @@ public interface Config {
     String dbHost();
 
     /**
+     * Возвращает auth-URL
+     */
+    String authUrl();
+
+    /**
      * Возвращает порт базы данных по умолчанию (5432).
      */
     default int dbPort() {

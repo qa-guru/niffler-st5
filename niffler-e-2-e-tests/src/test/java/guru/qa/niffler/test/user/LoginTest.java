@@ -6,7 +6,7 @@ import guru.qa.niffler.data.repository.UserRepository;
 import guru.qa.niffler.data.repository.UserRepositoryHibernate;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.WelcomePage;
-import guru.qa.niffler.page.common.HeaderMenu;
+import guru.qa.niffler.page.component.Header;
 import guru.qa.niffler.test.BaseWebTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ public class LoginTest extends BaseWebTest {
 
     private final WelcomePage welcomePage = new WelcomePage();
     private final LoginPage loginPage = new LoginPage();
-    private final HeaderMenu menu = new HeaderMenu();
+    private final Header menu = new Header();
 
     private final String userLogin = "user5155";
     private UserEntity userDataUser;
