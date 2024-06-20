@@ -19,12 +19,12 @@ public class ApiSpendExtension extends AbstractSpendExtension {
 
     @Override
     protected SpendJson createSpend(ExtensionContext extensionContext, Spend spend, CategoryJson category) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     protected void removeSpend(SpendJson spend) {
-
+        throw new UnsupportedOperationException();
     }
 
 }
