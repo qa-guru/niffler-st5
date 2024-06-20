@@ -1,16 +1,13 @@
 package guru.qa.niffler.test.user;
 
-import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.data.entity.*;
 import guru.qa.niffler.data.repository.UserRepository;
 import guru.qa.niffler.data.repository.UserRepositoryHibernate;
-import guru.qa.niffler.page.LoginPage;
-import guru.qa.niffler.page.WelcomePage;
-import guru.qa.niffler.page.component.Header;
 import guru.qa.niffler.test.BaseWebTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -21,10 +18,6 @@ public class LoginTest extends BaseWebTest {
     // UserRepository userRepository = UserRepository.getInstance();
 
     UserRepository userRepository = new UserRepositoryHibernate();
-
-    private final WelcomePage welcomePage = new WelcomePage();
-    private final LoginPage loginPage = new LoginPage();
-    private final Header menu = new Header();
 
     private final String userLogin = "user5155";
     private UserEntity userDataUser;
@@ -55,7 +48,7 @@ public class LoginTest extends BaseWebTest {
 
     @Test
     void loginTest() {
-        Selenide.open(CFG.frontUrl());
+        open(CFG.frontUrl());
         welcomePage.goToLogin();
         loginPage.login(userLogin, "12345");
 

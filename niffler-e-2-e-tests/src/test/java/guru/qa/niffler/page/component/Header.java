@@ -8,7 +8,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 @Getter
-public class Header extends BaseComponent<Header>{
+public class Header extends BaseComponent<Header> {
 
     private final SelenideElement friends = self.$("li[data-tooltip-id='friends']");
     private final SelenideElement people = self.$("li[data-tooltip-id='people']");
@@ -27,5 +27,15 @@ public class Header extends BaseComponent<Header>{
     @Step("Выйти из системы")
     public void logout() {
         getLogout().click();
+    }
+
+    @Step("Открыть страницу 'People'")
+    public void openPeoplePage() {
+        getPeople().click();
+    }
+
+    @Step("Открыть страницу 'People'")
+    public void openFriendsPage() {
+        getFriends().click();
     }
 }
