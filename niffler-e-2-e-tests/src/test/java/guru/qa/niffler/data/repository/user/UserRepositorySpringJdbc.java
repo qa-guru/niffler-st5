@@ -4,7 +4,9 @@ import guru.qa.niffler.data.Database;
 import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
+import guru.qa.niffler.data.sjdbc.UserAuthEntityRowMapper;
 import guru.qa.niffler.data.sjdbc.UserEntityRowMapper;
+import guru.qa.niffler.model.CurrencyValues;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -17,6 +19,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -124,11 +128,42 @@ public class UserRepositorySpringJdbc implements UserRepository {
     }
 
     @Override
+    public UserAuthEntity findUserAuthByUsername(String username) {
+        return authJdbcTemplate.queryForObject(
+                "SELECT * FROM \"user\" WHERE username = ?",
+                UserAuthEntityRowMapper.INSTANCE,
+                username
+        );
+    }
+
+    @Override
     public UserEntity findUserInUserdataById(UUID id) {
         return Optional.ofNullable(userDataJdbcTemplate.queryForObject(
                 "SELECT * FROM \"user\" WHERE id = ?",
                 UserEntityRowMapper.INSTANCE,
                 id)).orElseThrow();
+    }
+
+    @Override
+    public List<UserEntity> findUserByUsername(String username) {
+        List<Map<String, Object>> rows = userDataJdbcTemplate.queryForList(
+                "SELECT * FROM \"user\" WHERE username = ?", username
+        );
+
+        return rows.stream().map(
+                        row -> {
+                            UserEntity user = new UserEntity();
+                            user.setUsername(username);
+                            user.setCurrency(CurrencyValues.valueOf((String) row.get("currency")));
+                            user.setFirstname((String) row.get("firstname"));
+                            user.setSurname((String) row.get("surname"));
+                            user.setPhoto((byte[]) row.get("photo"));
+                            user.setPhotoSmall((byte[]) row.get("photo_small"));
+                            user.setId((UUID) row.get("id"));
+                            return user;
+                        }
+                )
+                .toList();
     }
 
     @Override

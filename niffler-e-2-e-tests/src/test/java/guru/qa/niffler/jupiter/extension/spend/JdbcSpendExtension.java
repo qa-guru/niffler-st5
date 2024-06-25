@@ -4,11 +4,13 @@ import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.data.repository.spend.SpendRepository;
 import guru.qa.niffler.model.SpendJson;
 
-import static guru.qa.niffler.data.repository.RepositoryType.SPRING_JDBC;
+import java.util.List;
+
+import static guru.qa.niffler.data.repository.RepositoryType.HIBERNATE;
 
 public class JdbcSpendExtension extends AbstractSpendExtension {
 
-    private final SpendRepository spendRepository = SpendRepository.getInstance(SPRING_JDBC);
+    private final SpendRepository spendRepository = SpendRepository.getInstance(HIBERNATE);
 
     @Override
     protected SpendJson createSpend(SpendJson spendJson) {
@@ -19,7 +21,10 @@ public class JdbcSpendExtension extends AbstractSpendExtension {
 
     @Override
     protected void removeSpend(SpendJson spendJson) {
-        spendRepository.removeSpend(SpendEntity.fromJson(spendJson));
+        List<SpendEntity> spendEntityList = spendRepository.findAllByUsername(spendJson.username());
+        if (!spendEntityList.isEmpty()) {
+            spendRepository.removeSpend(SpendEntity.fromJson(spendJson));
+        }
     }
 
 }

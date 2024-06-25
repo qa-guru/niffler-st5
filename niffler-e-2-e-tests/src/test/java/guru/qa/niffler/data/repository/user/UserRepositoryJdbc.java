@@ -4,7 +4,8 @@ import guru.qa.niffler.data.entity.AuthorityEntity;
 import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
-import guru.qa.niffler.model.CurrencyValues;
+import guru.qa.niffler.data.sjdbc.UserAuthEntityRowMapper;
+import guru.qa.niffler.data.sjdbc.UserEntityRowMapper;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -13,6 +14,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static guru.qa.niffler.data.Database.AUTH;
@@ -133,6 +136,31 @@ public class UserRepositoryJdbc implements UserRepository {
     }
 
     @Override
+    public UserAuthEntity findUserAuthByUsername(String username) {
+        try (Connection connection = userDataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement
+                     (
+                             "SELECT * FROM \"user\" WHERE username = ?"
+                     )) {
+
+            statement.setString(1, username);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            UserAuthEntity userAuthEntity = null;
+
+            while (resultSet.next()) {
+                userAuthEntity = UserAuthEntityRowMapper.INSTANCE.mapRow(resultSet, 0);
+            }
+
+            return userAuthEntity;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public UserEntity findUserInUserdataById(UUID id) {
         try (Connection connection = userDataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
@@ -143,17 +171,39 @@ public class UserRepositoryJdbc implements UserRepository {
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            UserEntity userEntity = new UserEntity();
+            UserEntity userEntity = null;
 
             while (resultSet.next()) {
-                userEntity.setId(id);
-                userEntity.setUsername(resultSet.getString("username"));
-                userEntity.setCurrency(CurrencyValues.valueOf(resultSet.getString("currency")));
-                userEntity.setFirstname(resultSet.getString("firstName"));
-                userEntity.setSurname(resultSet.getString("surname"));
+                userEntity = UserEntityRowMapper.INSTANCE.mapRow(resultSet, 0);
             }
 
             return userEntity;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<UserEntity> findUserByUsername(String username) {
+        try (Connection connection = userDataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement
+                     (
+                             "SELECT * FROM \"user\" WHERE username = ?"
+                     )) {
+
+            statement.setString(1, username);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            List<UserEntity> userEntities = new ArrayList<>();
+
+            while (resultSet.next()) {
+                UserEntity user = UserEntityRowMapper.INSTANCE.mapRow(resultSet, 0);
+                userEntities.add(user);
+            }
+
+            return userEntities;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -1,7 +1,7 @@
 package guru.qa.niffler.jupiter.extension.spend;
 
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
-import guru.qa.niffler.jupiter.extension.category.JdbcCategoryExtension;
+import guru.qa.niffler.jupiter.extension.category.AbstractCategoryExtension;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
 import org.junit.jupiter.api.extension.AfterEachCallback;
@@ -16,7 +16,7 @@ import java.util.Date;
 
 public abstract class AbstractSpendExtension implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
-    public static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(HttpSpendExtension.class);
+    public static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(AbstractSpendExtension.class);
 
     protected abstract SpendJson createSpend(SpendJson spendJson);
 
@@ -24,7 +24,7 @@ public abstract class AbstractSpendExtension implements BeforeEachCallback, Afte
 
     @Override
     public void beforeEach(ExtensionContext context) {
-        CategoryJson categoryJson = context.getStore(JdbcCategoryExtension.NAMESPACE).get(
+        CategoryJson categoryJson = context.getStore(AbstractCategoryExtension.NAMESPACE).get(
                 context.getUniqueId(),
                 CategoryJson.class);
 

@@ -6,13 +6,13 @@ import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
 import guru.qa.niffler.data.sjdbc.SpendEntityRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -42,6 +42,24 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
         category.setId(UUID.fromString((String) Objects.requireNonNull(keyHolder.getKeys()).get("id")));
 
         return category;
+    }
+
+    @Override
+    public List<CategoryEntity> findAllByCategoryName(String categoryName) {
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(
+                "SELECT * FROM category WHERE category = ?", categoryName
+        );
+
+        return rows.stream().map(
+                        row -> {
+                            CategoryEntity category = new CategoryEntity();
+                            category.setCategory((String) row.get("category"));
+                            category.setUsername((String) row.get("username"));
+                            category.setId((UUID) row.get("id"));
+                            return category;
+                        }
+                )
+                .toList();
     }
 
     @Override
@@ -123,9 +141,16 @@ public class SpendRepositorySpringJdbc implements SpendRepository {
 
     @Override
     public List<SpendEntity> findAllByUsername(String username) {
-        RowMapper<SpendEntity> rowMapper = new SpendEntityRowMapper();
+        return jdbcTemplate.query("SELECT * FROM spend WHERE username = ?",
+                SpendEntityRowMapper.INSTANCE,
+                username);
+    }
 
-        return jdbcTemplate.query("SELECT * FROM spend WHERE username = ?", rowMapper, username);
+    @Override
+    public SpendEntity findAByUsernameAndDescription(String username, String description) {
+        return jdbcTemplate.queryForObject("SELECT * FROM spend WHERE username = ? AND description = ?",
+                SpendEntityRowMapper.INSTANCE,
+                username, description);
     }
 
 }

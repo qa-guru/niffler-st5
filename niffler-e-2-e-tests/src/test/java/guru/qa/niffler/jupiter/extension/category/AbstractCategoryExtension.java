@@ -10,7 +10,7 @@ import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatio
 
 public abstract class AbstractCategoryExtension implements BeforeEachCallback, AfterEachCallback {
 
-    public static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(JdbcCategoryExtension.class);
+    public static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(AbstractCategoryExtension.class);
 
     protected abstract CategoryJson createCategory(CategoryJson categoryJson);
 

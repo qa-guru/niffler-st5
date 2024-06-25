@@ -3,6 +3,8 @@ package guru.qa.niffler.data.repository.spend;
 import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
+import guru.qa.niffler.data.sjdbc.CategoryEntityRowMapper;
+import guru.qa.niffler.data.sjdbc.SpendEntityRowMapper;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -45,6 +47,32 @@ public class SpendRepositoryJdbc implements SpendRepository {
 
             category.setId(generatedId);
             return category;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<CategoryEntity> findAllByCategoryName(String categoryName) {
+        try (Connection connection = spendDataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement
+                     (
+                             "SELECT * FROM category WHERE category = ?"
+                     )) {
+
+            statement.setString(1, categoryName);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            List<CategoryEntity> categoryEntities = new ArrayList<>();
+
+            while (resultSet.next()) {
+                CategoryEntity category = CategoryEntityRowMapper.INSTANCE.mapRow(resultSet, 0);
+                categoryEntities.add(category);
+            }
+
+            return categoryEntities;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -174,20 +202,36 @@ public class SpendRepositoryJdbc implements SpendRepository {
             List<SpendEntity> spendEntities = new ArrayList<>();
 
             while (resultSet.next()) {
-                SpendEntity spend = new SpendEntity();
-                CategoryEntity category = new CategoryEntity();
-                category.setId(resultSet.getObject("category_id", UUID.class));
-
-                spend.setId((UUID) resultSet.getObject("id"));
-                spend.setUsername(resultSet.getString("username"));
-                spend.setSpendDate(resultSet.getDate("spend_date"));
-                spend.setAmount(resultSet.getDouble("amount"));
-                spend.setDescription(resultSet.getString("description"));
-                spend.setCategory(category);
+                SpendEntity spend = SpendEntityRowMapper.INSTANCE.mapRow(resultSet, 0);
                 spendEntities.add(spend);
             }
 
             return spendEntities;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public SpendEntity findAByUsernameAndDescription(String username, String description) {
+        try (Connection connection = spendDataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                     "SELECT * FROM spend WHERE username = ? AND description = ?"
+             )) {
+
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, description);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            SpendEntity spend = null;
+
+            while (resultSet.next()) {
+                spend = SpendEntityRowMapper.INSTANCE.mapRow(resultSet, 0);
+            }
+
+            return spend;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
