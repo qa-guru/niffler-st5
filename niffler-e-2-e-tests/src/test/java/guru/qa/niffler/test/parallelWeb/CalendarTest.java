@@ -1,15 +1,20 @@
-package guru.qa.niffler.test;
+package guru.qa.niffler.test.parallelWeb;
 
-import org.junit.jupiter.api.Test;
+import guru.qa.niffler.test.BaseWebTest;
+import io.qameta.allure.Epic;
+import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
 
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Epic("Календарь")
+@Tag("ParallelWebTests")
 public class CalendarTest extends BaseWebTest {
 
     @Test
+    @DisplayName("Работа календаря при выборе даты расхода")
     void dateSelectionTest() {
         open(CFG.frontUrl());
         welcomePage.goToLogin();

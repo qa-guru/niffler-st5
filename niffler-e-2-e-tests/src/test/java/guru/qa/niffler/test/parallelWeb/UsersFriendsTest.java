@@ -1,14 +1,14 @@
-package guru.qa.niffler.test.user.friends;
+package guru.qa.niffler.test.parallelWeb;
 
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.test.BaseWebTest;
 import io.qameta.allure.Description;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import io.qameta.allure.Epic;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.open;
@@ -16,7 +16,10 @@ import static guru.qa.niffler.jupiter.annotation.User.UserType.*;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Epic("Друзья")
 @WebTest
+@Tag("ParallelWebTests")
+@Execution(ExecutionMode.SAME_THREAD)
 public class UsersFriendsTest extends BaseWebTest {
 
     @BeforeEach

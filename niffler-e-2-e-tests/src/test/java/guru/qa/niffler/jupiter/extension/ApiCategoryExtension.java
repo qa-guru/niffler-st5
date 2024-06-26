@@ -18,6 +18,6 @@ public class ApiCategoryExtension extends AbstractCategoryExtension {
 
     @Override
     protected void removeCategory(CategoryJson category) {
-        throw new UnsupportedOperationException();
+        //throw new UnsupportedOperationException();
     }
 }

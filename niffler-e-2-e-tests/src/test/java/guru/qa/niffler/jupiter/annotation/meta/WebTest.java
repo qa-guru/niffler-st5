@@ -12,8 +12,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @ExtendWith({
         BrowserExtension.class,
-        CategoryHttpExtension.class,
-        SpendHttpExtension.class,
+        ApiCategoryExtension.class,
+        ApiSpendExtension.class,
         UserQueueExtension.class
 })
 public @interface WebTest {

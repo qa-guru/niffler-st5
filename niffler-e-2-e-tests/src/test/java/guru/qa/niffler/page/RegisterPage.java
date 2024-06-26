@@ -3,8 +3,8 @@ package guru.qa.niffler.page;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 
 public class RegisterPage extends BasePage<RegisterPage> {
@@ -17,6 +17,7 @@ public class RegisterPage extends BasePage<RegisterPage> {
     private final SelenideElement submitButton = $("button[type='submit']");
     private final SelenideElement proceedLoginLink = $("a[href*='redirect']");
     private final SelenideElement errorContainer = $(".form__error");
+    private final SelenideElement registeredCongratulations = $(byText("Congratulations! You've registered!"));
 
     @Step("Fill register page with credentials: username: {0}, password: {1}, submit password: {2}")
     public RegisterPage fillRegisterPage(String login, String password, String passwordSubmit) {
@@ -28,25 +29,26 @@ public class RegisterPage extends BasePage<RegisterPage> {
 
     @Step("Set username: {0}")
     public RegisterPage setUsername(String username) {
-        usernameInput.setValue(username);
+        usernameInput.append(username);
         return this;
     }
 
     @Step("Set password: {0}")
     public RegisterPage setPassword(String password) {
-        passwordInput.setValue(password);
+        passwordInput.append(password);
         return this;
     }
 
     @Step("Confirm password: {0}")
     public RegisterPage setPasswordSubmit(String password) {
-        passwordSubmitInput.setValue(password);
+        passwordSubmitInput.append(password);
         return this;
     }
 
     @Step("Submit register")
     public LoginPage successSubmit() {
         submitButton.click();
+        checkRegisteredCongratulationsMessage();
         proceedLoginLink.click();
         return new LoginPage();
     }
@@ -68,6 +70,11 @@ public class RegisterPage extends BasePage<RegisterPage> {
 
     public RegisterPage checkErrorMessage(String errorMessage) {
         errorContainer.shouldHave(text(errorMessage));
+        return this;
+    }
+
+    public RegisterPage checkRegisteredCongratulationsMessage() {
+        registeredCongratulations.should(exist);
         return this;
     }
 }

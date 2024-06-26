@@ -5,14 +5,18 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.ex.ElementNotFound;
 import com.codeborne.selenide.selector.ByText;
 import guru.qa.niffler.page.component.ReactCalendar;
+import guru.qa.niffler.page.component.SpendingsTable;
 import io.qameta.allure.Step;
 import lombok.Getter;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MainPage extends BasePage<MainPage> {
 
@@ -30,6 +34,9 @@ public class MainPage extends BasePage<MainPage> {
     @Getter
     private final ReactCalendar reactCalendar = new ReactCalendar(addSpendingSection.$(".react-datepicker"));
 
+    @Getter
+    protected static final SpendingsTable spendingsTable = new SpendingsTable($(".spendings-table tbody"));
+
     @Step("Ожидание загрузки страницы")
     @Override
     public MainPage waitForPageLoaded() {
@@ -45,9 +52,10 @@ public class MainPage extends BasePage<MainPage> {
     }
 
     @Step("Удалить выбранные расходы")
-    public void deleteSpending() {
+    public MainPage deleteSpending() {
         deleteAllSelectedBtn.click();
         progressBar.should(not(visible), Duration.ofSeconds(10));
+        return this;
     }
 
     @Step("Проверка видимости строки в таблице расходов по description расхода")
@@ -64,6 +72,22 @@ public class MainPage extends BasePage<MainPage> {
         } catch (ElementNotFound exception) {
             throw new RuntimeException("Category not found");
         }
+    }
+
+    @Step("Проверка отображаемого списка трат")
+    public void checkSpendingsList(List<String> spends) {
+
+        List<String> spendDescriptions = new ArrayList<>();
+
+        for (String entry : spendingsTable.getAllSpendings()) {
+            String[] parts = entry.split("\n");
+            if (parts.length >= 5) {
+                spendDescriptions.add(parts[4]);
+            }
+        }
+
+        assertTrue(spendDescriptions.containsAll(spends),
+                "Список трат в таблице должен совпадать с добавленными тратами");
     }
 
 }

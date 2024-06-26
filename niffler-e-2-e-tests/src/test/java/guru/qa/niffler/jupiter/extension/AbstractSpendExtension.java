@@ -1,6 +1,5 @@
 package guru.qa.niffler.jupiter.extension;
 
-import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.jupiter.annotation.Spend;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
@@ -34,7 +33,7 @@ public abstract class AbstractSpendExtension implements BeforeEachCallback, Afte
         // Получаем объект расхода из хранилища
         SpendJson spendJson = context.getStore(NAMESPACE).get(context.getUniqueId(), SpendJson.class);
         // Удаляем расход
-        removeSpend(spendJson);
+        if (spendJson != null) removeSpend(spendJson);
     }
 
     // Абстрактный метод для создания объекта расхода

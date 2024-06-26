@@ -23,11 +23,12 @@ public class LoginPage extends BasePage<LoginPage>{
      * Войти в систему
      */
     @Step("Войти в систему c учетными данными: логин: {0}, пароль: {1} ")
-    public void login(String login, String password) {
-        loginInput.setValue(login);
-        passwordInput.setValue(password);
+    public MainPage login(String login, String password) {
+        loginInput.append(login);
+        passwordInput.append(password);
         submitButton.click();
         loader.should(not(visible), Duration.ofSeconds(10));
+        return new MainPage();
     }
 
     @Step("Перейти на страницу регистрации")

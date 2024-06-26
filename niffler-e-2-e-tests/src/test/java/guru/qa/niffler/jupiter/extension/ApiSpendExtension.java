@@ -18,13 +18,15 @@ public class ApiSpendExtension extends AbstractSpendExtension {
     }
 
     @Override
+    @SneakyThrows
     protected SpendJson createSpend(ExtensionContext extensionContext, Spend spend, CategoryJson category) {
         throw new UnsupportedOperationException();
     }
 
     @Override
+    @SneakyThrows
     protected void removeSpend(SpendJson spend) {
-        throw new UnsupportedOperationException();
+        spendApiClient.removeSpends(spend.username(), String.valueOf(spend.id()));
     }
 
 }

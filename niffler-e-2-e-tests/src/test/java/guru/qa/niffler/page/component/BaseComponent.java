@@ -19,4 +19,8 @@ public abstract class BaseComponent<T extends BaseComponent<?>> {
     public BaseComponent(SelenideElement self) {
         this.self = self;
     }
+
+    public SelenideElement getSelf() {
+        return self;
+    }
 }
