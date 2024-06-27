@@ -224,8 +224,7 @@ public class UserRepositoryJdbc implements UserRepository {
                             account_non_expired = ?,
                             account_non_locked = ?,
                             credentials_non_expired= ?
-                            WHERE id = ?""",
-                    RETURN_GENERATED_KEYS);
+                            WHERE id = ?""");
 
                  PreparedStatement deleteAuthorityPreparedStatement = connection.prepareStatement(
                          "DELETE FROM authority WHERE user_id = ?");

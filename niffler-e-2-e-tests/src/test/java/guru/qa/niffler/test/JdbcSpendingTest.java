@@ -7,7 +7,8 @@ import guru.qa.niffler.jupiter.annotation.GenerateSpend;
 import guru.qa.niffler.jupiter.extension.category.JdbcCategoryExtension;
 import guru.qa.niffler.jupiter.extension.spend.JdbcSpendExtension;
 import guru.qa.niffler.model.SpendJson;
-import guru.qa.niffler.page.UiBot;
+import guru.qa.niffler.ui.UiBot;
+import guru.qa.niffler.ui.page.StartPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,8 +31,7 @@ public class JdbcSpendingTest {
 
     @BeforeEach
     void doLogin() {
-        Selenide.open("http://127.0.0.1:3000/main");
-        ui.startPage()
+        Selenide.open(StartPage.URL, StartPage.class)
                 .clickLogin()
                 .setUsername(USERNAME)
                 .setPassword("qa_pass_666")
@@ -43,8 +43,7 @@ public class JdbcSpendingTest {
     @GenerateSpend(description = "QA.GURU Advanced 5", amount = 65000.00, currency = RUB)
     void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
         ui.mainPage()
-                .findSpendingByDescription(spendJson)
-                .chooseSpending()
+                .chooseSpending(spendJson)
                 .deleteChosenSpending()
                 .assertThatTableContentHasSize(0);
     }

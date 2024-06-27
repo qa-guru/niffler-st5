@@ -4,7 +4,8 @@ import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.model.UserJson;
-import guru.qa.niffler.page.UiBot;
+import guru.qa.niffler.ui.UiBot;
+import guru.qa.niffler.ui.page.StartPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +21,7 @@ public class UserQueueExampleTest {
     @BeforeEach
     void login(@User UserJson user) {
         System.out.println(user); //если здесь будет тот же пользователь, что и в тесте, до afterEach код не дойдет, и тест будет ждать юзера вечно.
-        Selenide.open("http://127.0.0.1:3000/main");
+        Selenide.open(StartPage.URL);
     }
 
     @Test

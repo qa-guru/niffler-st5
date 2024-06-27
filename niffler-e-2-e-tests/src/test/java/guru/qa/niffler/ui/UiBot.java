@@ -1,4 +1,7 @@
-package guru.qa.niffler.page;
+package guru.qa.niffler.ui;
+
+import guru.qa.niffler.ui.page.MainPage;
+import guru.qa.niffler.ui.page.StartPage;
 
 public class UiBot {
 
