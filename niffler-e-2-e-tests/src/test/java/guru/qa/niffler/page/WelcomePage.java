@@ -1,12 +1,15 @@
-package guru.qa.niffler.pages;
+package guru.qa.niffler.page;
 
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 
-public class WelcomePage {
+public class WelcomePage extends BasePage<WelcomePage> {
+
+    public static final String URL = CFG.frontUrl();
 
     private final String welcomeMassage = "Welcome to magic journey with Niffler. The coin keeper";
 
@@ -14,22 +17,24 @@ public class WelcomePage {
     private final SelenideElement loginBtn = $(byText("Login"));
     private final SelenideElement registerBtn = $(byText("Register"));
 
-    /**
-     * Перейти на страницу входа
-     */
+    @Step("Перейти на страницу входа в систему")
     public void goToLogin() {
         welcomeHeader.should(text(welcomeMassage));
         loginBtn.click();
         welcomeHeader.should(not(visible));
     }
 
-    /**
-     * Перейти на страницу регистрации
-     */
+    @Step("Перейти на страницу регистрации")
     public void goToRegister() {
         welcomeHeader.should(text(welcomeMassage));
         registerBtn.click();
         welcomeHeader.should(not(visible));
     }
 
+    @Step("Check that page is loaded")
+    @Override
+    public WelcomePage waitForPageLoaded() {
+        loginBtn.should(visible);
+        return this;
+    }
 }

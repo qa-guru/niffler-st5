@@ -1,4 +1,4 @@
-package guru.qa.niffler.pages;
+package guru.qa.niffler.page;
 
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
@@ -9,7 +9,9 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 
-public class LoginPage {
+public class LoginPage extends BasePage<LoginPage>{
+
+    public static final String URL = CFG.authUrl() + "login";
 
     private final SelenideElement loginInput = $("input[name='username']");
     private final SelenideElement passwordInput = $("input[name='password']");
@@ -20,18 +22,25 @@ public class LoginPage {
     /**
      * Войти в систему
      */
-    @Step
-    public void login(String login, String password) {
-        loginInput.setValue(login);
-        passwordInput.setValue(password);
+    @Step("Войти в систему c учетными данными: логин: {0}, пароль: {1} ")
+    public MainPage login(String login, String password) {
+        loginInput.append(login);
+        passwordInput.append(password);
         submitButton.click();
         loader.should(not(visible), Duration.ofSeconds(10));
+        return new MainPage();
     }
 
-    /**
-     * Перейти на страницу регистрации
-     */
+    @Step("Перейти на страницу регистрации")
     public void goToRegister() {
         signUp.click();
+    }
+
+    @Step("Ожидание загрузки страницы")
+    @Override
+    public LoginPage waitForPageLoaded() {
+        loginInput.should(visible);
+        passwordInput.should(visible);
+        return this;
     }
 }

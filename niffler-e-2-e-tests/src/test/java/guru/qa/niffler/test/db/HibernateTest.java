@@ -10,9 +10,9 @@ import guru.qa.niffler.jupiter.annotation.meta.JdbcTest;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.model.UserJson;
-import guru.qa.niffler.pages.LoginPage;
-import guru.qa.niffler.pages.WelcomePage;
-import guru.qa.niffler.pages.common.HeaderMenu;
+import guru.qa.niffler.page.LoginPage;
+import guru.qa.niffler.page.WelcomePage;
+import guru.qa.niffler.page.component.Header;
 import io.qameta.allure.Description;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +27,7 @@ public class HibernateTest {
 
     private final WelcomePage welcomePage = new WelcomePage();
     private final LoginPage loginPage = new LoginPage();
-    private final HeaderMenu menu = new HeaderMenu();
+    private final Header menu = new Header();
 
     UserRepository userRepository = UserRepository.getInstance();
     SpendRepository spendRepository = SpendRepository.getInstance();

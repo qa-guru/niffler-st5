@@ -31,6 +31,11 @@ public class SpendJdbcExtension extends AbstractSpendExtension {
     }
 
     @Override
+    protected SpendJson createSpend(SpendJson spend) {
+        return null;
+    }
+
+    @Override
     protected void removeSpend(SpendJson spend) {
         if (spend == null) return;
         getThreadLocalRepoInstance().removeSpend(spend);

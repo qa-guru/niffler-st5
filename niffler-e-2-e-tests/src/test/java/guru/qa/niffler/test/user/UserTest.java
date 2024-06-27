@@ -1,6 +1,5 @@
 package guru.qa.niffler.test.user;
 
-import com.codeborne.selenide.Selenide;
 import com.github.javafaker.Faker;
 import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
@@ -10,23 +9,18 @@ import guru.qa.niffler.jupiter.annotation.TestUser;
 import guru.qa.niffler.jupiter.extension.DbCreateUserExtension;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.UserJson;
-import guru.qa.niffler.pages.LoginPage;
-import guru.qa.niffler.pages.WelcomePage;
-import guru.qa.niffler.pages.common.HeaderMenu;
+import guru.qa.niffler.test.BaseWebTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.UUID;
 
+import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(DbCreateUserExtension.class)
-public class UserTest {
-
-    private final WelcomePage welcomePage = new WelcomePage();
-    private final LoginPage loginPage = new LoginPage();
-    private final HeaderMenu menu = new HeaderMenu();
+public class UserTest extends BaseWebTest {
 
     UserRepository userJdbcRepo = new UserRepositoryJdbc();
     UserRepositorySpringJdbc userSpringJdbcRepo = new UserRepositorySpringJdbc();
@@ -39,7 +33,7 @@ public class UserTest {
     @Test
     @TestUser
     void loginTest(UserJson userJson) {
-        Selenide.open("http://127.0.0.1:3000");
+        open(CFG.frontUrl());
         welcomePage.goToLogin();
         loginPage.login(userJson.username(), userJson.testData().password());
         assertTrue(menu.isAvatarVisible(), "Пользователь не вошёл в систему");
@@ -48,7 +42,7 @@ public class UserTest {
     @Test
     @TestUser
     void updateUserInAuthTest(UserJson userJson) {
-        Selenide.open("http://127.0.0.1:3000");
+        open(CFG.frontUrl());
         welcomePage.goToLogin();
         loginPage.login(userJson.username(), userJson.testData().password());
 

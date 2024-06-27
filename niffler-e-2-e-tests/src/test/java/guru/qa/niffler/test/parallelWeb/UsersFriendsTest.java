@@ -1,37 +1,30 @@
-package guru.qa.niffler.test.user.friends;
+package guru.qa.niffler.test.parallelWeb;
 
-import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.model.UserJson;
-import guru.qa.niffler.pages.FriendsBrowsePage;
-import guru.qa.niffler.pages.LoginPage;
-import guru.qa.niffler.pages.PeopleBrowsePage;
-import guru.qa.niffler.pages.WelcomePage;
-import guru.qa.niffler.pages.common.HeaderMenu;
+import guru.qa.niffler.test.BaseWebTest;
 import io.qameta.allure.Description;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import io.qameta.allure.Epic;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selenide.open;
 import static guru.qa.niffler.jupiter.annotation.User.UserType.*;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Epic("Друзья")
 @WebTest
-public class UsersFriendsTest {
-
-    private final WelcomePage welcomePage = new WelcomePage();
-    private final LoginPage loginPage = new LoginPage();
-    private final HeaderMenu menu = new HeaderMenu();
-    private final FriendsBrowsePage friendsPage = new FriendsBrowsePage();
-    private final PeopleBrowsePage peoplePage = new PeopleBrowsePage();
+@Tag("ParallelWebTests")
+@Execution(ExecutionMode.SAME_THREAD)
+public class UsersFriendsTest extends BaseWebTest {
 
     @BeforeEach
     void doLogin() {
-        Selenide.open("http://127.0.0.1:3000");
+        open(CFG.frontUrl());
         welcomePage.goToLogin();
     }
 
@@ -40,9 +33,10 @@ public class UsersFriendsTest {
     @Test
     void invitationSendTest0(@User(INVITATION_SEND) UserJson invitationSendTestUser) {
         loginPage.login(invitationSendTestUser.username(), invitationSendTestUser.testData().password());
-        menu.getAvatar().should(exist);
+        mainPage.waitForPageLoaded();
 
-        menu.getPeople().click();
+        menu.openPeoplePage();
+        peoplePage.waitForPageLoaded();
         peoplePage.getPeopleContentTableWrapper().should(visible);
         peoplePage.getFriends().find(text("Pending invitation")).should(exist);
     }
@@ -52,9 +46,10 @@ public class UsersFriendsTest {
     void invitationSendTest1(@User(INVITATION_SEND) UserJson invitationSendTestUser) {
         loginPage.login(invitationSendTestUser.username(), invitationSendTestUser.testData().password());
 
-        menu.getAvatar().should(exist);
+        mainPage.waitForPageLoaded();
 
-        menu.getPeople().click();
+        menu.openPeoplePage();
+        peoplePage.waitForPageLoaded();
         peoplePage.getPeopleContentTableWrapper().should(visible);
         peoplePage.getFriends().find(text("Pending invitation")).should(exist);
     }
@@ -62,9 +57,10 @@ public class UsersFriendsTest {
     @Test
     void invitationSendTest2(@User(INVITATION_SEND) UserJson invitationSendTestUser) {
         loginPage.login(invitationSendTestUser.username(), invitationSendTestUser.testData().password());
-        menu.getAvatar().should(exist);
+        mainPage.waitForPageLoaded();
 
-        menu.getPeople().click();
+        menu.openPeoplePage();
+        peoplePage.waitForPageLoaded();
         peoplePage.getPeopleContentTableWrapper().should(visible);
         peoplePage.getFriends().find(text("Pending invitation")).should(exist);
     }
@@ -76,14 +72,16 @@ public class UsersFriendsTest {
                                          invitationRecievedTestUser) {
 
         loginPage.login(invitationRecievedTestUser.username(), invitationRecievedTestUser.testData().password());
-        menu.getAvatar().should(exist);
+        mainPage.waitForPageLoaded();
 
-        menu.getFriends().click();
+        menu.openFriendsPage();
+        friendsPage.waitForPageLoaded();
         friendsPage.getPeopleContentTableWrapper().should(exist);
         friendsPage.getSubmitInvitationBtn().should(exist);
         friendsPage.getDeclineInvitationBtn().should(exist);
 
-        menu.getPeople().click();
+        menu.openPeoplePage();
+        peoplePage.waitForPageLoaded();
         peoplePage.getPeopleContentTableWrapper().should(visible);
         peoplePage.getSubmitInvitationBtn().should(exist);
         peoplePage.getDeclineInvitationBtn().should(exist);
@@ -93,14 +91,16 @@ public class UsersFriendsTest {
     void invitationRecievedTest1(@User(INVITATION_RECEIVED) UserJson
                                          invitationRecievedTestUser) {
         loginPage.login(invitationRecievedTestUser.username(), invitationRecievedTestUser.testData().password());
-        menu.getAvatar().should(exist);
+        mainPage.waitForPageLoaded();
 
-        menu.getFriends().click();
+        menu.openFriendsPage();
+        friendsPage.waitForPageLoaded();
         friendsPage.getPeopleContentTableWrapper().should(exist);
         friendsPage.getSubmitInvitationBtn().should(exist);
         friendsPage.getDeclineInvitationBtn().should(exist);
 
-        menu.getPeople().click();
+        menu.openPeoplePage();
+        peoplePage.waitForPageLoaded();
         peoplePage.getPeopleContentTableWrapper().should(visible);
         peoplePage.getSubmitInvitationBtn().should(exist);
         peoplePage.getDeclineInvitationBtn().should(exist);
@@ -111,15 +111,17 @@ public class UsersFriendsTest {
                                          invitationRecievedTestUser) {
         loginPage.login(invitationRecievedTestUser.username(), invitationRecievedTestUser.testData().password());
 
-        menu.getAvatar().should(exist);
+        mainPage.waitForPageLoaded();
 
-        menu.getFriends().click();
+        menu.openFriendsPage();
+        friendsPage.waitForPageLoaded();
         friendsPage.getPeopleContentTableWrapper().should(exist);
 
         friendsPage.getSubmitInvitationBtn().should(exist);
         friendsPage.getDeclineInvitationBtn().should(exist);
 
-        menu.getPeople().click();
+        menu.openPeoplePage();
+        peoplePage.waitForPageLoaded();
         peoplePage.getPeopleContentTableWrapper().should(visible);
         peoplePage.getDeclineInvitationBtn().should(exist);
         peoplePage.getSubmitInvitationBtn().should(exist);
@@ -130,9 +132,10 @@ public class UsersFriendsTest {
     @Test
     void withFiendsTest0(@User(WITH_FRIENDS) UserJson withFriendsTestUser) {
         loginPage.login(withFriendsTestUser.username(), withFriendsTestUser.testData().password());
-        menu.getAvatar().should(exist);
+        mainPage.waitForPageLoaded();
 
-        menu.getPeople().click();
+        menu.openPeoplePage();
+        peoplePage.waitForPageLoaded();
         friendsPage.getPeopleContentTableWrapper().should(exist);
         friendsPage.getFriends().find(text("You are friends")).should(exist);
     }
@@ -140,9 +143,10 @@ public class UsersFriendsTest {
     @Test
     void withFiendsTest1(@User(WITH_FRIENDS) UserJson withFriendsTestUser) {
         loginPage.login(withFriendsTestUser.username(), withFriendsTestUser.testData().password());
-        menu.getAvatar().should(exist);
+        mainPage.waitForPageLoaded();
 
-        menu.getFriends().click();
+        menu.openFriendsPage();
+        friendsPage.waitForPageLoaded();
         friendsPage.getPeopleContentTableWrapper().should(exist);
         friendsPage.getFriends().find(text("You are friends")).should(exist);
     }
@@ -150,9 +154,10 @@ public class UsersFriendsTest {
     @Test
     void withFiendsTest2(@User(WITH_FRIENDS) UserJson withFriendsTestUser) {
         loginPage.login(withFriendsTestUser.username(), withFriendsTestUser.testData().password());
-        menu.getAvatar().should(exist);
+        mainPage.waitForPageLoaded();
 
-        menu.getFriends().click();
+        menu.openFriendsPage();
+        friendsPage.waitForPageLoaded();
         friendsPage.getPeopleContentTableWrapper().should(exist);
         friendsPage.getFriends().find(text("You are friends")).should(exist);
     }
