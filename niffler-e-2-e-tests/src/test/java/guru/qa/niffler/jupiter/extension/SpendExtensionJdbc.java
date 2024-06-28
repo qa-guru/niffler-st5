@@ -5,7 +5,7 @@ import guru.qa.niffler.data.repository.SpendRepository;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
 
-public class SpendExtensionJdbc extends SpendExtensionAbstract {
+public class SpendExtensionJdbc extends AbstractSpendExtension {
 
     private final SpendRepository spendRepository = SpendRepository.getInstance();
 

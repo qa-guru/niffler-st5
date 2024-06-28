@@ -11,10 +11,10 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import java.util.Date;
 
-public abstract class SpendExtensionAbstract implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
+public abstract class AbstractSpendExtension implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
     public static final ExtensionContext.Namespace NAMESPACE
-            = ExtensionContext.Namespace.create(SpendExtensionAbstract.class);
+            = ExtensionContext.Namespace.create(AbstractSpendExtension.class);
 
     private static final OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .build();
@@ -27,7 +27,7 @@ public abstract class SpendExtensionAbstract implements BeforeEachCallback, Afte
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) {
-        CategoryJson category = extensionContext.getStore(CategoryExtensionAbstract.NAMESPACE)
+        CategoryJson category = extensionContext.getStore(AbstractCategoryExtension.NAMESPACE)
                 .get(extensionContext.getUniqueId(), CategoryJson.class);
 
         AnnotationSupport.findAnnotation(

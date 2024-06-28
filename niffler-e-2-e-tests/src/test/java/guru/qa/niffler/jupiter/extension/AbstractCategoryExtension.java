@@ -5,10 +5,10 @@ import guru.qa.niffler.model.CategoryJson;
 import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
 
-public abstract class CategoryExtensionAbstract implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
+public abstract class AbstractCategoryExtension implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
     public static final ExtensionContext.Namespace NAMESPACE
-            = ExtensionContext.Namespace.create(CategoryExtensionAbstract.class);
+            = ExtensionContext.Namespace.create(AbstractCategoryExtension.class);
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) {

@@ -11,7 +11,7 @@ import java.io.IOException;
 
 import static okhttp3.logging.HttpLoggingInterceptor.Level.BODY;
 
-public class CategoryExtensionHttp extends CategoryExtensionAbstract {
+public class CategoryExtensionHttp extends AbstractCategoryExtension {
 
     private static final OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(BODY))

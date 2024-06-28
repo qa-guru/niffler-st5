@@ -10,7 +10,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 import java.io.IOException;
 import java.util.Objects;
 
-public class SpendExtensionHttp extends SpendExtensionAbstract {
+public class SpendExtensionHttp extends AbstractSpendExtension {
 
 
     private static final OkHttpClient okHttpClient = new OkHttpClient.Builder()
