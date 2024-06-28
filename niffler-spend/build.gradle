@@ -27,6 +27,7 @@ dependencies {
     testImplementation("org.mockito:mockito-junit-jupiter:5.5.0") {
         exclude group: "org.junit.jupiter"
     }
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
 jib {

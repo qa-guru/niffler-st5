@@ -79,6 +79,7 @@ dependencies {
     jaxb "org.glassfish.jaxb:jaxb-xjc:${project.ext.glassfishJaxbVersion}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
 jib {
