@@ -5,22 +5,35 @@ import guru.qa.niffler.jupiter.annotation.Spend;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.extension.ExtensionContext;
+
+import static guru.qa.niffler.utils.DateHelper.convertStringToDate;
 
 public class ApiSpendExtension extends AbstractSpendExtension {
 
     private final SpendApiClient spendApiClient = new SpendApiClient();
 
     @Override
-    @SneakyThrows
-    protected SpendJson createSpend(SpendJson spend) {
-        return spendApiClient.createSpend(spend);
+    protected SpendJson createSpend(Spend spend, CategoryJson category) {
+
+        // Создаем объект расхода
+        SpendJson spendJson = new SpendJson(
+                null,
+                // Конвертируем дату из строки в формат Date
+                convertStringToDate(spend.spendDate()),
+                spend.category(),
+                spend.currency(),
+                spend.amount(),
+                spend.description(),
+                spend.username()
+        );
+
+        return spendApiClient.createSpend(spendJson);
     }
 
     @Override
     @SneakyThrows
-    protected SpendJson createSpend(ExtensionContext extensionContext, Spend spend, CategoryJson category) {
-        throw new UnsupportedOperationException();
+    protected SpendJson createSpend(SpendJson spend) {
+        return spendApiClient.createSpend(spend);
     }
 
     @Override
