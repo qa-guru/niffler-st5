@@ -35,7 +35,7 @@ public class MainPage extends BasePage<MainPage> {
     private final ReactCalendar reactCalendar = new ReactCalendar(addSpendingSection.$(".react-datepicker"));
 
     @Getter
-    protected static final SpendingsTable spendingsTable = new SpendingsTable($(".spendings-table tbody"));
+    protected final SpendingsTable spendingsTable = new SpendingsTable($(".spendings-table tbody"));
 
     @Step("Ожидание загрузки страницы")
     @Override

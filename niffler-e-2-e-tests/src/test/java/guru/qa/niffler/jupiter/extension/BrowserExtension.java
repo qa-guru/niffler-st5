@@ -53,7 +53,7 @@ public class BrowserExtension implements TestExecutionExceptionHandler,
     public void beforeAll(ExtensionContext context) {
 
         Configuration.browserSize = "1920x1080";
-        Configuration.timeout = 15000;
+        Configuration.timeout = 5000;
         Configuration.fastSetValue = true;
         Configuration.pageLoadStrategy = "normal";
 
