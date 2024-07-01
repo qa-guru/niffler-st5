@@ -214,4 +214,62 @@ public class UserRepositoryJdbc implements UserRepository {
         return Optional.of(user);
     }
 
+    @Override
+    public Optional<UserEntity> findUserInUserdataByUsername(String username) {
+        UserEntity user = new UserEntity();
+        try (Connection conn = udDataSource.getConnection();
+             PreparedStatement userPs = conn.prepareStatement(
+                     "SELECT * FROM \"user\" WHERE username = ?")) {
+            userPs.setObject(1, username);
+            userPs.execute();
+
+            try (ResultSet resultSet = userPs.getResultSet()) {
+                if (resultSet.next()) {
+                    user.setId(resultSet.getObject("id", UUID.class));
+                    user.setUsername(resultSet.getString("username"));
+                    user.setCurrency(CurrencyValues.valueOf(resultSet.getString("currency")));
+                    user.setFirstname(resultSet.getString("firstname"));
+                    user.setSurname(resultSet.getString("surname"));
+                    user.setPhoto(resultSet.getBytes("photo"));
+                    user.setPhotoSmall(resultSet.getBytes("photo_small"));
+                } else {
+                    return Optional.empty();
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return Optional.of(user);
+    }
+
+
+    @Override
+    public Optional<UserAuthEntity> findUserInAuthByUsername(String username) {
+        UserAuthEntity user = new UserAuthEntity();
+        try (Connection connection = authDataSource.getConnection();
+             PreparedStatement userPs = connection.prepareStatement(
+                     "SELECT * FROM \"user\" WHERE username = ?")) {
+            userPs.setObject(1, username);
+            userPs.execute();
+
+            try (ResultSet resultSet = userPs.getResultSet()) {
+                if (resultSet.next()) {
+                    user.setId(resultSet.getObject("id", UUID.class));
+                    user.setUsername(resultSet.getString("username"));
+                    user.setPassword(resultSet.getString("password"));
+                    user.setEnabled(resultSet.getBoolean("enabled"));
+                    user.setAccountNonExpired(resultSet.getBoolean("account_non_expired"));
+                    user.setAccountNonLocked(resultSet.getBoolean("account_non_locked"));
+                    user.setCredentialsNonExpired(resultSet.getBoolean("credentials_non_expired"));
+
+                } else {
+                    return Optional.empty();
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return Optional.of(user);
+    }
+
 }

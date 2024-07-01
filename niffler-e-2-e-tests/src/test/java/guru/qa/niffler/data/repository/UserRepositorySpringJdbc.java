@@ -1,10 +1,10 @@
 package guru.qa.niffler.data.repository;
 
 import guru.qa.niffler.data.DataBase;
-import guru.qa.niffler.data.entity.Authority;
 import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.data.jdbc.DataSourceProvider;
+import guru.qa.niffler.data.sjdbc.UserAuthEntityRowMapper;
 import guru.qa.niffler.data.sjdbc.UserEntityRowMapper;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -162,6 +162,30 @@ public class UserRepositorySpringJdbc implements UserRepository {
             return Optional.of(userdataJdbcTemplate.queryForObject(
                     "SELECT * FROM \"user\" WHERE id = ?",
                     UserEntityRowMapper.instance, id
+            ));
+        } catch (DataRetrievalFailureException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<UserEntity> findUserInUserdataByUsername(String username) {
+        try {
+            return Optional.of(userdataJdbcTemplate.queryForObject(
+                    "SELECT * FROM \"user\" WHERE username = ?",
+                    UserEntityRowMapper.instance, username
+            ));
+        } catch (DataRetrievalFailureException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<UserAuthEntity> findUserInAuthByUsername(String username) {
+        try {
+            return Optional.of(authJdbcTemplate.queryForObject(
+                    "SELECT * FROM \"user\" WHERE username = ?",
+                    UserAuthEntityRowMapper.instance, username
             ));
         } catch (DataRetrievalFailureException e) {
             return Optional.empty();

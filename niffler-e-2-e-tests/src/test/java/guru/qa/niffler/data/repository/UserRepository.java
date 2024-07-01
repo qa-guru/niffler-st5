@@ -9,10 +9,13 @@ import java.util.UUID;
 public interface UserRepository {
 
     static UserRepository getInstance() {
-        if ("sjdbs".equals(System.getProperty("repo"))) {
+        if ("sjdbc".equals(System.getProperty("repo"))) {
             return new UserRepositorySpringJdbc();
         }
-        return new UserRepositoryJdbc();
+        if ("jdbc".equals(System.getProperty("repo"))) {
+            return new UserRepositorySpringJdbc();
+        }
+        return new UserRepositoryHibernate();
     }
 
     UserAuthEntity createUserInAuth(UserAuthEntity User);
@@ -24,4 +27,8 @@ public interface UserRepository {
     UserEntity updateUserInUserdata(UserEntity User);
 
     Optional<UserEntity> findUserInUserdataById(UUID id);
+
+    Optional<UserEntity> findUserInUserdataByUsername(String username);
+
+    Optional<UserAuthEntity> findUserInAuthByUsername(String username);
 }

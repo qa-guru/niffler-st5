@@ -155,6 +155,29 @@ public class SpendRepositoryJdbc implements SpendRepository {
     }
 
     @Override
+    public CategoryEntity findByUsernameAndCategory(String username, String category) {
+        try (Connection connection = spendDateSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(
+                     "SELECT * FROM category WHERE username = ? AND category = ?")) {
+            ps.setString(1, username);
+            ps.setString(2, category);
+
+            ResultSet resultSet = ps.executeQuery();
+
+            CategoryEntity categoryEntity = new CategoryEntity();
+            resultSet.next(); {
+                categoryEntity.setId(UUID.fromString(resultSet.getString("id")));
+                categoryEntity.setCategory(resultSet.getString("category"));
+                categoryEntity.setUsername(resultSet.getString("username"));
+            }
+            return categoryEntity;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public void removeSpend(SpendEntity spend) {
         try (Connection connection = spendDateSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(

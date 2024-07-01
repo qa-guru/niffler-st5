@@ -8,10 +8,13 @@ import java.util.List;
 public interface SpendRepository {
 
     static SpendRepository getInstance() {
-        if ("sjdbs".equals(System.getProperty("repo"))) {
+        if ("sjdbc".equals(System.getProperty("repo"))) {
             return new SpendRepositorySpringJdbc();
         }
-        return new SpendRepositoryJdbc();
+        if ("jdbc".equals(System.getProperty("repo"))) {
+            return new SpendRepositoryJdbc();
+        }
+        return new SpendRepositoryHibernate();
     }
 
     CategoryEntity createCategory(CategoryEntity category);
@@ -27,4 +30,6 @@ public interface SpendRepository {
     SpendEntity editSpend(SpendEntity spend);
 
     List<SpendEntity> findAllByUsername(String username);
+
+    CategoryEntity findByUsernameAndCategory(String username, String category);
 }
