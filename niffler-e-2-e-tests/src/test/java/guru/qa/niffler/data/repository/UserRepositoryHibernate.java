@@ -45,17 +45,4 @@ public class UserRepositoryHibernate implements UserRepository {
         return Optional.ofNullable(udEm.find(UserEntity.class, id));
     }
 
-    @Override
-    public Optional<UserEntity> findUserInUserdataByUsername(String username) {
-        return Optional.ofNullable(udEm.createQuery("from UserEntity WHERE username = :username", UserEntity.class)
-                .setParameter("username", username)
-                .getSingleResult());
-    }
-
-    @Override
-    public Optional<UserAuthEntity> findUserInAuthByUsername(String username) {
-        return Optional.ofNullable(authEm.createQuery("from UserAuthEntity WHERE username = :username", UserAuthEntity.class)
-                .setParameter("username", username)
-                .getSingleResult());
-    }
 }
