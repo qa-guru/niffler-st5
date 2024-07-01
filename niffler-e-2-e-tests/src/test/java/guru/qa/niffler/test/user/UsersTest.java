@@ -46,7 +46,7 @@ public class UsersTest extends BaseWebTest {
 
         menu.logout();
 
-        step("API: пользователем 2 отклонить предложение", () -> {
+        step("API: пользователем 2 принять предложение", () -> {
             welcomePage.goToLogin();
             loginPage.login(usersTestLogins[1], "12345");
 
@@ -56,7 +56,7 @@ public class UsersTest extends BaseWebTest {
 
         menu.logout();
 
-        step("API: пользователем 3 принять предложение", () -> {
+        step("API: пользователем 3 отклонить предложение", () -> {
             welcomePage.goToLogin();
             loginPage.login(usersTestLogins[2], "12345");
 
