@@ -11,6 +11,7 @@ import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.pages.AuthPage;
 import guru.qa.niffler.pages.MainPage;
 import guru.qa.niffler.pages.StartPage;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +25,11 @@ public class SpendingTestHttp {
 
     static {
         Configuration.browserSize = "1920x1080";
+    }
+
+    @BeforeAll
+    public static void setRepository() {
+        System.setProperty("repo", "sjdbc");
     }
 
     @BeforeEach
@@ -57,10 +63,10 @@ public class SpendingTestHttp {
     void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
 
         MainPage mainPage = new MainPage();
-
         mainPage.clickCheckbox(spendJson.description())
                 .deleteSpending()
                 .checkSpendingsDeletedText()
                 .checkSpendingsCount(0);
+
     }
 }
