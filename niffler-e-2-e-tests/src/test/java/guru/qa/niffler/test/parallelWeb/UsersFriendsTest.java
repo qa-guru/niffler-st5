@@ -77,8 +77,8 @@ public class UsersFriendsTest extends BaseWebTest {
         menu.openFriendsPage();
         friendsPage.waitForPageLoaded();
         friendsPage.getPeopleContentTableWrapper().should(exist);
-        friendsPage.getSubmitInvitationBtn().should(exist);
-        friendsPage.getDeclineInvitationBtn().should(exist);
+        friendsPage.getPeopleTable().getSubmitInvitationBtn().should(exist);
+        friendsPage.getPeopleTable().getDeclineInvitationBtn().should(exist);
 
         menu.openPeoplePage();
         peoplePage.waitForPageLoaded();
@@ -96,8 +96,8 @@ public class UsersFriendsTest extends BaseWebTest {
         menu.openFriendsPage();
         friendsPage.waitForPageLoaded();
         friendsPage.getPeopleContentTableWrapper().should(exist);
-        friendsPage.getSubmitInvitationBtn().should(exist);
-        friendsPage.getDeclineInvitationBtn().should(exist);
+        friendsPage.getPeopleTable().getSubmitInvitationBtn().should(exist);
+        friendsPage.getPeopleTable().getDeclineInvitationBtn().should(exist);
 
         menu.openPeoplePage();
         peoplePage.waitForPageLoaded();
@@ -117,8 +117,8 @@ public class UsersFriendsTest extends BaseWebTest {
         friendsPage.waitForPageLoaded();
         friendsPage.getPeopleContentTableWrapper().should(exist);
 
-        friendsPage.getSubmitInvitationBtn().should(exist);
-        friendsPage.getDeclineInvitationBtn().should(exist);
+        friendsPage.getPeopleTable().getSubmitInvitationBtn().should(exist);
+        friendsPage.getPeopleTable().getDeclineInvitationBtn().should(exist);
 
         menu.openPeoplePage();
         peoplePage.waitForPageLoaded();
@@ -137,7 +137,7 @@ public class UsersFriendsTest extends BaseWebTest {
         menu.openPeoplePage();
         peoplePage.waitForPageLoaded();
         friendsPage.getPeopleContentTableWrapper().should(exist);
-        friendsPage.getFriends().find(text("You are friends")).should(exist);
+        friendsPage.getPeopleTable().getAllRows().find(text("You are friends")).should(exist);
     }
 
     @Test
@@ -148,7 +148,7 @@ public class UsersFriendsTest extends BaseWebTest {
         menu.openFriendsPage();
         friendsPage.waitForPageLoaded();
         friendsPage.getPeopleContentTableWrapper().should(exist);
-        friendsPage.getFriends().find(text("You are friends")).should(exist);
+        friendsPage.getPeopleTable().getAllRows().find(text("You are friends")).should(exist);
     }
 
     @Test
@@ -159,7 +159,7 @@ public class UsersFriendsTest extends BaseWebTest {
         menu.openFriendsPage();
         friendsPage.waitForPageLoaded();
         friendsPage.getPeopleContentTableWrapper().should(exist);
-        friendsPage.getFriends().find(text("You are friends")).should(exist);
+        friendsPage.getPeopleTable().getAllRows().find(text("You are friends")).should(exist);
     }
 
     //**************** Multiple users ********************//

@@ -2,6 +2,7 @@ package guru.qa.niffler.api;
 
 import guru.qa.niffler.model.*;
 import io.qameta.allure.Step;
+import lombok.SneakyThrows;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -80,6 +81,7 @@ public class GatewayApiClient extends ApiClient {
 
     @Step("Send REST POST('/api/invitations/send') request to niffler-gateway")
     @Nullable
+    @SneakyThrows
     public UserJson sendInvitation(String bearerToken, FriendJson friend) throws Exception {
         return gatewayApi.sendInvitation(bearerToken, friend)
                 .execute()

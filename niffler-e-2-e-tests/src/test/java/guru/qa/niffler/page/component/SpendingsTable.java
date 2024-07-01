@@ -6,7 +6,7 @@ import io.qameta.allure.Step;
 
 import java.util.List;
 
-import static guru.qa.niffler.condition.SpendsCondition.spendsInTable;
+import static guru.qa.niffler.condition.spends.SpendsCondition.spendsInTable;
 
 public class SpendingsTable extends BaseComponent<SpendingsTable> {
     /**

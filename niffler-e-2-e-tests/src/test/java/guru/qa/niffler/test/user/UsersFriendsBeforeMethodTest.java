@@ -1,4 +1,4 @@
-package guru.qa.niffler.test.user.friends;
+package guru.qa.niffler.test.user;
 
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;

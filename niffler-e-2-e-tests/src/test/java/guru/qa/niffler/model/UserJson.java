@@ -1,12 +1,16 @@
 package guru.qa.niffler.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.javafaker.Faker;
 
+import java.util.UUID;
+
 // Указывает, что поля с null-значениями не должны включаться в JSON
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record UserJson(
         @JsonProperty("username")
         String username,

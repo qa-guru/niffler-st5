@@ -1,4 +1,4 @@
-package guru.qa.niffler.condition;
+package guru.qa.niffler.condition.users;
 
 import com.codeborne.selenide.ex.UIAssertionError;
 import com.codeborne.selenide.impl.CollectionSource;
@@ -7,19 +7,18 @@ import javax.annotation.Nullable;
 
 import static java.lang.System.lineSeparator;
 
-public class SpendMismatchException extends UIAssertionError {
-    public SpendMismatchException(String message, CollectionSource collection,
-                                  String expectedSpend, String actualElementText,
-                                  @Nullable String explanation, long timeoutMs,
-                                  @Nullable Throwable cause) {
+public class UserMismatchException extends UIAssertionError {
+    public UserMismatchException(String message, CollectionSource collection,
+                                 String expectedUserText, String actualElementText,
+                                 @Nullable String explanation, long timeoutMs, @Nullable Exception cause) {
         super(
                 collection.driver(),
                 message +
                         lineSeparator() + "Actual: " + actualElementText +
-                        lineSeparator() + "Expected: " + expectedSpend +
+                        lineSeparator() + "Expected: " + expectedUserText +
                         (explanation == null ? "" : lineSeparator() + "Because: " + explanation) +
                         lineSeparator() + "Collection: " + collection.description(),
-                expectedSpend, actualElementText,
+                expectedUserText, actualElementText,
                 cause,
                 timeoutMs);
     }

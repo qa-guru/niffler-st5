@@ -1,4 +1,4 @@
-package guru.qa.niffler.condition;
+package guru.qa.niffler.condition.spends;
 
 import com.codeborne.selenide.WebElementsCondition;
 import guru.qa.niffler.model.SpendJson;
