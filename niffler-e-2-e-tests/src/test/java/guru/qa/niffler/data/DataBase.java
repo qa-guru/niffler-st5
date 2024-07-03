@@ -2,6 +2,7 @@ package guru.qa.niffler.data;
 
 import guru.qa.niffler.config.Config;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 @RequiredArgsConstructor //объявляем конструктор для работы полей
 public enum DataBase {
@@ -19,5 +20,16 @@ public enum DataBase {
                 CFG.dbHost(),
                 CFG.dbPort()
         );
+    }
+
+
+    /**
+     * Модифицирует JDBC URL, полученный из getJdbcUrl(), добавляя префикс "jdbc:p6spy:",
+     * чтобы P6Spy могла перехватывать и логировать все SQL-запросы
+     * @return JDBC URL, который может быть использован с библиотекой P6Spy
+     */
+    public String getP6spyUrl() {
+        return "jdbc:p6spy:" + StringUtils.substringAfter(getJdbcUrl(), ":");
+        // P6Spy - инструмент для мониторинга и логирования SQL-запросов, выполняемых приложением.
     }
 }

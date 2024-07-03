@@ -1,5 +1,6 @@
 package guru.qa.niffler.data.jdbc;
 
+import com.p6spy.engine.spy.P6DataSource;
 import guru.qa.niffler.data.DataBase;
 import org.postgresql.ds.PGSimpleDataSource;
 
@@ -7,7 +8,10 @@ import javax.sql.DataSource;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-//enum - синглтон
+/**
+ * Отвечает за предоставление объектов DataSource для различных баз данных, определенных в перечислении DataBase.
+ */
+//enum - синглтон (в приложении будет существовать только один экземпляр этого класса)
 public enum DataSourceProvider {
     INSTANCE;
 
@@ -23,10 +27,21 @@ public enum DataSourceProvider {
             pgDataSource.setURL(db.getJdbcUrl());
             pgDataSource.setUser("postgres");
             pgDataSource.setPassword("secret");
-            return pgDataSource;
+            return new P6DataSource(pgDataSource);
+
+            /* использование P6DataSource вместо обычного DataSource позволяет получить дополнительные возможности
+             по мониторингу и отладке работы приложения с базами данных без необходимости вносить изменения в основной
+              код приложения */
         });
     }
 
+    /**
+     * Метод-обертка вокруг computeDataSource().
+     * Позволяет получить объект DataSource для указанной базы данных db без необходимости создавать экземпляр класса DataSourceProvider
+     *
+     * @param db
+     * @return
+     */
     public static DataSource dataSource(DataBase db) {
         return DataSourceProvider.INSTANCE.computeDataSource(db);
     }

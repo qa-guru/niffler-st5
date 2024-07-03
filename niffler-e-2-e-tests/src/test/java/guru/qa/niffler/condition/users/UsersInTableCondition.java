@@ -112,8 +112,7 @@ public class UsersInTableCondition extends WebElementsCondition {
             firstnameResult = td.get(2).getText().equals(
                     formatNameSurname(String.format("%s %S", expectedUser.firstname(), expectedUser.surname())));
         } else {
-            firstnameResult = td.get(2).getText().equals(
-                    String.format(expectedUser.firstname()));
+            firstnameResult = td.get(2).getText().equals((expectedUser.firstname()));
         }
 
         boolean friendState;
@@ -181,7 +180,7 @@ public class UsersInTableCondition extends WebElementsCondition {
             if (user.surname() != null) {
                 uiUserName = String.format("%s %S", user.firstname(), user.surname());
             } else {
-                uiUserName = String.format(user.firstname());
+                uiUserName = user.firstname();
             }
 
             sb.append("— ")
@@ -209,6 +208,8 @@ public class UsersInTableCondition extends WebElementsCondition {
 
     // форматирует строку "Имя ФАМИЛИЯ" в "Имя Фамилия"
     public static String formatNameSurname(String input) {
+        if (input == null) return "";
+
         String[] parts = input.split(" ");
         StringBuilder result = new StringBuilder();
 
