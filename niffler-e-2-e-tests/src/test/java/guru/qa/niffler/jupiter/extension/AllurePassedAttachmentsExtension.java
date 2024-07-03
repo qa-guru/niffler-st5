@@ -49,6 +49,7 @@ public class AllurePassedAttachmentsExtension implements SuiteExtension {
             for (Path allureResult : allureResults) {
                 JsonNode jsonResult = om.readTree(Files.newInputStream(allureResult));
                 if (jsonResult.get("status").asText().equals(Status.PASSED.value())
+                        && jsonResult.get("testCaseName") != null
                         && !jsonResult.get("testCaseName").asText().equals(caseName)) {
                     ((ObjectNode) jsonResult).putArray("attachments");
                     Files.write(
