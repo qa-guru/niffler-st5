@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Перехватывает и форматирует SQL-запросы, выполняемые приложением, и прикрепляет их к отчетам Allure.
  */
-public class AllureAppender extends StdoutLogger {
+public class AllureSqlAppender extends StdoutLogger {
 
     /**
      * В контексте библиотеки Allure, шаблоны используются для определения формата и внешнего вида вложений (attachments) в отчетах.
