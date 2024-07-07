@@ -2,7 +2,6 @@ package guru.qa.niffler.jupiter.extension;
 
 import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.data.repository.SpendRepository;
-import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
 
 public class SpendExtensionJdbc extends AbstractSpendExtension {

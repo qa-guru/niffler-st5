@@ -1,7 +1,6 @@
 package guru.qa.niffler.jupiter.extension;
 
 import guru.qa.niffler.api.SpendApiClient;
-import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
 
 public class ApiSpendExtension extends AbstractSpendExtension {
