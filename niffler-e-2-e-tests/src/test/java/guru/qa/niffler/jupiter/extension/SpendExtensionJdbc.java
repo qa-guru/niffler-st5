@@ -10,8 +10,8 @@ public class SpendExtensionJdbc extends AbstractSpendExtension {
     private final SpendRepository spendRepository = SpendRepository.getInstance();
 
     @Override
-    protected SpendJson createSpend(SpendJson spend, CategoryJson category) {
-        SpendEntity spendEntity = SpendEntity.fromJson(spend, category);
+    protected SpendJson createSpend(SpendJson spend) {
+        SpendEntity spendEntity = SpendEntity.fromJson(spend);
         return SpendJson.fromEntity(spendRepository.createSpend(spendEntity));
     }
 

@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 
 
-public class MainPage {
+public class MainPage extends BasePage<MainPage> {
 
     private final ElementsCollection spendingRows = $(".spendings-table tbody")
             .$$("tr");
@@ -19,7 +19,7 @@ public class MainPage {
     private final SelenideElement friendsButton = $("a[href*='friends']");
     private final SelenideElement peopleButton = $("a[href*='people']");
     private final SelenideElement logOutButton = $(".header__logout");
-
+    private final ReactCalendar calendar = new ReactCalendar();
     public MainPage openPage() {
 
         Selenide.open("http://127.0.0.1:3000/main");
@@ -66,5 +66,9 @@ public class MainPage {
         logOutButton.click();
     }
 
+    @Override
+    public MainPage checkPageLoaded() {
+        return null;
+    }
 }
 

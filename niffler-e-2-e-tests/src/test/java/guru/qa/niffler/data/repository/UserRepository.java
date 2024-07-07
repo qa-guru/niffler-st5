@@ -9,10 +9,11 @@ import java.util.UUID;
 public interface UserRepository {
 
     static UserRepository getInstance() {
-        if ("sjdbc".equals(System.getProperty("repo"))) {
+        String repo = System.getProperty("repo");
+        if ("sjdbc".equals(repo)) {
             return new UserRepositorySpringJdbc();
         }
-        if ("jdbc".equals(System.getProperty("repo"))) {
+        if ("jdbc".equals(repo)) {
             return new UserRepositorySpringJdbc();
         }
         return new UserRepositoryHibernate();

@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 @ExtendWith(DbCreateUserExtension.class)
-public class LoginTest {
+public class LoginTest extends BaseWebTest{
 
     @Test
     @TestUser
@@ -21,10 +21,10 @@ public class LoginTest {
         StartPage startPage = new StartPage();
         AuthPage authPage = new AuthPage();
 
-        Selenide.open("http://127.0.0.1:3000/");
+        Selenide.open(CFG.frontUrl() + "/login");
         startPage.clickLoginButton();
         authPage.login(userJson.username(), userJson.testData().password());
-        Selenide.open("http://127.0.0.1:3000/main");
+        Selenide.open(CFG.frontUrl() + "/main");
         $("a[href*='redirect']").should(visible);
 
     }

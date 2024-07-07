@@ -8,10 +8,11 @@ import java.util.List;
 public interface SpendRepository {
 
     static SpendRepository getInstance() {
-        if ("sjdbc".equals(System.getProperty("repo"))) {
+        String repo = System.getProperty("repo");
+        if ("sjdbc".equals(repo)) {
             return new SpendRepositorySpringJdbc();
         }
-        if ("jdbc".equals(System.getProperty("repo"))) {
+        if ("jdbc".equals(repo)) {
             return new SpendRepositoryJdbc();
         }
         return new SpendRepositoryHibernate();

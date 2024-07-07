@@ -44,7 +44,11 @@ public abstract class AbstractSpendExtension implements BeforeEachCallback, Afte
                                     spend.description(),
                                     category.username()
                             );
-                            extensionContext.getStore(NAMESPACE).put(extensionContext.getUniqueId(), createSpend(spendJson, category));
+                            try {
+                                extensionContext.getStore(NAMESPACE).put(extensionContext.getUniqueId(), createSpend(spendJson));
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
                         }
                 );
     }
@@ -70,7 +74,7 @@ public abstract class AbstractSpendExtension implements BeforeEachCallback, Afte
         return extensionContext.getStore(NAMESPACE).get(extensionContext.getUniqueId());
     }
 
-    protected abstract SpendJson createSpend(SpendJson spend, CategoryJson category);
+    protected abstract SpendJson createSpend(SpendJson spend) throws Exception;
 
 
     protected abstract void removeSpend(SpendJson json);
