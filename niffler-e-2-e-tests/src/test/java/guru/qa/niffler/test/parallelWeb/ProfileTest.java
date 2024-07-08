@@ -1,7 +1,7 @@
 package guru.qa.niffler.test.parallelWeb;
 
 import com.codeborne.selenide.Selenide;
-import guru.qa.niffler.jupiter.annotation.TestUser;
+import guru.qa.niffler.jupiter.annotation.DbUser;
 import guru.qa.niffler.jupiter.extension.DbCreateUserExtension;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.CurrencyValues;
@@ -35,7 +35,7 @@ public class ProfileTest extends BaseWebTest {
     }
 
     @Test
-    @TestUser
+    @DbUser
     @DisplayName("Проверка загрузки аватара")
     void setNewAvatarTest(UserJson userJson) {
         loginPage.login(userJson.username(), userJson.testData().password());
@@ -59,7 +59,7 @@ public class ProfileTest extends BaseWebTest {
     }
 
     @Test
-    @TestUser
+    @DbUser
     @DisplayName("Проверка создания категории")
     void createCategoryTest(UserJson userJson) {
 
@@ -81,7 +81,7 @@ public class ProfileTest extends BaseWebTest {
     }
 
     @Test
-    @TestUser
+    @DbUser
     @DisplayName("Проверка обновления данных профайла")
     void updateProfileTest(UserJson userJson) {
         loginPage.login(userJson.username(), userJson.testData().password());

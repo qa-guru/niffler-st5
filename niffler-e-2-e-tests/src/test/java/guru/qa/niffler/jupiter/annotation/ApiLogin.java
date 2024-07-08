@@ -8,7 +8,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface ApiLogin {
-    String username();
+    String username() default "";
 
-    String password();
+    String password() default "";
+
+    DbUser user() default @DbUser;
 }

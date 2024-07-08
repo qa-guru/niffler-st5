@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
  * Расширение JUnit Jupiter для управления контекстом теста.
  * Сохраняет контекст теста в ThreadLocal для доступа из любого места.
  */
-public class ContextExtension implements BeforeEachCallback, AfterEachCallback {
+public class ContextHolderExtension implements BeforeEachCallback, AfterEachCallback {
 
     /**
      * Сохраняет контекст теста перед каждым тестовым методом.

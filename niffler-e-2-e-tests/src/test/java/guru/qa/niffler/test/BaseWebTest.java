@@ -33,36 +33,36 @@ public class BaseWebTest {
         System.setProperty("repo", "hibernate");
         UserRepository userRepository = UserRepository.getInstance();
 
-        Arrays.stream(usersTestLogins).forEach(user -> {
-            try {
-                userRepository.findUserInUserData(user);
-                return;
-            } catch (Exception ignore) {
-            }
-
-            AuthorityEntity read = new AuthorityEntity();
-            read.setAuthority(Authority.read);
-            AuthorityEntity write = new AuthorityEntity();
-            write.setAuthority(Authority.write);
-
-            UserAuthEntity userToCommit = new UserAuthEntity();
-            userToCommit.setUsername(user);
-
-            userToCommit.setPassword("12345");
-            userToCommit.setEnabled(true);
-            userToCommit.setAccountNonExpired(true);
-            userToCommit.setAccountNonLocked(true);
-            userToCommit.setCredentialsNonExpired(true);
-            userToCommit.addAuthorities(read, write);
-
-            userRepository.createUserInAuth(userToCommit);
-
-            UserEntity userEntity = new UserEntity();
-            userEntity.setUsername((user));
-            userEntity.setFirstname((user + "Name"));
-            userEntity.setCurrency(CurrencyValues.RUB);
-            userRepository.createUserInUserData(userEntity);
-        });
+//        Arrays.stream(usersTestLogins).forEach(user -> {
+//            try {
+//                userRepository.findUserInUserData(user);
+//                return;
+//            } catch (Exception ignore) {
+//            }
+//
+//            AuthorityEntity read = new AuthorityEntity();
+//            read.setAuthority(Authority.read);
+//            AuthorityEntity write = new AuthorityEntity();
+//            write.setAuthority(Authority.write);
+//
+//            UserAuthEntity userToCommit = new UserAuthEntity();
+//            userToCommit.setUsername(user);
+//
+//            userToCommit.setPassword("12345");
+//            userToCommit.setEnabled(true);
+//            userToCommit.setAccountNonExpired(true);
+//            userToCommit.setAccountNonLocked(true);
+//            userToCommit.setCredentialsNonExpired(true);
+//            userToCommit.addAuthorities(read, write);
+//
+//            userRepository.createUserInAuth(userToCommit);
+//
+//            UserEntity userEntity = new UserEntity();
+//            userEntity.setUsername((user));
+//            userEntity.setFirstname((user + "Name"));
+//            userEntity.setCurrency(CurrencyValues.RUB);
+//            userRepository.createUserInUserData(userEntity);
+//        });
 
     }
 }

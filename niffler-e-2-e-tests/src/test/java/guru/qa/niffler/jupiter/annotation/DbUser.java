@@ -8,6 +8,6 @@ import java.lang.annotation.Target;
 // Атрибут для пометки параметров тестовых методов
 @Target(ElementType.METHOD) // Указывает, что этот атрибут может быть применен только к параметрам методов
 @Retention(RetentionPolicy.RUNTIME) // Указывает, что этот атрибут будет доступен на этапе выполнения
-public @interface TestUser {
+public @interface DbUser {
     // Этот атрибут не имеет свойств
 }

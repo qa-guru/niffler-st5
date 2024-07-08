@@ -5,7 +5,7 @@ import guru.qa.niffler.data.repository.SpendRepository;
 import guru.qa.niffler.data.repository.UserRepository;
 import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.jupiter.annotation.Spend;
-import guru.qa.niffler.jupiter.annotation.TestUser;
+import guru.qa.niffler.jupiter.annotation.DbUser;
 import guru.qa.niffler.jupiter.annotation.meta.JdbcTest;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
@@ -68,7 +68,7 @@ public class HibernateTest {
     }
 
     @DisplayName("Создание User через запрос в БД (для дз 'Hibernate')")
-    @TestUser
+    @DbUser
     @Test
     void userTest(UserJson userJson) {
         loginPage.login(userJson.username(), userJson.testData().password());

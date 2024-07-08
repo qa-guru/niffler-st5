@@ -5,7 +5,7 @@ import guru.qa.niffler.data.entity.CategoryEntity;
 import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.data.repository.*;
-import guru.qa.niffler.jupiter.annotation.TestUser;
+import guru.qa.niffler.jupiter.annotation.DbUser;
 import guru.qa.niffler.jupiter.extension.DbCreateUserExtension;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.UserJson;
@@ -31,7 +31,7 @@ public class UserTest extends BaseWebTest {
     Faker faker = new Faker();
 
     @Test
-    @TestUser
+    @DbUser
     void loginTest(UserJson userJson) {
         open(CFG.frontUrl());
         welcomePage.goToLogin();
@@ -40,7 +40,7 @@ public class UserTest extends BaseWebTest {
     }
 
     @Test
-    @TestUser
+    @DbUser
     void updateUserInAuthTest(UserJson userJson) {
         open(CFG.frontUrl());
         welcomePage.goToLogin();

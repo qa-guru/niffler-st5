@@ -1,6 +1,6 @@
 package guru.qa.niffler.test.parallelWeb;
 
-import guru.qa.niffler.jupiter.annotation.TestUser;
+import guru.qa.niffler.jupiter.annotation.DbUser;
 import guru.qa.niffler.jupiter.extension.DbCreateUserExtension;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.CurrencyValues;
@@ -29,7 +29,7 @@ public class SpendingsTest extends BaseWebTest {
     }
 
     @Test
-    @TestUser
+    @DbUser
     @DisplayName("Проверка списка трат")
     void spendsListTest(UserJson userJson) {
 
@@ -61,7 +61,7 @@ public class SpendingsTest extends BaseWebTest {
     }
 
     @Test
-    @TestUser
+    @DbUser
     @DisplayName("Проверка удаления траты")
     void deletedSpendingTest(UserJson userJson) {
 

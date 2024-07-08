@@ -1,6 +1,6 @@
 package guru.qa.niffler.test.user;
 
-import guru.qa.niffler.jupiter.annotation.TestUser;
+import guru.qa.niffler.jupiter.annotation.DbUser;
 import guru.qa.niffler.jupiter.extension.BrowserExtension;
 import guru.qa.niffler.jupiter.extension.DbCreateUserExtension;
 import guru.qa.niffler.model.FriendJson;
@@ -26,7 +26,7 @@ import static io.qameta.allure.Allure.step;
 public class UsersTest extends BaseWebTest {
 
     @Test
-    @TestUser
+    @DbUser
     public void peopleTest(UserJson userJson) {
         open(CFG.frontUrl());
         welcomePage.goToLogin();

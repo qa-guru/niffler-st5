@@ -31,4 +31,5 @@ public class DbCreateUserExtension extends AbstractCreateUserExtension {
         }
         return userRepository;
     }
+
 }

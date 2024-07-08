@@ -3,12 +3,13 @@ package guru.qa.niffler.jupiter.extension;
 import guru.qa.niffler.api.AuthApiClient;
 import guru.qa.niffler.api.cookie.ThreadSafeCookieStore;
 import guru.qa.niffler.jupiter.annotation.ApiLogin;
+import guru.qa.niffler.model.UserJson;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.platform.commons.support.AnnotationSupport;
 
-import static guru.qa.niffler.jupiter.extension.ContextExtension.context;
+import static guru.qa.niffler.jupiter.extension.ContextHolderExtension.context;
 
 /**
  * Расширение JUnit Jupiter для автоматической авторизации в API перед каждым тестом.
@@ -31,7 +32,14 @@ public class ApiLoginExtension implements BeforeEachCallback, AfterEachCallback 
                 context.getRequiredTestMethod(),
                 ApiLogin.class
         ).ifPresent(annotation -> {
-            authApiClient.doLogin(annotation.username(), annotation.password());
+            if (!annotation.username().isEmpty()) {
+                authApiClient.doLogin(annotation.username(), annotation.password());
+            } else if (annotation.user() != null) {
+                UserJson userJson = context.getStore(AbstractCreateUserExtension.NAMESPACE).get(context.getUniqueId(), UserJson.class);
+                authApiClient.doLogin(userJson.username(), userJson.testData().password());
+            } else {
+                throw new RuntimeException("Can`t api-login. User not found.");
+            }
         });
     }
 

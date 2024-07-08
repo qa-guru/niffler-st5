@@ -1,6 +1,7 @@
 package guru.qa.niffler.jupiter.extension;
 
-import guru.qa.niffler.jupiter.annotation.TestUser;
+import guru.qa.niffler.jupiter.annotation.ApiLogin;
+import guru.qa.niffler.jupiter.annotation.DbUser;
 import guru.qa.niffler.model.UserJson;
 import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
@@ -13,13 +14,24 @@ public abstract class AbstractCreateUserExtension implements BeforeEachCallback,
     // Метод, вызываемый перед каждым тестом
     @Override
     public void beforeEach(ExtensionContext context) {
-        // Ищем аннотацию @TestUser у метода
-        AnnotationSupport.findAnnotation(context.getRequiredTestMethod(), TestUser.class)
+        // Ищем аннотацию @DbUser у метода
+        AnnotationSupport.findAnnotation(context.getRequiredTestMethod(), DbUser.class)
                 .ifPresent(testUser -> {
                     // Создаем случайного пользователя
                     UserJson user = UserJson.randomUser();
                     // Сохраняем пользователя в контексте расширения, используя уникальный идентификатор теста
                     context.getStore(NAMESPACE).put(context.getUniqueId(), createUser(user));
+                });
+
+        // Ищем аннотацию @ApiLogin у метода и аннотацию @DbUser у аннотации @ApiLogin
+        AnnotationSupport.findAnnotation(context.getRequiredTestMethod(), ApiLogin.class)
+                .ifPresent(apiLogin -> {
+                    if (apiLogin.user() != null) {
+                        // Создаем случайного пользователя
+                        UserJson user = UserJson.randomUser();
+                        // Сохраняем пользователя в контексте расширения, используя уникальный идентификатор теста
+                        context.getStore(NAMESPACE).put(context.getUniqueId(), createUser(user));
+                    }
                 });
     }
 
@@ -41,4 +53,6 @@ public abstract class AbstractCreateUserExtension implements BeforeEachCallback,
 
     // Абстрактный метод для создания пользователя, реализуемый в конкретных расширениях
     protected abstract UserJson createUser(UserJson user);
+
 }
+
