@@ -58,9 +58,6 @@ public class UserAuthEntity implements Serializable {
         // Создание сущности UserAuthEntity
         UserAuthEntity userAuthEntity = new UserAuthEntity();
 
-        read.setUser(userAuthEntity);
-        write.setUser(userAuthEntity);
-
         userAuthEntity.setUsername(userJson.username());
         userAuthEntity.setPassword(userJson.testData().password());
         userAuthEntity.setEnabled(true);

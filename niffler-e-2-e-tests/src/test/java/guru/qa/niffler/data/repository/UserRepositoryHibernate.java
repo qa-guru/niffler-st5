@@ -25,6 +25,8 @@ public class UserRepositoryHibernate implements UserRepository {
     public UserAuthEntity createUserInAuth(UserAuthEntity user) {
         // Шифруем пароль пользователя
         user.setPassword(PASSWORD_ENCODER.encode(user.getPassword()));
+        user.getAuthorities().get(0).setUser(user);
+        user.getAuthorities().get(1).setUser(user);
         // Persist - сохраняем пользователя в базе данных авторизации
         authEm.persist(user);
         // Возвращаем созданного пользователя
