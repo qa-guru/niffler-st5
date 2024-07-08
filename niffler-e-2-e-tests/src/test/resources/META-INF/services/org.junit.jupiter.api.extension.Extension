@@ -1,3 +1,4 @@
+guru.qa.niffler.jupiter.extension.ContextExtension
 guru.qa.niffler.jupiter.extension.AllureLogsExtension
 guru.qa.niffler.jupiter.extension.AllurePassedAttachmentsExtension
 

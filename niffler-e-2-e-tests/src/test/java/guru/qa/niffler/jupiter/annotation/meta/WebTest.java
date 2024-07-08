@@ -14,7 +14,8 @@ import java.lang.annotation.Target;
         BrowserExtension.class,
         ApiCategoryExtension.class,
         ApiSpendExtension.class,
-        UserQueueExtension.class
+        UserQueueExtension.class,
+        ApiLoginExtension.class
 })
 public @interface WebTest {
 }

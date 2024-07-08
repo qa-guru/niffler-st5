@@ -36,7 +36,7 @@ public class AllureLogsExtension implements SuiteExtension {
     public void afterSuite() {
         String caseId = UUID.randomUUID().toString();
         AllureLifecycle lifecycle = Allure.getLifecycle();
-        lifecycle.scheduleTestCase(new TestResult().setUuid(caseId).setName(caseName).setStatus(PASSED));
+        lifecycle.scheduleTestCase(new TestResult().setUuid(caseId).setName(caseName));
         lifecycle.startTestCase(caseId);
 
         lifecycle.addAttachment("auth log", "text/html", ".log", Files.newInputStream(
