@@ -1,14 +1,11 @@
 package guru.qa.niffler.jupiter.extension;
 
 import guru.qa.niffler.api.SpendApi;
-import guru.qa.niffler.data.entity.CategoryEntity;
-import guru.qa.niffler.data.entity.SpendEntity;
 import guru.qa.niffler.jupiter.annotation.Spend;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import org.junit.jupiter.api.extension.ExtensionContext;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
@@ -38,7 +35,7 @@ public class SpendHttpExtension extends AbstractSpendExtension {
 
     // Метод для создания объекта расхода
     @Override
-    protected SpendJson createSpend(ExtensionContext extensionContext, Spend spend, CategoryJson category) {
+    protected SpendJson createSpend(Spend spend, CategoryJson category) {
         // Создаем экземпляр API для создания расходов
         SpendApi spendApi = retrofit.create(SpendApi.class);
 

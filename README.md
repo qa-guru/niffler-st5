@@ -26,6 +26,10 @@
 - [Gradle 8.6](https://docs.gradle.org/8.6/release-notes.html)
 - [GHA](https://docs.github.com/en/actions)
 - And much more:)
+---
+- PS: в Idea добавлен Amplicode-plugin (в проект были добавлены файлы конфигурации)
+- после установки плагина потребовалось снова указать конфигурацию для локального запуска -Dspring.profiles.active=local 
+---
 
 Рекомендуемые материалы к просмотру (прочтению):
 

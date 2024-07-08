@@ -38,6 +38,7 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.h2database:h2:2.2.224'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
 jib {

@@ -12,7 +12,7 @@ public class ApiCategoryExtension extends AbstractCategoryExtension {
     @Override
     @SneakyThrows
     protected CategoryJson createCategory(Category category) {
-        CategoryJson categoryJson = new CategoryJson(null, category.username(), category.category());
+        CategoryJson categoryJson = new CategoryJson(null, category.category(), category.username());
         return spendApiClient.createCategory(categoryJson);
     }
 

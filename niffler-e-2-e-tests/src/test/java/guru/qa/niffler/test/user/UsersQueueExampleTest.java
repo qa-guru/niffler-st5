@@ -1,4 +1,4 @@
-package guru.qa.niffler.test.user.common;
+package guru.qa.niffler.test.user;
 
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.jupiter.extension.UserQueueExtension;

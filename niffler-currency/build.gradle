@@ -21,6 +21,7 @@ dependencies {
     runtimeOnly "org.postgresql:postgresql:${project.ext.postgresDriverVersion}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
 jib {

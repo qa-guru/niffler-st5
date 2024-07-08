@@ -6,7 +6,6 @@ import guru.qa.niffler.data.repository.SpendRepository;
 import guru.qa.niffler.jupiter.annotation.Spend;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
-import org.junit.jupiter.api.extension.ExtensionContext;
 
 import static guru.qa.niffler.utils.DateHelper.convertStringToDate;
 
@@ -15,7 +14,7 @@ public class SpendJdbcExtension extends AbstractSpendExtension {
     private final ThreadLocal<SpendRepository> spendRepositoryThreadLocal = new ThreadLocal<>();
 
     @Override
-    protected SpendJson createSpend(ExtensionContext context, Spend spend, CategoryJson category) {
+    protected SpendJson createSpend(Spend spend, CategoryJson category) {
         SpendEntity spendEntity = new SpendEntity();
         spendEntity.setSpendDate(convertStringToDate(spend.spendDate()));
         spendEntity.setCategory(CategoryEntity.fromJson(category));

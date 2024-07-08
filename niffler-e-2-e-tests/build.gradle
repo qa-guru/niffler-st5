@@ -173,6 +173,6 @@ test {
     testLogging.showStandardStreams = true
     testLogging.exceptionFormat = 'full'
     useJUnitPlatform {
-        includeTags "ParallelWebTests"
+//        includeTags "ParallelWebTests"
     }
 }

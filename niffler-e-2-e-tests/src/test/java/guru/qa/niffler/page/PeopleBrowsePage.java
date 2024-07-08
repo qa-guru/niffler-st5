@@ -3,6 +3,7 @@ package guru.qa.niffler.page;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import guru.qa.niffler.page.component.PeopleTable;
 import io.qameta.allure.Step;
 import lombok.Getter;
 
@@ -17,6 +18,9 @@ public class PeopleBrowsePage extends BasePage<PeopleBrowsePage> {
     private final ElementsCollection friends = $(".table tbody").$$("tr");
     private final SelenideElement submitInvitationBtn = $("div[data-tooltip-id='submit-invitation']");
     private final SelenideElement declineInvitationBtn = $("div[data-tooltip-id='decline-invitation']");
+
+    @Getter
+    private final PeopleTable peopleTable = new PeopleTable($(".table"));
 
     @Step("Check that page is loaded")
     @Override
