@@ -69,7 +69,6 @@ public interface AuthApi {
     @POST("oauth2/token")
     @FormUrlEncoded
     Call<TokenJson> token(
-            @Header("Authorization") String basicAuthorizationHeader,
             @Field("code") String code,
             @Field(value = "redirect_uri", encoded = true) String redirectUri,
             @Field("code_verifier") String codeVerifier,

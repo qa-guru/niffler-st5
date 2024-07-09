@@ -22,7 +22,6 @@ export const Redirect = ({}) => {
         if (searchParams?.get('code')) {
             const code = searchParams?.get('code');
             const client = 'client';
-            const secret = 'secret';
             const verifier = sessionStorage.getItem('codeVerifier');
             const url = 'oauth2/token';
 

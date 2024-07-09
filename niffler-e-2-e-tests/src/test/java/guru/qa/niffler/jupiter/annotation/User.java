@@ -5,13 +5,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface ApiLogin {
+public @interface User {
 
-  TestUser user() default @TestUser(fake = true);
+  Point value() default Point.INNER;
 
-  String username() default "";
-
-  String password() default "";
+  enum Point {
+    INNER, OUTER
+  }
 }

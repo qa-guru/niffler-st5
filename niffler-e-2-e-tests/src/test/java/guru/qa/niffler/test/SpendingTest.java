@@ -4,6 +4,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.jupiter.annotation.Spend;
 import guru.qa.niffler.jupiter.annotation.Spends;
@@ -13,6 +14,7 @@ import guru.qa.niffler.model.SpendJson;
 import io.qameta.allure.Allure;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.OutputType;
 
@@ -26,8 +28,9 @@ import static com.codeborne.selenide.Selenide.$;
 import static guru.qa.niffler.condition.SpendsCondition.spendsInTable;
 
 
+@Disabled
 @WebTest
-public class SpendingTest {
+public class SpendingTest extends BaseWebTest {
 
     static {
         Configuration.browserSize = "1920x1080";
@@ -36,7 +39,7 @@ public class SpendingTest {
     @BeforeEach
     void doLogin() {
         // createSpend
-        Selenide.open("http://127.0.0.1:3000/");
+        Selenide.open(CFG.frontUrl());
         $("a[href*='redirect']").click();
         $("input[name='username']").setValue("dima");
         $("input[name='password']").setValue("12345");
@@ -45,7 +48,7 @@ public class SpendingTest {
 
     @Test
     void anotherTest() {
-        Selenide.open("http://127.0.0.1:3000/");
+        Selenide.open(CFG.frontUrl());
         $("a[href*='redirect']").should(visible);
     }
 

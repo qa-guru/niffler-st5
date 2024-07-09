@@ -168,8 +168,6 @@ services:
     depends_on:
       frontend.niffler.dc:
         condition: service_started
-    volumes:
-      - allure-artifacts:/niffler/niffler-e-2-e-tests/build/allure-results/
     networks:
       - test-network
     dns_search: .

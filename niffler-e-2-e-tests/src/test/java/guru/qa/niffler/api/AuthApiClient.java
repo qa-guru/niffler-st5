@@ -48,7 +48,6 @@ public class AuthApiClient extends ApiClient {
         ).execute();
 
         TokenJson response = authApi.token(
-                "Basic " + Base64.getEncoder().encodeToString("client:secret".getBytes(StandardCharsets.UTF_8)),
                 ApiLoginExtension.getCode(),
                 CFG.frontUrl() + "/authorized", //
                 codeVerifier,

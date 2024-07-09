@@ -49,8 +49,6 @@ public class NifflerAuthServiceConfig {
     private final KeyManager keyManager;
     private final String nifflerFrontUri;
     private final String nifflerAuthUri;
-    private final String clientId;
-    private final String clientSecret;
     private final CorsCustomizer corsCustomizer;
     private final String serverPort;
     private final String defaultHttpsPort = "443";
@@ -60,16 +58,12 @@ public class NifflerAuthServiceConfig {
     public NifflerAuthServiceConfig(KeyManager keyManager,
                                     @Value("${niffler-front.base-uri}") String nifflerFrontUri,
                                     @Value("${niffler-auth.base-uri}") String nifflerAuthUri,
-                                    @Value("${oauth2.client-id}") String clientId,
-                                    @Value("${oauth2.client-secret}") String clientSecret,
                                     @Value("${server.port}") String serverPort,
                                     CorsCustomizer corsCustomizer,
                                     Environment environment) {
         this.keyManager = keyManager;
         this.nifflerFrontUri = nifflerFrontUri;
         this.nifflerAuthUri = nifflerAuthUri;
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
         this.serverPort = serverPort;
         this.corsCustomizer = corsCustomizer;
         this.environment = environment;
@@ -123,23 +117,21 @@ public class NifflerAuthServiceConfig {
 
     @Bean
     public RegisteredClientRepository registeredClientRepository() {
-        RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId(clientId)
-                .clientSecret(clientSecret)
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+        RegisteredClient publicClient = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId("client")
+                .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .redirectUri(nifflerFrontUri + "/authorized")
                 .scope(OidcScopes.OPENID)
+                .scope(OidcScopes.PROFILE)
                 .clientSettings(ClientSettings.builder()
-                        .requireAuthorizationConsent(true).build())
-                .tokenSettings(TokenSettings.builder()
-                        .accessTokenTimeToLive(Duration.ofHours(1))
-                        .refreshTokenTimeToLive(Duration.ofHours(10))
-                        .build())
+                        .requireAuthorizationConsent(true)
+                        .requireProofKey(true)
+                        .build()
+                )
                 .build();
 
-        return new InMemoryRegisteredClientRepository(registeredClient);
+        return new InMemoryRegisteredClientRepository(publicClient);
     }
 
     @Bean

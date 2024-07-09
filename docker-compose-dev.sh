@@ -8,10 +8,10 @@ java --version
 front=""
 front_image=""
 if [[ "$1" = "gql" ]]; then
-  front="./niffler-frontend-gql/";
+  front="./${FRONT_IMAGE_NAME_GQL}";
   front_image="${IMAGE_PREFIX}/${FRONT_IMAGE_NAME_GQL}-${PROFILE}:latest";
 else
-  front="./niffler-frontend/";
+  front="./${FRONT_IMAGE_NAME}";
   front_image="${IMAGE_PREFIX}/${FRONT_IMAGE_NAME}-${PROFILE}:latest";
 fi
 

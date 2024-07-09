@@ -15,4 +15,4 @@ COPY ./niffler-grpc-common ./niffler-grpc-common
 COPY ./build.gradle ./
 COPY ./settings.gradle ./
 
-CMD ./gradlew test -Dtest.env=docker -Drepository=jpa
+CMD ./gradlew test -Dtest.env=docker -Drepository=jpa -Pskipjaxb=true

@@ -64,9 +64,11 @@ public abstract class SpendExtension implements BeforeEachCallback, AfterEachCal
     @Override
     @SuppressWarnings("unchecked")
     public void afterEach(ExtensionContext context) throws Exception {
-        context.getStore(NAMESPACE)
-                .get(context.getUniqueId(), List.class)
-                .forEach(spend -> removeSpend((SpendJson) spend));
+        List spendings = context.getStore(NAMESPACE)
+                .get(context.getUniqueId(), List.class);
+        if (spendings != null) {
+            spendings.forEach(spend -> removeSpend((SpendJson) spend));
+        }
     }
 
     @Override

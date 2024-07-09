@@ -9,10 +9,10 @@ import java.util.UUID;
 public interface SpendRepository {
 
     static SpendRepository getInstance() {
-        if ("sjdbc".equals(System.getProperty("repo"))) {
+        if ("sjdbc".equals(System.getProperty("repository"))) {
             return new SpendRepositorySpringJdbc();
         }
-        if ("hibernate".equals(System.getProperty("repo"))) {
+        if ("jpa".equals(System.getProperty("repository"))) {
             return new SpendRepositoryHibernate();
         }
         return new SpendRepositoryJdbc();

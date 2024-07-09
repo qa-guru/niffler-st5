@@ -15,9 +15,11 @@ import static com.codeborne.selenide.Selenide.$$;
 
 public class ProfilePage extends BasePage<ProfilePage> {
 
-    public static final String URL = CFG.frontUrl() + "profile";
+    public static final String URL = CFG.frontUrl() + "/profile";
 
     private final SelenideElement userName = $(".avatar-container figcaption");
+    private final SelenideElement avatar = $(".profile__avatar");
+    private final SelenideElement avatarInput = $("input[type='file']");
     private final SelenideElement nameInput = $("input[name='firstname']");
     private final SelenideElement surnameInput = $("input[name='surname']");
     private final SelenideElement categoryInput = $("input[name='category']");
@@ -51,6 +53,13 @@ public class ProfilePage extends BasePage<ProfilePage> {
     public ProfilePage setCurrency(CurrencyValues currency) {
         currencySelect.click();
         $$("div[id^='react-select']").find(exactText(currency.name())).click();
+        return this;
+    }
+
+    @Step("Set name: {0}")
+    public ProfilePage setAvatar(String photoInClasspath) {
+        avatar.click();
+        avatarInput.uploadFromClasspath(photoInClasspath);
         return this;
     }
 
