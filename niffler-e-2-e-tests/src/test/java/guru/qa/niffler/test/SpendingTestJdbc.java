@@ -1,10 +1,8 @@
 package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
-import guru.qa.niffler.jupiter.annotation.TestUser;
 import guru.qa.niffler.jupiter.extension.JdbcCategoryExtension;
 import guru.qa.niffler.jupiter.extension.SpendExtensionJdbc;
 import guru.qa.niffler.jupiter.extension.UserQueueExtension;
@@ -13,6 +11,7 @@ import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.pages.AuthPage;
 import guru.qa.niffler.pages.MainPage;
 import guru.qa.niffler.pages.StartPage;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +22,10 @@ import static com.codeborne.selenide.Selenide.$;
 
 @ExtendWith({JdbcCategoryExtension.class, SpendExtensionJdbc.class, UserQueueExtension.class})
 public class SpendingTestJdbc {
-
+    @BeforeAll
+    public static void setRepository() {
+        System.setProperty("repo", "jdbc");
+    }
     static {
         Configuration.browserSize = "1920x1080";
     }
@@ -35,16 +37,9 @@ public class SpendingTestJdbc {
         StartPage startPage = new StartPage();
         AuthPage authPage = new AuthPage();
 
-        Selenide.open("http://127.0.0.1:3000/");
-        startPage.clickLoginButton();
+        startPage.openPage()
+                .clickLoginButton();
         authPage.login("Nastiletko", "bB!123456");
-    }
-
-    @TestUser
-    @Test
-    void anotherTest() {
-        Selenide.open("http://127.0.0.1:3000/main");
-        $("a[href*='redirect']").should(visible);
     }
 
     @GenerateSpend(

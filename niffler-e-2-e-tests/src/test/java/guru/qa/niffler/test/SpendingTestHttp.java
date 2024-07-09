@@ -1,11 +1,10 @@
 package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
-import guru.qa.niffler.jupiter.extension.CategoryExtensionHttp;
-import guru.qa.niffler.jupiter.extension.SpendExtensionHttp;
+import guru.qa.niffler.jupiter.extension.ApiCategoryExtension;
+import guru.qa.niffler.jupiter.extension.ApiSpendExtension;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.pages.AuthPage;
@@ -16,11 +15,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
 
-
-@ExtendWith({CategoryExtensionHttp.class, SpendExtensionHttp.class})
+@ExtendWith({ApiCategoryExtension.class, ApiSpendExtension.class})
 public class SpendingTestHttp {
 
     static {
@@ -39,15 +35,9 @@ public class SpendingTestHttp {
         StartPage startPage = new StartPage();
         AuthPage authPage = new AuthPage();
 
-        Selenide.open("http://127.0.0.1:3000/");
-        startPage.clickLoginButton();
+        startPage.openPage()
+        .clickLoginButton();
         authPage.login("Nastiletko", "bB!123456");
-    }
-
-    @Test
-    void anotherTest() {
-        Selenide.open("http://127.0.0.1:3000/main");
-        $("a[href*='redirect']").should(visible);
     }
 
     @GenerateSpend(
@@ -67,6 +57,5 @@ public class SpendingTestHttp {
                 .deleteSpending()
                 .checkSpendingsDeletedText()
                 .checkSpendingsCount(0);
-
     }
 }

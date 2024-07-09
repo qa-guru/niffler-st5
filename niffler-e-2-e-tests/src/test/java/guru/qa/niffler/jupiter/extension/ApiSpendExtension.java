@@ -3,6 +3,8 @@ package guru.qa.niffler.jupiter.extension;
 import guru.qa.niffler.api.SpendApiClient;
 import guru.qa.niffler.model.SpendJson;
 
+import java.util.List;
+
 public class ApiSpendExtension extends AbstractSpendExtension {
     private final SpendApiClient spendApiClient = new SpendApiClient();
     @Override
@@ -12,6 +14,6 @@ public class ApiSpendExtension extends AbstractSpendExtension {
 
     @Override
     protected void removeSpend(SpendJson json) {
-
+        spendApiClient.removeSpend(List.of(String.valueOf(json.id())));
     }
 }

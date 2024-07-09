@@ -28,8 +28,8 @@ public class UsersQueueTest {
     @Test
     void noFriendsInTable(@User() UserJson testUser) {
 
-        Selenide.open("http://127.0.0.1:3000/");
-        startPage.clickLoginButton();
+        startPage.openPage()
+                .clickLoginButton();
         authPage.login(testUser.username(), testUser.testData().password());
         mainPage.clickFriendsButton();
         friendsPage.checkNoFriendsMessage();
@@ -39,8 +39,8 @@ public class UsersQueueTest {
     void friendsSeeEachOtherInFiendsTable(@User(User.UserType.WITH_FRIEND) UserJson testUser,
                                           @User(User.UserType.WITH_FRIEND) UserJson testUserAnother) {
 
-        Selenide.open("http://127.0.0.1:3000/");
-        startPage.clickLoginButton();
+        startPage.openPage()
+                .clickLoginButton();
         authPage.login(testUser.username(), testUser.testData().password());
         mainPage.clickFriendsButton();
         friendsPage.checkFriendsName(testUserAnother.username());
@@ -50,7 +50,8 @@ public class UsersQueueTest {
     void userSendInviteSeeInvitedInFriendsTable(@User(User.UserType.INVITATION_SEND) UserJson userSendInvite,
                                                 @User(User.UserType.INVITATION_RECIEVED) UserJson userWithInvite) {
 
-        Selenide.open("http://127.0.0.1:3000/");
+        startPage.openPage()
+                .clickLoginButton();
         startPage.clickLoginButton();
         authPage.login(userSendInvite.username(), userSendInvite.testData().password());
         mainPage.clickPeopleButton();
@@ -61,7 +62,8 @@ public class UsersQueueTest {
     void userWithInviteSeeInvitedInFriendsTable(@User(User.UserType.INVITATION_SEND) UserJson userSendInvite,
                                                 @User(User.UserType.INVITATION_RECIEVED) UserJson userWithInvite) {
 
-        Selenide.open("http://127.0.0.1:3000/");
+        startPage.openPage()
+                .clickLoginButton();
         startPage.clickLoginButton();
         authPage.login(userWithInvite.username(), userWithInvite.testData().password());
         mainPage.clickFriendsButton();
@@ -71,7 +73,8 @@ public class UsersQueueTest {
     @Test
     void userWithInviteCanDeclineAndSubmit(@User(User.UserType.INVITATION_RECIEVED) UserJson testUser) {
 
-        Selenide.open("http://127.0.0.1:3000/");
+        startPage.openPage()
+                .clickLoginButton();
         startPage.clickLoginButton();
         authPage.login(testUser.username(), testUser.testData().password());
         mainPage.clickFriendsButton();
@@ -82,7 +85,8 @@ public class UsersQueueTest {
     void friendTaggedInPeopleTable(@User(User.UserType.WITH_FRIEND) UserJson testUser,
                                    @User(User.UserType.WITH_FRIEND) UserJson testUserAnother) {
 
-        Selenide.open("http://127.0.0.1:3000/");
+        startPage.openPage()
+                .clickLoginButton();
         startPage.clickLoginButton();
         authPage.login(testUser.username(), testUser.testData().password());
         mainPage.clickPeopleButton();

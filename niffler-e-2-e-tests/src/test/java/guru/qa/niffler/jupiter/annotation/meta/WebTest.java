@@ -1,8 +1,8 @@
 package guru.qa.niffler.jupiter.annotation.meta;
 
 import guru.qa.niffler.jupiter.extension.BrowserExtension;
-import guru.qa.niffler.jupiter.extension.CategoryExtensionHttp;
-import guru.qa.niffler.jupiter.extension.SpendExtensionHttp;
+import guru.qa.niffler.jupiter.extension.ApiCategoryExtension;
+import guru.qa.niffler.jupiter.extension.ApiSpendExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.lang.annotation.ElementType;
@@ -14,8 +14,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @ExtendWith({
         BrowserExtension.class,
-        CategoryExtensionHttp.class,
-        SpendExtensionHttp.class
+        ApiCategoryExtension.class,
+        ApiSpendExtension.class
 })
 public @interface WebTest {
 }

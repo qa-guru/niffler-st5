@@ -6,6 +6,7 @@ import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 
@@ -13,6 +14,8 @@ public class MainPage extends BasePage<MainPage> {
 
     private final ElementsCollection spendingRows = $(".spendings-table tbody")
             .$$("tr");
+
+    private final SelenideElement spendingsSection = $("main-content__section main-content__section-add-spending");
 
     private final SelenideElement deleteButton = $(".spendings__bulk-actions button");
 
@@ -69,6 +72,11 @@ public class MainPage extends BasePage<MainPage> {
     @Override
     public MainPage checkPageLoaded() {
         return null;
+    }
+
+    public MainPage checkSpendingsSectionIsVisible() {
+        spendingsSection.shouldBe(visible);
+        return this;
     }
 }
 
