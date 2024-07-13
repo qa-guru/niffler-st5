@@ -2,7 +2,7 @@ package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
-import guru.qa.niffler.jupiter.annotation.GenerateSpend;
+import guru.qa.niffler.jupiter.annotation.Spend;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.ui.page.StartPage;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +26,7 @@ public class HttpSpendingTest extends BaseWebTest {
 
     @Test
     @GenerateCategory(category = "Обучение", username = USERNAME)
-    @GenerateSpend(description = "QA.GURU Advanced 5", amount = 65000.00, currency = RUB)
+    @Spend(description = "QA.GURU Advanced 5", amount = 65000.00, currency = RUB)
     void spendingShouldBeDeletedAfterTableAction(SpendJson spendJson) {
         ui.mainPage()
                 .chooseSpending(spendJson)

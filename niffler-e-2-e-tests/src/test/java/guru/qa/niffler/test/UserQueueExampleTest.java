@@ -28,8 +28,8 @@ public class UserQueueExampleTest extends BaseWebTest {
     }
 
     @Test
-    void userWithFriendTest1(@User(friendship = WITH_FRIENDS) UserJson userWithFriend,
-                             @User(friendship = WITH_FRIENDS) UserJson friend) {
+    void userWithFriendTest1(@User(friendship = WITH_FRIENDS) UserJson friend,
+                             @User(friendship = WITH_FRIENDS) UserJson userWithFriend) {
         ui.startPage()
                 .login(userWithFriend)
                 .clickAllPeople()

@@ -17,6 +17,8 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.$$;
+import static guru.qa.niffler.condition.spend.SpendsCondition.spendsInTable;
 
 public class MainPage extends BasePage<MainPage> {
 
@@ -32,6 +34,11 @@ public class MainPage extends BasePage<MainPage> {
     private final SelenideElement amountInput = $("[type='number']");
     private final SelenideElement descriptionInput = $("[name='description']");
     private final SelenideElement addSpendingBtn = $("[type='submit']");
+
+    @Step("Проверить отображение всех трат")
+    public void checkSpends(SpendJson[] spendJsons) {
+        tableRows.shouldHave(spendsInTable(spendJsons));
+    }
 
     @Step("Выбрать категорию")
     public MainPage chooseCategory(String category) {
