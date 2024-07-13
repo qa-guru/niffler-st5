@@ -1,6 +1,6 @@
 package guru.qa.niffler.jupiter.extension.spend;
 
-import guru.qa.niffler.api.SpendApiClient;
+import guru.qa.niffler.api.spend.SpendApiClient;
 import guru.qa.niffler.model.SpendJson;
 
 import java.io.IOException;

@@ -2,6 +2,8 @@ package guru.qa.niffler.data;
 
 import guru.qa.niffler.config.Config;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+
 
 @RequiredArgsConstructor
 public enum Database {
@@ -20,6 +22,10 @@ public enum Database {
                 CONFIG.dbHost(),
                 CONFIG.dbPort()
         );
+    }
+
+    public String getP6SpyUrl(){
+        return "jdbc:p6spy:" + StringUtils.substringAfter(getJdbcUrl(), ":");
     }
 
 }

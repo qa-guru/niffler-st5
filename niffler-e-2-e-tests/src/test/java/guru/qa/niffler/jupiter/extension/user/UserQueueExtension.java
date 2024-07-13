@@ -92,7 +92,7 @@ public class UserQueueExtension implements BeforeEachCallback, AfterEachCallback
     @SuppressWarnings("unchecked")
     public void afterEach(ExtensionContext context) {
         Map<Friendship, List<UserJson>> testUsers = context.getStore(NAMESPACE).get(context.getUniqueId(), Map.class);
-        testUsers.forEach((key, value) -> USERS.get(key).addAll(value));
+        if (testUsers != null) testUsers.forEach((key, value) -> USERS.get(key).addAll(value));
     }
 
     @Override

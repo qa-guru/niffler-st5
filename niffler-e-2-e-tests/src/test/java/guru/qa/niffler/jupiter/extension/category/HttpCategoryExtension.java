@@ -1,6 +1,6 @@
 package guru.qa.niffler.jupiter.extension.category;
 
-import guru.qa.niffler.api.SpendApiClient;
+import guru.qa.niffler.api.spend.SpendApiClient;
 import guru.qa.niffler.model.CategoryJson;
 
 import java.io.IOException;
