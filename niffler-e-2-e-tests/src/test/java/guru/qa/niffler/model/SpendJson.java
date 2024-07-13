@@ -2,6 +2,7 @@ package guru.qa.niffler.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.javafaker.Faker;
 import guru.qa.niffler.data.entity.SpendEntity;
 
 import java.util.Date;
@@ -43,6 +44,20 @@ public record SpendJson(
                 spendEntity.getDescription(),
                 spendEntity.getUsername(),
                 spendEntity.getCategory().getId()
+        );
+    }
+
+    public static SpendJson randomSpend(String category, String username) {
+        Faker faker = new Faker();
+        return new SpendJson(
+                null,
+                new Date(),
+                category,
+                CurrencyValues.RUB,
+                faker.random().nextDouble(),
+                faker.commerce().productName(),
+                username,
+                null
         );
     }
 

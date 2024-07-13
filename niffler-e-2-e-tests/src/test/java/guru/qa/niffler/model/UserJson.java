@@ -6,7 +6,6 @@ import com.github.javafaker.Faker;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.userdata.wsdl.FriendState;
 
-import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 public record UserJson(
@@ -74,10 +73,10 @@ public record UserJson(
                 faker.name().firstName(),
                 faker.name().lastName(),
                 CurrencyValues.KZT,
-                faker.avatar().image().getBytes(StandardCharsets.UTF_8),
-                faker.avatar().image().getBytes(StandardCharsets.UTF_8),
                 null,
-                new TestData(faker.internet().password())
+                null,
+                null,
+                new TestData("generated_user")
         );
     }
 }

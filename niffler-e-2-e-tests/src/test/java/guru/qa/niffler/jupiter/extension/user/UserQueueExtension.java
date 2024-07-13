@@ -97,7 +97,7 @@ public class UserQueueExtension implements BeforeEachCallback, AfterEachCallback
 
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return parameterContext.isAnnotated(User.class);
+        return parameterContext.isAnnotated(User.class) && parameterContext.getParameter().getType().isAssignableFrom(UserJson.class);
     }
 
     @Override

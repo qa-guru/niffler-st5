@@ -1,12 +1,9 @@
 package guru.qa.niffler.test;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
-import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.model.SpendJson;
-import guru.qa.niffler.ui.UiBot;
 import guru.qa.niffler.ui.page.StartPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,16 +11,9 @@ import org.junit.jupiter.api.Test;
 import static guru.qa.niffler.model.CurrencyValues.RUB;
 
 
-@WebTest
-public class HttpSpendingTest {
-
-    private final UiBot ui = new UiBot();
+public class HttpSpendingTest extends BaseWebTest {
 
     private final static String USERNAME = "zhanna1";
-
-    static {
-        Configuration.browserSize = "1920x1080";
-    }
 
     @BeforeEach
     void doLogin() {

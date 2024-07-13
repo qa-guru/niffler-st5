@@ -6,7 +6,7 @@ public interface Config {
         String environment = System.getProperty("test.env", "local");
         if ("local".equals(environment)) {
             return LocalConfig.instance;
-        } else if ("docker".equals(environment)) {
+        } else if ("docker".equals(System.getProperty("test.env"))) {
             return DockerConfig.instance;
         } else {
             throw new IllegalArgumentException("Can't find config with given env");

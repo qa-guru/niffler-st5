@@ -1,15 +1,16 @@
 package guru.qa.niffler.test;
 
-import guru.qa.niffler.jupiter.extension.BrowserExtension;
-import guru.qa.niffler.jupiter.extension.user.DbCreateUserExtension;
+import com.codeborne.selenide.Configuration;
+import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.ui.UiBot;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-@ExtendWith({
-        BrowserExtension.class,
-        DbCreateUserExtension.class})
+@WebTest
 public class BaseWebTest {
 
     protected final UiBot ui = new UiBot();
+
+    static {
+        Configuration.browserSize = "1920x1080";
+    }
 
 }

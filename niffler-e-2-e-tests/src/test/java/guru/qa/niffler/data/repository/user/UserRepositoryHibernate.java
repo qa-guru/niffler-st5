@@ -5,6 +5,8 @@ import guru.qa.niffler.data.entity.UserAuthEntity;
 import guru.qa.niffler.data.entity.UserEntity;
 import guru.qa.niffler.data.jpa.EmProvider;
 import jakarta.persistence.EntityManager;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,9 +15,11 @@ public class UserRepositoryHibernate implements UserRepository {
 
     private final EntityManager userDataEm = EmProvider.entityManager(Database.USERDATA);
     private final EntityManager authEm = EmProvider.entityManager(Database.AUTH);
+    private static final PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
     @Override
     public UserAuthEntity createUserInAuth(UserAuthEntity user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         authEm.persist(user);
         return user;
     }
@@ -39,9 +43,9 @@ public class UserRepositoryHibernate implements UserRepository {
     @Override
     public UserEntity findUserInUserdataById(UUID id) {
         return userDataEm.createQuery(
-                "FROM UserEntity WHERE id = :id",
+                        "FROM UserEntity WHERE id = :id",
                         UserEntity.class
-        )
+                )
                 .setParameter("id", id)
                 .getSingleResult();
     }

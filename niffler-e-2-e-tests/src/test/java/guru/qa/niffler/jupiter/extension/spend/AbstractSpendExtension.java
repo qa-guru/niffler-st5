@@ -53,7 +53,7 @@ public abstract class AbstractSpendExtension implements BeforeEachCallback, Afte
     @Override
     public void afterEach(ExtensionContext context) {
         SpendJson spendJson = context.getStore(NAMESPACE).get(context.getUniqueId(), SpendJson.class);
-        removeSpend(spendJson);
+        if (spendJson != null) removeSpend(spendJson);
     }
 
     @Override
