@@ -9,9 +9,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface User {
 
-  Point value() default Point.INNER;
+    Point value() default Point.INNER;
 
-  enum Point {
-    INNER, OUTER
-  }
+    enum Point {
+        INNER, OUTER
+    }
 }

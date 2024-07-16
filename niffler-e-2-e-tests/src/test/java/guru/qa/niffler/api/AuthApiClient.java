@@ -9,9 +9,6 @@ import lombok.SneakyThrows;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-
 public class AuthApiClient extends ApiClient {
 
     private final AuthApi authApi;

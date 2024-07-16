@@ -13,7 +13,7 @@ subprojects {
         dockerHubName = "qaguru"
 
         lombokVersion = '1.18.32'
-        springKafkaVersion = '3.1.4'
+        springKafkaVersion = '3.2.1'
         postgresDriverVersion = '42.7.3'
         flywayVersion = '10.11.0'
         oauth2AuthorizationServerVersion = '1.2.4'

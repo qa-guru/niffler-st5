@@ -1,0 +1,21 @@
+package guru.qa.niffler.jupiter.annotation.meta;
+
+import guru.qa.niffler.jupiter.extension.ApiLoginExtension;
+import guru.qa.niffler.jupiter.extension.ApiSpendExtension;
+import guru.qa.niffler.jupiter.extension.DBCreteUserExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@ExtendWith({
+        DBCreteUserExtension.class,
+        ApiSpendExtension.class,
+        ApiLoginExtension.class
+})
+public @interface GqlTest {
+}

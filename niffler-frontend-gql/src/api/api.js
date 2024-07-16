@@ -79,8 +79,7 @@ const authClient = {
             method: "POST",
             credentials: "include",
             headers: {
-                "Content-type": "application/x-www-form-urlencoded",
-                "Authorization": `Basic ${Buffer.from("client:secret").toString("base64")}`,
+                "Content-type": "application/x-www-form-urlencoded"
             },
             body: data.toString()
         });

@@ -1,8 +1,8 @@
 type Mutation {
     createCategory(input: CreateCategoryInput!): Category!
     updateUser(input: UpdateUserInfoInput!): User!
-    addSpend(spend: SpendInput!): Spend!
-    updateSpend(spend: UpdateSpendInput!): Spend!
+    addSpend(input: SpendInput!): Spend!
+    updateSpend(input: UpdateSpendInput!): Spend!
     deleteSpends(ids: [String]): [String!]!
     acceptInvitation(friendUsername: String!): User!
     declineInvitation(friendUsername: String!): User!
