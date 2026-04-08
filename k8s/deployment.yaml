@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: niffler-st5-frontend
+  namespace: niffler-st5
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: niffler-st5-frontend
+  template:
+    metadata:
+      labels:
+        app: niffler-st5-frontend
+    spec:
+      containers:
+        - name: frontend
+          # указываешь образ, который пушится в registry
+          image: pggorbachev/niffler-st5:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80
