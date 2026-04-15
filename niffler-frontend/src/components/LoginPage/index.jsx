@@ -17,7 +17,7 @@ export const LoginPage = () => {
             {user ? <Navigate to={"/main"}/> : (
                 <div className={"main-page__container"}>
                     <div className={"form"}>
-                        <h1 className={"main__header"}>Welcome to magic journey with Niffler. The coin keeper</h1>
+                        <h1 className={"main__header"}>dksjghfsdgkjhsg. The coin keeper</h1>
                         <img className={"main__logo"} src="/images/niffler-logo.png" width={150}
                              height={150} alt="Logo Niffler"></img>
                         <div className={"main__links"}>
