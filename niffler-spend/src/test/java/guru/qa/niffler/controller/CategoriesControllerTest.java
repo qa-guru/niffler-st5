@@ -40,4 +40,8 @@ class CategoriesControllerTest {
                 .andExpect(jsonPath("$[0].username").value("dima"))
                 .andExpect(jsonPath("$[0].category").value("Обучение"));
     }
+    @Test
+    void testTest() {
+        System.out.println("testTest");
+    }
 }
