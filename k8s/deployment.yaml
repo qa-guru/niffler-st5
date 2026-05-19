@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: niffler-test-frontend
+  namespace: niffler-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: niffler-test-frontend
+  template:
+    metadata:
+      labels:
+        app: niffler-test-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: pggorbachev/niffler-st5:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80
